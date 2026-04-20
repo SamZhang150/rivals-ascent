@@ -4,13 +4,12 @@
 ## === MAIN.TSCN NODE TREE ===
 ## Main (Node2D)                        [script: game_manager.gd]
 ## ├── World (Node2D)                   ← shared game world, all rooms are children
-## ├── ViewportContainer (HBoxContainer) [full_rect anchors, mouse_filter=Ignore]
-## │   ├── Left (SubViewportContainer)  [stretch=true, size_flags_horizontal=EXPAND_FILL]
-## │   │   └── SubViewport              [size: half screen, world_2d: assign in code]
-## │   │       └── Camera2D             [enabled=true]
-## │   └── Right (SubViewportContainer) [stretch=true, size_flags_horizontal=EXPAND_FILL]
-## │       └── SubViewport              [size: half screen, world_2d: assign in code]
-## │           └── Camera2D             [enabled=true]
+## ├── ScreenDisplay (CanvasLayer)
+## |   |   ViewportContainer (HBoxContainer) [full_rect anchors, mouse_filter=Ignore]
+## │   |   ├── Left (SubViewportContainer)  [stretch=true, size_flags_horizontal=EXPAND_FILL]
+## │   |   │   └── SubViewport              [size: half screen, world_2d: assign in code]
+## │   |   └── Right (SubViewportContainer) [stretch=true, size_flags_horizontal=EXPAND_FILL]
+## │   |  	   └── SubViewport              [size: half screen, world_2d: assign in code]
 ## └── UI (CanvasLayer)
 ##     ├── ReadyUpUI (Control)          [visible=false, full_rect]
 ##     │   ├── P1ReadyLabel (Label)
@@ -78,6 +77,24 @@ func _ready():
 	_transition_to(Phase.LOBBY)
 
 func _process(_delta: float):
+	if phase == Phase.LOBBY and lobby_instance:
+		var lobby_spawn = lobby_instance.get_node("SpawnPoint") as Marker2D
+		if lobby_spawn:
+			_center_viewport_on(left_viewport, lobby_spawn.global_position)
+		return
+
+	if phase == Phase.SHOP and shop_instance:
+		var shop_spawn = shop_instance.get_node("SpawnPoint") as Marker2D
+		if shop_spawn:
+			_center_viewport_on(left_viewport, shop_spawn.global_position)
+		return
+
+	if phase == Phase.PVP and pvp_instance:
+		var pvp_spawn = pvp_instance.get_node("SpawnPoint") as Marker2D
+		if pvp_spawn:
+			_center_viewport_on(left_viewport, pvp_spawn.global_position)
+		return
+
 	if p1:
 		_center_viewport_on(left_viewport, p1.global_position)
 	if p2:
@@ -111,7 +128,7 @@ func _set_screen_mode(mode: ScreenMode):
 			left_viewport.size = Vector2i(112, 126)
 			right_viewport.size = Vector2i(112, 126)
 		ScreenMode.SHARED:
-			left_container.visible = false
+			left_container.visible = true
 			right_container.visible = false
 			# Full logical width when taking the whole screen
 			left_viewport.size = Vector2i(224, 126)

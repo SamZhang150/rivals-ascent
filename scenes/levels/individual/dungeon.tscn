@@ -585,23 +585,23 @@ tile_set = SubResource("TileSet_y4cx7")
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1349847423]
 z_index = -1
-position = Vector2(64, 64)
+position = Vector2(112, 64)
 
 [node name="ExitDoor" type="StaticBody2D" parent="." unique_id=1816227877]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1877061687]
-position = Vector2(114, 53)
+position = Vector2(206, 111)
 shape = SubResource("RectangleShape2D_uvhcu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ExitDoor" unique_id=1350192538]
-position = Vector2(114, 53)
+position = Vector2(207, 111)
 sprite_frames = SubResource("SpriteFrames_ljrjq")
 animation = &"closed"
 
 [node name="ExitTrigger" type="Area2D" parent="." unique_id=490725026]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitTrigger" unique_id=2000696674]
-position = Vector2(253, 8)
+position = Vector2(206, 111)
 shape = SubResource("RectangleShape2D_0f117")
 
 [node name="Enemies" type="Node2D" parent="." unique_id=857047854]
