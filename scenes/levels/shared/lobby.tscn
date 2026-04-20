@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b7fgp2hgf4f5g"]
 
 [ext_resource type="Texture2D" uid="uid://bdfluv7vquebp" path="res://assets/sprites/lobby/field.png" id="1_en3xm"]
+[ext_resource type="PackedScene" uid="uid://dghjbmvjnkbp7" path="res://scenes/entities/player.tscn" id="2_7vqca"]
 
 [node name="Lobby" type="Node2D" unique_id=522539396]
 
@@ -9,3 +10,15 @@ offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("1_en3xm")
 stretch_mode = 1
+
+[node name="Player" parent="." unique_id=897775928 instance=ExtResource("2_7vqca")]
+position = Vector2(9, 11)
+
+[node name="Player2" parent="." unique_id=1513034214 instance=ExtResource("2_7vqca")]
+position = Vector2(18, 22)
+player_id = 2
+move_left = "p2_left"
+move_right = "p2_right"
+move_up = "p2_up"
+move_down = "p2_down"
+attack_action = "p2_attack"

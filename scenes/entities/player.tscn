@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://dghjbmvjnkbp7"]
+
+[ext_resource type="Script" uid="uid://cxe7kvyjcwd6a" path="res://scripts/player.gd" id="1_ucweq"]
+[ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_08t41"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ie0h"]
+atlas = ExtResource("2_08t41")
+region = Rect2(0, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_42nxq"]
+atlas = ExtResource("2_08t41")
+region = Rect2(0, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5u6hq"]
+atlas = ExtResource("2_08t41")
+region = Rect2(8, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d4qa6"]
+atlas = ExtResource("2_08t41")
+region = Rect2(16, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ss7kx"]
+atlas = ExtResource("2_08t41")
+region = Rect2(24, 8, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dnykm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ie0h")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_42nxq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5u6hq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d4qa6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ss7kx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d4qa6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5u6hq")
+}],
+"loop": true,
+"name": &"run",
+"speed": 7.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ie0h"]
+size = Vector2(8, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_08t41"]
+size = Vector2(5, 7)
+
+[node name="Player" type="CharacterBody2D" unique_id=897775928]
+script = ExtResource("1_ucweq")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=615768730]
+position_smoothing_enabled = true
+position_smoothing_speed = 15.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1251588531]
+sprite_frames = SubResource("SpriteFrames_dnykm")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.821766
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=924631295]
+shape = SubResource("RectangleShape2D_1ie0h")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=191753898]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=698855096]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_08t41")
