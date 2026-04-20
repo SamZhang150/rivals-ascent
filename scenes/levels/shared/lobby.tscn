@@ -543,4 +543,4 @@ tile_map_data = PackedByteArray("AAAAAAEAAAAEAAQAAAABAAEAAAAFAAQAAAACAAEAAAAGAAQ
 tile_set = SubResource("TileSet_7vqca")
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=2031520815]
-position = Vector2(64, 64)
+position = Vector2(112, 64)
