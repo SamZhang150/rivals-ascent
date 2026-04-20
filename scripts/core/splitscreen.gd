@@ -36,12 +36,10 @@ enum ScreenMode { SPLIT, SHARED }
 
 # ─── NODE REFERENCES ────────────────────────────────────
 @onready var world: Node2D = $World
-@onready var left_container: SubViewportContainer = $ViewportContainer/Left
-@onready var right_container: SubViewportContainer = $ViewportContainer/Right
-@onready var left_viewport: SubViewport = $ViewportContainer/Left/SubViewport
-@onready var right_viewport: SubViewport = $ViewportContainer/Right/SubViewport
-@onready var cam_left: Camera2D = $ViewportContainer/Left/SubViewport/Camera2D
-@onready var cam_right: Camera2D = $ViewportContainer/Right/SubViewport/Camera2D
+@onready var left_container: SubViewportContainer = $ScreenDisplay/ViewportContainer/Left
+@onready var right_container: SubViewportContainer = $ScreenDisplay/ViewportContainer/Right
+@onready var left_viewport: SubViewport = $ScreenDisplay/ViewportContainer/Left/SubViewport
+@onready var right_viewport: SubViewport = $ScreenDisplay/ViewportContainer/Right/SubViewport
 @onready var ready_up_ui: Control = $UI/ReadyUpUI
 @onready var shop_ui: Control = $UI/ShopUI
 @onready var round_over_ui: Control = $UI/RoundOverUI
@@ -61,7 +59,7 @@ var p1_finished_dungeon: bool = false
 var p2_finished_dungeon: bool = false
 
 # Room spacing in world coordinates
-const ROOM_SPACING := 3000.0
+const ROOM_SPACING := 300.0
 
 # Room instance references
 var lobby_instance: Node2D
@@ -75,17 +73,20 @@ func _ready():
 	# Make both viewports render the same world
 	left_viewport.world_2d = world.get_world_2d()
 	right_viewport.world_2d = world.get_world_2d()
-
+	_set_screen_mode(ScreenMode.SPLIT)
 	_spawn_players()
 	_transition_to(Phase.LOBBY)
 
-
 func _process(_delta: float):
-	# Cameras follow their respective players
 	if p1:
-		cam_left.global_position = p1.global_position
+		_center_viewport_on(left_viewport, p1.global_position)
 	if p2:
-		cam_right.global_position = p2.global_position
+		_center_viewport_on(right_viewport, p2.global_position)
+		
+func _center_viewport_on(vp: SubViewport, target_pos: Vector2):
+	var vp_size = Vector2(vp.size)
+	var offset = target_pos - vp_size / 2.0
+	vp.canvas_transform = Transform2D(0.0, -offset)
 
 
 func _unhandled_input(event: InputEvent):
@@ -110,7 +111,7 @@ func _set_screen_mode(mode: ScreenMode):
 			left_viewport.size = Vector2i(112, 126)
 			right_viewport.size = Vector2i(112, 126)
 		ScreenMode.SHARED:
-			left_container.visible = true
+			left_container.visible = false
 			right_container.visible = false
 			# Full logical width when taking the whole screen
 			left_viewport.size = Vector2i(224, 126)
@@ -222,7 +223,7 @@ func _generate_dungeon_rooms():
 		# Player 1 rooms along the top row
 		var p1_room = _place_room(
 			dungeon_room_scene,
-			Vector2(ROOM_SPACING * (i + 1), 0)
+			Vector2(ROOM_SPACING * (i), 0)
 		)
 		p1_room.name = "P1_Room_%d" % i
 		p1_room.room_cleared.connect(_on_room_cleared.bind(1))
@@ -231,7 +232,7 @@ func _generate_dungeon_rooms():
 		# Player 2 rooms along the bottom row
 		var p2_room = _place_room(
 			dungeon_room_scene,
-			Vector2(ROOM_SPACING * (i + 1), ROOM_SPACING)
+			Vector2(ROOM_SPACING * (i), ROOM_SPACING)
 		)
 		p2_room.name = "P2_Room_%d" % i
 		p2_room.room_cleared.connect(_on_room_cleared.bind(2))
@@ -243,7 +244,10 @@ func _teleport_to_dungeon_room(player_id: int, room_index: int):
 	var player = p1 if player_id == 1 else p2
 	if room_index < rooms.size():
 		var spawn = rooms[room_index].get_node("SpawnPoint") as Marker2D
+		print("Teleporting P%d to room %d at %s" % [player_id, room_index, spawn.global_position])
 		player.global_position = spawn.global_position
+	else:
+		print("ERROR: room_index %d out of range for P%d" % [room_index, player_id])
 
 
 func _on_room_cleared(player_id: int):
@@ -323,7 +327,9 @@ func _place_room(scene: PackedScene, pos: Vector2) -> Node2D:
 func _clear_rooms():
 	for child in world.get_children():
 		if child == p1 or child == p2:
+			print("Skipping player: ", child.name)
 			continue
+		print("Freeing: ", child.name)
 		child.queue_free()
 	p1_dungeon_rooms.clear()
 	p2_dungeon_rooms.clear()

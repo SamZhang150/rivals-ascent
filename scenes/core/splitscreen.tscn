@@ -17,35 +17,6 @@ player_scene = ExtResource("5_w00f7")
 
 [node name="World" type="Node2D" parent="." unique_id=907279618]
 
-[node name="ViewportContainer" type="HBoxContainer" parent="." unique_id=574092326]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Left" type="SubViewportContainer" parent="ViewportContainer" unique_id=1020436082]
-layout_mode = 2
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="ViewportContainer/Left" unique_id=1797143321]
-handle_input_locally = false
-size = Vector2i(2, 2)
-render_target_update_mode = 4
-
-[node name="Camera2D" type="Camera2D" parent="ViewportContainer/Left/SubViewport" unique_id=579284315]
-
-[node name="Right" type="SubViewportContainer" parent="ViewportContainer" unique_id=644704426]
-layout_mode = 2
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="ViewportContainer/Right" unique_id=1981732774]
-handle_input_locally = false
-size = Vector2i(2, 2)
-render_target_update_mode = 4
-
-[node name="Camera2D" type="Camera2D" parent="ViewportContainer/Right/SubViewport" unique_id=2114431493]
-
 [node name="UI" type="CanvasLayer" parent="." unique_id=347216691]
 
 [node name="ReadyUpUI" type="Control" parent="UI" unique_id=1051422504]
@@ -95,3 +66,35 @@ offset_bottom = 23.0
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="ScreenDisplay" type="CanvasLayer" parent="." unique_id=25438073]
+
+[node name="ViewportContainer" type="HBoxContainer" parent="ScreenDisplay" unique_id=1188213856]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Left" type="SubViewportContainer" parent="ScreenDisplay/ViewportContainer" unique_id=22574553]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SubViewport" type="SubViewport" parent="ScreenDisplay/ViewportContainer/Left" unique_id=1380497078]
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+size = Vector2i(112, 126)
+render_target_update_mode = 4
+
+[node name="Right" type="SubViewportContainer" parent="ScreenDisplay/ViewportContainer" unique_id=546929494]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SubViewport" type="SubViewport" parent="ScreenDisplay/ViewportContainer/Right" unique_id=1361715336]
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+size = Vector2i(112, 126)
+render_target_update_mode = 4
