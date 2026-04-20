@@ -1,114 +1,132 @@
+## player.gd
+## Attach to the root of player.tscn
+##
+## === PLAYER.TSCN NODE TREE ===
+## Player (CharacterBody2D)             [script: player.gd]
+## ├── Sprite2D                         ← player sprite/animation
+## ├── CollisionShape2D                 ← physics body (RectangleShape2D or CircleShape2D)
+## ├── HitboxArea (Area2D)              ← detects incoming damage
+## │   └── CollisionShape2D             ← slightly larger than body collision
+## ├── AttackArea (Area2D)              ← deals damage on attack
+## │   └── CollisionShape2D             ← positioned in front of player
+## └── AttackCooldownTimer (Timer)      [wait_time=0.4, one_shot=true]
+##
+## === INPUT MAP (Project > Input Map) ===
+## You MUST create these input actions:
+##   p1_up, p1_down, p1_left, p1_right, p1_attack, p1_ready
+##   p2_up, p2_down, p2_left, p2_right, p2_attack, p2_ready
+##
+## Suggested bindings:
+##   P1: WASD + Space (attack) + Enter (ready)
+##   P2: Arrow keys + Numpad 0 (attack) + Numpad Enter (ready)
+
 extends CharacterBody2D
 
+# ─── CONFIG ──────────────────────────────────────────────
+@export var speed: float = 50.0
+@export var max_health: int = 100
+@export var attack_damage: int = 20
 
-const SPEED = 35.0
+# ─── STATE ───────────────────────────────────────────────
+var player_id: int = 1  # set by game_manager on spawn
+var can_move: bool = true
+var can_attack: bool = false
+var health: int = max_health
+var is_attacking: bool = false
 
-@export var player_id := 1
-@export var move_left := "p1_left"
-@export var move_right := "p1_right"
-@export var move_up := "p1_up"
-@export var move_down := "p1_down"
-@export var attack_action := "p1_attack"
+# Input action prefixes
+var _prefix: String = "p1_"
 
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var attack_area: Area2D = $AttackArea
+@onready var attack_timer: Timer = $AttackCooldownTimer
 
-# shared player variables
-var facing_dir := Vector2.RIGHT
-
-var is_attacking := false
-var is_dead := false
-
-var attack_timer := 0.0
-var invuln_timer := 0.0
-var cooldown_timer := 0.0
-
-var hit_enemies := []
-
-# nodes
-@onready var sprite = $AnimatedSprite2D
-@onready var attack_hitbox = $AttackHitbox
-@onready var attack_shape = $AttackHitbox/CollisionShape2D
-@onready var camera = $Camera2D
-
-@onready var health_ui = get_tree().current_scene.get_node("HealthUI")
+signal died(player_id: int)
 
 
-func _ready() -> void:
-	if not Global.player_stats.has(player_id):
-		Global.player_stats[player_id] = {
-			"health": 20,
-			"max_health": 20,
-			"is_dead": false,
-			"attack_damage": 2,
-			"attack_duration": 0.2,
-			"attack_cooldown": 1.75,
-			"invuln_time": 0.75,
-			"knockback_strength": 260.0,
-			"knockback_decay": 700.0
-		}
+func _ready():
+	_prefix = "p1_" if player_id == 1 else "p2_"
+	attack_area.monitoring = false
+	attack_timer.timeout.connect(_on_attack_cooldown_finished)
 
-func _physics_process(delta: float) -> void:
-	handle_timers(delta)
-	handle_movement()
-	handle_attack()
+	# Connect hitbox to receive damage
+	var hitbox = $HitboxArea as Area2D
+	hitbox.area_entered.connect(_on_hitbox_area_entered)
+
+	health = max_health
+
+
+func _physics_process(_delta: float):
+	if not can_move:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
+	# Gather directional input
+	var input_dir := Vector2.ZERO
+	input_dir.x = Input.get_axis(_prefix + "left", _prefix + "right")
+	input_dir.y = Input.get_axis(_prefix + "up", _prefix + "down")
+	input_dir = input_dir.normalized()
+
+	velocity = input_dir * speed
 	move_and_slide()
 
-
-func handle_movement() -> void:
-	var input_dir = Input.get_vector(move_left, move_right, move_up, move_down)
-	
-	if input_dir != Vector2.ZERO:
-		facing_dir = input_dir.normalized()
-		velocity = facing_dir * SPEED
+	# Flip sprite and attack area based on movement direction
+	if input_dir.x != 0:
 		sprite.flip_h = input_dir.x < 0
-		sprite.play("run")
-	else:
-		velocity = Vector2.ZERO
-		sprite.play("idle")
+		attack_area.scale.x = -1 if input_dir.x < 0 else 1
 
 
-func handle_attack() -> void:
-	if Input.is_action_just_pressed(attack_action) and not is_attacking and cooldown_timer <= 0.0:
-		start_attack()
-
-
-func start_attack() -> void:
-	$Attack.play()
-	is_attacking = true
-	attack_timer = get_stat("attack_duration")
-	cooldown_timer = get_stat("attack_cooldown")
-	hit_enemies.clear()
-	attack_hitbox.set_deferred("monitoring", true)
-	attack_shape.set_deferred("disabled", false)
-
-
-func handle_timers(delta: float) -> void:
-	if attack_timer > 0.0:
-		attack_timer -= delta
-		if attack_timer <= 0.0:
-			is_attacking = false
-			attack_hitbox.set_deferred("monitoring", false)
-			attack_shape.set_deferred("disabled", true)
-			
-	if cooldown_timer > 0.0:
-		cooldown_timer -= delta
-		
-	if invuln_timer > 0.0:
-		invuln_timer -= delta
-
-
-func take_damage(amount: int) -> void:
-	if invuln_timer > 0.0 or get_stat("is_dead"):
+func _unhandled_input(event: InputEvent):
+	if not can_attack:
 		return
-		
-	set_stat("health", get_stat("health") - amount)
-	invuln_timer = get_stat("invuln_time")
-	
-	if get_stat("health") <= 0:
-		set_stat("health", 0)
-		set_stat("is_dead", true)
+	if event.is_action_pressed(_prefix + "attack") and not is_attacking:
+		_perform_attack()
 
-func get_stat(stat_name: String):
-	return Global.player_stats[player_id][stat_name]
 
-func set_stat(stat_name: String, value) -> void:
-	Global.player_stats[player_id][stat_name] = value
+func _perform_attack():
+	is_attacking = true
+	attack_area.monitoring = true
+	attack_timer.start()
+	# You could play an attack animation here
+	# sprite.play("attack")
+
+
+func _on_attack_cooldown_finished():
+	is_attacking = false
+	attack_area.monitoring = false
+
+
+func _on_hitbox_area_entered(area: Area2D):
+	# Check if the incoming area is another player's AttackArea
+	var attacker = area.get_parent()
+	if attacker is CharacterBody2D and attacker != self:
+		take_damage(attacker.attack_damage)
+
+
+func take_damage(amount: int):
+	health -= amount
+	# Flash the sprite red briefly
+	sprite.modulate = Color.RED
+	get_tree().create_timer(0.15).timeout.connect(
+		func(): sprite.modulate = Color.WHITE
+	)
+	if health <= 0:
+		_die()
+
+
+func _die():
+	can_move = false
+	can_attack = false
+	visible = false
+	# Notify game manager
+	var game_manager = get_tree().root.get_node("Main")
+	if game_manager.has_method("on_player_died"):
+		game_manager.on_player_died(player_id)
+
+
+func reset_for_round():
+	health = max_health
+	can_move = true
+	visible = true
+	sprite.modulate = Color.WHITE

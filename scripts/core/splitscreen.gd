@@ -91,11 +91,11 @@ func _process(_delta: float):
 func _unhandled_input(event: InputEvent):
 	# Ready-up handling
 	if phase == Phase.LOBBY or phase == Phase.SHOP:
-		if event.is_action_pressed("p1_ready"):
+		if event.is_action_pressed("p1_interact"):
 			p1_ready = true
 			_update_ready_ui()
 			_check_both_ready()
-		if event.is_action_pressed("p2_ready"):
+		if event.is_action_pressed("p2_interact"):
 			p2_ready = true
 			_update_ready_ui()
 			_check_both_ready()
@@ -107,28 +107,27 @@ func _set_screen_mode(mode: ScreenMode):
 		ScreenMode.SPLIT:
 			left_container.visible = true
 			right_container.visible = true
-			# HBoxContainer handles 50/50 split automatically
-			left_container.size_flags_stretch_ratio = 1.0
-			right_container.size_flags_stretch_ratio = 1.0
+			left_viewport.size = Vector2i(112, 126)
+			right_viewport.size = Vector2i(112, 126)
 		ScreenMode.SHARED:
 			left_container.visible = true
 			right_container.visible = false
-			# Left viewport takes full width
+			# Full logical width when taking the whole screen
+			left_viewport.size = Vector2i(224, 126)
 
 
 # ─── PLAYER SPAWNING ────────────────────────────────────
 func _spawn_players():
 	p1 = player_scene.instantiate() as CharacterBody2D
 	p1.name = "Player1"
+	p1.player_id = 1                    # set BEFORE add_child
 	p1.set_meta("player_id", 1)
-	# The player script reads this to decide which input actions to use
-	p1.set("player_id", 1)
-	world.add_child(p1)
+	world.add_child(p1)                 # _ready() fires here
 
 	p2 = player_scene.instantiate() as CharacterBody2D
 	p2.name = "Player2"
+	p2.player_id = 2                    # set BEFORE add_child
 	p2.set_meta("player_id", 2)
-	p2.set("player_id", 2)
 	world.add_child(p2)
 
 

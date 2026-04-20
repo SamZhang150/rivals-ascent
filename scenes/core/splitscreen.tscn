@@ -4,38 +4,94 @@
 [ext_resource type="Script" uid="uid://dxa0chs7qg7k" path="res://scripts/core/splitscreen.gd" id="1_70hwx"]
 [ext_resource type="PackedScene" uid="uid://b7fgp2hgf4f5g" path="res://scenes/levels/shared/lobby.tscn" id="1_nd0h1"]
 [ext_resource type="PackedScene" uid="uid://xx2gppykpk8e" path="res://scenes/levels/individual/dungeon.tscn" id="2_qjr4r"]
+[ext_resource type="PackedScene" uid="uid://dghjbmvjnkbp7" path="res://scenes/entities/player.tscn" id="5_w00f7"]
 
 [node name="Splitscreen" type="Node2D" unique_id=1386558526]
+z_index = -5
 script = ExtResource("1_70hwx")
 dungeon_room_scene = ExtResource("2_qjr4r")
 lobby_room_scene = ExtResource("1_nd0h1")
 shop_room_scene = ExtResource("1_6s57n")
 pvp_room_scene = ExtResource("1_nd0h1")
+player_scene = ExtResource("5_w00f7")
 
 [node name="World" type="Node2D" parent="." unique_id=907279618]
 
-[node name="SubViewportContainerLeft" type="SubViewportContainer" parent="." unique_id=2090869864]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="ViewportContainer" type="HBoxContainer" parent="." unique_id=574092326]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Left" type="SubViewportContainer" parent="ViewportContainer" unique_id=1020436082]
+layout_mode = 2
 stretch = true
 
-[node name="Left" type="SubViewport" parent="SubViewportContainerLeft" unique_id=1127895627]
+[node name="SubViewport" type="SubViewport" parent="ViewportContainer/Left" unique_id=1797143321]
 handle_input_locally = false
-size = Vector2i(40, 40)
+size = Vector2i(2, 2)
 render_target_update_mode = 4
 
-[node name="Camera2D" type="Camera2D" parent="SubViewportContainerLeft/Left" unique_id=1716668742]
+[node name="Camera2D" type="Camera2D" parent="ViewportContainer/Left/SubViewport" unique_id=579284315]
 
-[node name="SubViewportContainerRight" type="SubViewportContainer" parent="." unique_id=452637972]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="Right" type="SubViewportContainer" parent="ViewportContainer" unique_id=644704426]
+layout_mode = 2
 stretch = true
 
-[node name="Right" type="SubViewport" parent="SubViewportContainerRight" unique_id=1936557889]
+[node name="SubViewport" type="SubViewport" parent="ViewportContainer/Right" unique_id=1981732774]
 handle_input_locally = false
-size = Vector2i(40, 40)
+size = Vector2i(2, 2)
 render_target_update_mode = 4
 
-[node name="Camera2D" type="Camera2D" parent="SubViewportContainerRight/Right" unique_id=963246216]
+[node name="Camera2D" type="Camera2D" parent="ViewportContainer/Right/SubViewport" unique_id=2114431493]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=347216691]
+[node name="UI" type="CanvasLayer" parent="." unique_id=347216691]
+
+[node name="ReadyUpUI" type="Control" parent="UI" unique_id=1051422504]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="P1ReadyLabel" type="Label" parent="UI/ReadyUpUI" unique_id=1611471426]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 44.0
+offset_bottom = 23.0
+scale = Vector2(0.6, 0.6)
+
+[node name="P2ReadyLabel" type="Label" parent="UI/ReadyUpUI" unique_id=1600222840]
+layout_mode = 0
+offset_left = 152.0
+offset_right = 192.0
+offset_bottom = 23.0
+scale = Vector2(0.6, 0.6)
+horizontal_alignment = 2
+
+[node name="Instructions" type="Label" parent="UI/ReadyUpUI" unique_id=1322254115]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="ShopUI" type="Control" parent="UI" unique_id=798204320]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RoundOverUI" type="Control" parent="UI" unique_id=736761574]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="WinnerLabel" type="Label" parent="UI/RoundOverUI" unique_id=1438685620]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="ScoreLabel" type="Label" parent="UI/RoundOverUI" unique_id=926518458]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

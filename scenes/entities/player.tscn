@@ -63,12 +63,11 @@ size = Vector2(8, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_08t41"]
 size = Vector2(5, 7)
 
-[node name="Player" type="CharacterBody2D" unique_id=897775928]
-script = ExtResource("1_ucweq")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_42nxq"]
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=615768730]
-position_smoothing_enabled = true
-position_smoothing_speed = 15.0
+[node name="Player" type="CharacterBody2D" unique_id=897775928]
+z_index = 1
+script = ExtResource("1_ucweq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1251588531]
 sprite_frames = SubResource("SpriteFrames_dnykm")
@@ -79,8 +78,18 @@ frame_progress = 0.821766
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=924631295]
 shape = SubResource("RectangleShape2D_1ie0h")
 
-[node name="Hitbox" type="Area2D" parent="." unique_id=191753898]
+[node name="HitboxArea" type="Area2D" parent="." unique_id=191753898]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=698855096]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea" unique_id=698855096]
 position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_08t41")
+
+[node name="AttackArea" type="Area2D" parent="." unique_id=1296571934]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1631421250]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_42nxq")
+
+[node name="AttackCooldownTimer" type="Timer" parent="." unique_id=941111139]
+wait_time = 0.4
+one_shot = true
