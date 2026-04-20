@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://b7fgp2hgf4f5g"]
+
+[ext_resource type="Texture2D" uid="uid://bdfluv7vquebp" path="res://assets/sprites/lobby/field.png" id="1_en3xm"]
+
+[node name="Lobby" type="Node2D" unique_id=522539396]
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=547532131]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_en3xm")
+stretch_mode = 1
