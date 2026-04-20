@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://dbv36umbko48s"]
+
+[ext_resource type="PackedScene" uid="uid://dg6oc2mnd4j4p" path="res://scenes/levels/shared/shop.tscn" id="1_6s57n"]
+[ext_resource type="Script" uid="uid://dxa0chs7qg7k" path="res://scripts/core/splitscreen.gd" id="1_70hwx"]
+[ext_resource type="PackedScene" uid="uid://b7fgp2hgf4f5g" path="res://scenes/levels/shared/lobby.tscn" id="1_nd0h1"]
+[ext_resource type="PackedScene" uid="uid://xx2gppykpk8e" path="res://scenes/levels/individual/dungeon.tscn" id="2_qjr4r"]
+
+[node name="Splitscreen" type="Node2D" unique_id=1386558526]
+script = ExtResource("1_70hwx")
+dungeon_room_scene = ExtResource("2_qjr4r")
+lobby_room_scene = ExtResource("1_nd0h1")
+shop_room_scene = ExtResource("1_6s57n")
+pvp_room_scene = ExtResource("1_nd0h1")
+
+[node name="World" type="Node2D" parent="." unique_id=907279618]
+
+[node name="SubViewportContainerLeft" type="SubViewportContainer" parent="." unique_id=2090869864]
+offset_right = 40.0
+offset_bottom = 40.0
+stretch = true
+
+[node name="Left" type="SubViewport" parent="SubViewportContainerLeft" unique_id=1127895627]
+handle_input_locally = false
+size = Vector2i(40, 40)
+render_target_update_mode = 4
+
+[node name="Camera2D" type="Camera2D" parent="SubViewportContainerLeft/Left" unique_id=1716668742]
+
+[node name="SubViewportContainerRight" type="SubViewportContainer" parent="." unique_id=452637972]
+offset_right = 40.0
+offset_bottom = 40.0
+stretch = true
+
+[node name="Right" type="SubViewport" parent="SubViewportContainerRight" unique_id=1936557889]
+handle_input_locally = false
+size = Vector2i(40, 40)
+render_target_update_mode = 4
+
+[node name="Camera2D" type="Camera2D" parent="SubViewportContainerRight/Right" unique_id=963246216]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=347216691]

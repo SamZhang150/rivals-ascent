@@ -6,10 +6,10 @@ func _ready():
 	$TextureButton.mouse_exited.connect(_on_button_unhover)
 
 func _on_play_pressed():
-	Fade.transition_to("res://scenes/levels/days/day1.tscn")
+	Fade.transition_to("res://scenes/levels/shared/lobby.tscn")
 
 func _on_button_hover():
-	$TextureButton.scale = Vector2(1.05, 1.05)
+	$TextureButton.scale = Vector2(.11, 0.11)
 
 func _on_button_unhover():
-	$TextureButton.scale = Vector2(1.0, 1.0)
+	$TextureButton.scale = Vector2(0.1, 0.1)
