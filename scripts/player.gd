@@ -21,7 +21,8 @@ extends CharacterBody2D
 # ─── CONFIG ──────────────────────────────────────────────
 @export var speed: float = 50.0
 @export var max_health: int = 100
-@export var attack_damage: int = 20
+@export var starter_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/pistol.tscn")
+@export var weapon_offset: Vector2 = Vector2(5, -1)
 
 # ─── STATE ───────────────────────────────────────────────
 var player_id: int = 1  # set by game manager on spawn
@@ -29,6 +30,8 @@ var can_move: bool = true
 var can_attack: bool = false
 var health: int = max_health
 var is_attacking: bool = false
+var last_move_direction: Vector2 = Vector2.RIGHT
+var equipped_weapon: Node2D = null
 
 # Shop / progression state
 var gold: int = 100
@@ -57,10 +60,10 @@ func _ready() -> void:
 	# Connect hitbox to receive damage
 	var hitbox := $HitboxArea
 	hitbox.add_to_group("player_hitbox")
-	hitbox.area_entered.connect(_on_hitbox_area_entered)
 
 	health = max_health
 	$AnimatedSprite2D.play(_prefix + "idle")
+	_equip_starter_weapon()
 
 
 func _physics_process(_delta: float) -> void:
@@ -80,11 +83,12 @@ func _physics_process(_delta: float) -> void:
 	input_dir.y = Input.get_axis(_prefix + "up", _prefix + "down")
 	input_dir = input_dir.normalized()
 	if input_dir != Vector2.ZERO:
-		input_dir = input_dir.normalized()
+		last_move_direction = input_dir
 		velocity = input_dir * speed
 		$AnimatedSprite2D.play(_prefix + "run")
 		if input_dir.x != 0:
 			$AnimatedSprite2D.flip_h = input_dir.x < 0
+		_update_weapon_pose(input_dir)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, speed)
 		$AnimatedSprite2D.play(_prefix + "idle")
@@ -111,8 +115,68 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not can_attack:
 		return
 
-	if event.is_action_pressed(_prefix + "attack") and not is_attacking:
-		_perform_attack()
+
+func can_fire_weapon() -> bool:
+	return not shop_ui_open and can_move and visible
+
+
+func get_last_move_direction() -> Vector2:
+	return last_move_direction
+
+
+func get_attack_action_name() -> String:
+	return _prefix + "attack"
+
+
+func _equip_starter_weapon() -> void:
+	if starter_weapon_scene == null:
+		return
+	if equipped_weapon != null and is_instance_valid(equipped_weapon):
+		equipped_weapon.queue_free()
+
+	equipped_weapon = starter_weapon_scene.instantiate() as Node2D
+	if equipped_weapon == null:
+		return
+
+	equipped_weapon.position = weapon_offset
+	add_child(equipped_weapon)
+	_update_weapon_pose(last_move_direction)
+
+
+func _update_weapon_pose(move_dir: Vector2) -> void:
+	if equipped_weapon == null or not is_instance_valid(equipped_weapon):
+		return
+
+	if move_dir == Vector2.ZERO:
+		move_dir = last_move_direction
+	move_dir = move_dir.normalized()
+
+	var x: float = absf(weapon_offset.x)
+	var y: float = weapon_offset.y
+	var on_right_semicircle: bool = move_dir.x > 0.0
+
+	if absf(move_dir.x) >= absf(move_dir.y):
+		if move_dir.x < 0.0:
+			equipped_weapon.position = Vector2(-x, y)
+		else:
+			equipped_weapon.position = Vector2(x, y)
+	else:
+		if move_dir.y < 0.0:
+			equipped_weapon.position = Vector2(y, -x)
+		else:
+			equipped_weapon.position = Vector2(y, x)
+
+	if on_right_semicircle:
+		var right_angle: float = atan2(move_dir.y, move_dir.x)
+		equipped_weapon.rotation = PI + right_angle
+	else:
+		var left_angle: float = atan2(-move_dir.y, -move_dir.x)
+		equipped_weapon.rotation = left_angle
+
+	var weapon_sprite := equipped_weapon.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if weapon_sprite != null:
+		weapon_sprite.flip_h = false
+		weapon_sprite.flip_v = on_right_semicircle
 
 
 func _perform_attack() -> void:
@@ -126,18 +190,6 @@ func _perform_attack() -> void:
 func _on_attack_cooldown_finished() -> void:
 	is_attacking = false
 	attack_area.monitoring = false
-
-
-func _on_hitbox_area_entered(area: Area2D) -> void:
-	# Check if the incoming area is another player's AttackArea
-	var attacker := area.get_parent()
-	
-	if attacker == null or attacker == self:
-		return
-
-	if attacker.is_in_group("player"):
-		take_damage(attacker.attack_damage)
-
 
 func take_damage(amount: int) -> void:
 	health -= amount

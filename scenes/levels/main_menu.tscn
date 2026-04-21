@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://b1envwqcleqv6"]
+
+[ext_resource type="Script" path="res://scenes/core/main_menu.gd" id="1_fsby3"]
+[ext_resource type="Texture2D" uid="uid://dkgcfxryu0qe2" path="res://assets/sprites/ui/play.png" id="2_geflf"]
+[ext_resource type="Texture2D" uid="uid://p5wu83a55lgn" path="res://assets/sprites/ui/playpress.png" id="3_fkd6t"]
+[ext_resource type="Texture2D" uid="uid://do5f8jg22h2m4" path="res://assets/sprites/ui/playhover.png" id="4_keln3"]
+
+[node name="MainMenu" type="Control" unique_id=1201258221]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_fsby3")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1210137148]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureButton" type="TextureButton" parent="." unique_id=170748528]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 56.0
+offset_right = 624.0
+offset_bottom = 236.0
+scale = Vector2(0.1, 0.1)
+texture_normal = ExtResource("2_geflf")
+texture_pressed = ExtResource("3_fkd6t")
+texture_hover = ExtResource("4_keln3")

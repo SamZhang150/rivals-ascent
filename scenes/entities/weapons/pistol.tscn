@@ -2,10 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://ce8ba5aftjvwc" path="res://assets/sprites/weapons/pistol.png" id="1_jgh6n"]
 [ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_pojl6"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pojl6"]
-atlas = ExtResource("1_jgh6n")
-region = Rect2(0, 0, 12, 8)
+[ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/laser_projectile.tscn" id="2_o4rq5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3dj15"]
 atlas = ExtResource("1_jgh6n")
@@ -19,12 +16,13 @@ region = Rect2(24, 0, 12, 8)
 atlas = ExtResource("1_jgh6n")
 region = Rect2(36, 0, 12, 8)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_pojl6"]
+atlas = ExtResource("1_jgh6n")
+region = Rect2(0, 0, 12, 8)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pojl6")
-}, {
 "duration": 0.5,
 "texture": SubResource("AtlasTexture_3dj15")
 }, {
@@ -49,9 +47,15 @@ animations = [{
 
 [node name="Pistol" type="Node2D" unique_id=1518235098]
 script = ExtResource("1_pojl6")
+fire_rate = 6.0
+damage = 10
+bullet_length = 4.0
+bullet_speed = 280.0
+max_ammo = 10
+reload_time = 1.0
+current_ammo = 10
+projectile_scene = ExtResource("2_o4rq5")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
 sprite_frames = SubResource("SpriteFrames_kkxoa")
 animation = &"fire"
-frame = 3
-frame_progress = 1.0
