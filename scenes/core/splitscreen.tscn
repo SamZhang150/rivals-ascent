@@ -20,13 +20,22 @@ player_scene = ExtResource("5_w00f7")
 
 [node name="ScreenDisplay" type="CanvasLayer" parent="." unique_id=25438073]
 
+[node name="ColorRect" type="ColorRect" parent="ScreenDisplay" unique_id=974050885]
+offset_right = 500.0
+offset_bottom = 500.0
+color = Color(0, 0, 0, 1)
+
 [node name="ViewportContainer" type="HBoxContainer" parent="ScreenDisplay" unique_id=1188213856]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 2
 
 [node name="Left" type="SubViewportContainer" parent="ScreenDisplay/ViewportContainer" unique_id=22574553]
 layout_mode = 2
@@ -36,7 +45,7 @@ size_flags_horizontal = 3
 handle_input_locally = false
 snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
-size = Vector2i(112, 126)
+size = Vector2i(108, 122)
 render_target_update_mode = 4
 
 [node name="Right" type="SubViewportContainer" parent="ScreenDisplay/ViewportContainer" unique_id=546929494]
@@ -47,7 +56,7 @@ size_flags_horizontal = 3
 handle_input_locally = false
 snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
-size = Vector2i(112, 126)
+size = Vector2i(108, 122)
 render_target_update_mode = 4
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=347216691]

@@ -3,11 +3,23 @@
 [ext_resource type="Script" uid="uid://cxe7kvyjcwd6a" path="res://scripts/player.gd" id="1_ucweq"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_08t41"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1ie0h"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_08t41"]
 atlas = ExtResource("2_08t41")
-region = Rect2(0, 8, 8, 8)
+region = Rect2(0, 0, 8, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_42nxq"]
+atlas = ExtResource("2_08t41")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dnykm"]
+atlas = ExtResource("2_08t41")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c5rqy"]
+atlas = ExtResource("2_08t41")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ie0h"]
 atlas = ExtResource("2_08t41")
 region = Rect2(0, 8, 8, 8)
 
@@ -27,16 +39,38 @@ region = Rect2(24, 8, 8, 8)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_1ie0h")
+"texture": SubResource("AtlasTexture_08t41")
 }],
 "loop": true,
-"name": &"idle",
+"name": &"p1_idle",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_42nxq")
 }, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dnykm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c5rqy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dnykm")
+}],
+"loop": true,
+"name": &"p1_run",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ie0h")
+}],
+"loop": true,
+"name": &"p2_idle",
+"speed": 5.0
+}, {
+"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5u6hq")
 }, {
@@ -48,12 +82,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_d4qa6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5u6hq")
 }],
 "loop": true,
-"name": &"run",
+"name": &"p2_run",
 "speed": 7.0
 }]
 
@@ -72,10 +103,7 @@ script = ExtResource("1_ucweq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1251588531]
 sprite_frames = SubResource("SpriteFrames_dnykm")
-animation = &"run"
-autoplay = "idle"
-frame = 1
-frame_progress = 0.59354264
+animation = &"p1_run"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=924631295]
 shape = SubResource("RectangleShape2D_1ie0h")

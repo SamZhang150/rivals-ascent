@@ -60,6 +60,7 @@ func _ready() -> void:
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
 
 	health = max_health
+	$AnimatedSprite2D.play(_prefix + "idle")
 
 
 func _physics_process(_delta: float) -> void:
@@ -78,6 +79,15 @@ func _physics_process(_delta: float) -> void:
 	input_dir.x = Input.get_axis(_prefix + "left", _prefix + "right")
 	input_dir.y = Input.get_axis(_prefix + "up", _prefix + "down")
 	input_dir = input_dir.normalized()
+	if input_dir != Vector2.ZERO:
+		input_dir = input_dir.normalized()
+		velocity = input_dir * speed
+		$AnimatedSprite2D.play(_prefix + "run")
+		if input_dir.x != 0:
+			$AnimatedSprite2D.flip_h = input_dir.x < 0
+	else:
+		velocity = velocity.move_toward(Vector2.ZERO, speed)
+		$AnimatedSprite2D.play(_prefix + "idle")
 
 	velocity = input_dir * speed
 	move_and_slide()
