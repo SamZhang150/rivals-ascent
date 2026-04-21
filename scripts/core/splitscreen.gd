@@ -27,7 +27,7 @@ enum Phase { LOBBY, DUNGEON, SHOP_WAITING, SHOP, PVP, ROUND_END, GAME_OVER }
 enum ScreenMode { SPLIT, SHARED }
 
 # ─── EXPORTED ────────────────────────────────────────────
-@export var dungeon_room_scene: PackedScene  # assign dungeon_room.tscn
+@export var dungeon_pool: DungeonPool  # assign dungeon_pool.tres in inspector
 @export var lobby_room_scene: PackedScene    # assign lobby_room.tscn
 @export var shop_room_scene: PackedScene     # assign shop_room.tscn
 @export var pvp_room_scene: PackedScene      # assign pvp_room.tscn
@@ -67,6 +67,17 @@ var pvp_instance: Node2D
 var p1_dungeon_rooms: Array[Node2D] = []
 var p2_dungeon_rooms: Array[Node2D] = []
 
+var difficulty_curves: Array = [
+	[1, 1, 2, 2],
+	[1, 1, 2, 2],
+	[1, 1, 2, 2],
+	[1, 1, 2, 2],
+	[1, 1, 2, 2],
+]
+
+func _get_difficulty_curve() -> Array:
+	var index = mini(current_round, difficulty_curves.size() - 1)
+	return difficulty_curves[index]
 
 func _ready():
 	# Make both viewports render the same world
@@ -236,21 +247,27 @@ func _generate_dungeon_rooms():
 	p1_dungeon_rooms.clear()
 	p2_dungeon_rooms.clear()
 
+	var curve = _get_difficulty_curve()
+
 	for i in range(4):
-		# Player 1 rooms along the top row
+		var difficulty: int = curve[i]
+
+		# Player 1 gets a random room of this difficulty
+		var p1_scene = dungeon_pool.get_room(difficulty)
 		var p1_room = _place_room(
-			dungeon_room_scene,
-			Vector2(ROOM_SPACING * (i), 0)
+			p1_scene,
+			Vector2(ROOM_SPACING * (i + 1), 0)
 		)
 		p1_room.name = "P1_Room_%d" % i
 		p1_room.room_cleared.connect(_on_room_cleared.bind(1))
 		p1_room.set_room_player(p1)
 		p1_dungeon_rooms.append(p1_room)
 
-		# Player 2 rooms along the bottom row
+		# Player 2 gets an independently random room of the same difficulty
+		var p2_scene = dungeon_pool.get_room(difficulty)
 		var p2_room = _place_room(
-			dungeon_room_scene,
-			Vector2(ROOM_SPACING * (i), ROOM_SPACING)
+			p2_scene,
+			Vector2(ROOM_SPACING * (i + 1), ROOM_SPACING)
 		)
 		p2_room.name = "P2_Room_%d" % i
 		p2_room.room_cleared.connect(_on_room_cleared.bind(2))

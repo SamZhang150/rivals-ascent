@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DungeonPool" format=3 uid="uid://m0kpf2rdypio"]
+
+[ext_resource type="PackedScene" uid="uid://cgtdodxwfi8mk" path="res://scenes/levels/dungeon/difficulty_1/room1a.tscn" id="1_8p2u8"]
+[ext_resource type="Script" uid="uid://ciqvnns4ihm2w" path="res://scripts/levels/dungeon_pool.gd" id="1_qwihy"]
+[ext_resource type="PackedScene" uid="uid://daa4mu05oexbt" path="res://scenes/levels/dungeon/difficulty_1/room1b.tscn" id="2_gxi8c"]
+[ext_resource type="PackedScene" uid="uid://dhoul4p0uygfl" path="res://scenes/levels/dungeon/difficulty_2/room1c.tscn" id="3_j1qqk"]
+[ext_resource type="PackedScene" uid="uid://bf6d5rngwd3iq" path="res://scenes/levels/dungeon/difficulty_2/room1d.tscn" id="4_ar704"]
+
+[resource]
+script = ExtResource("1_qwihy")
+difficulty_1 = Array[PackedScene]([ExtResource("1_8p2u8"), ExtResource("2_gxi8c")])
+difficulty_2 = Array[PackedScene]([ExtResource("3_j1qqk"), ExtResource("4_ar704")])
+metadata/_custom_type_script = "uid://ciqvnns4ihm2w"
