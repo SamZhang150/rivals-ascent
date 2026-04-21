@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ddh3y03ry2ldy"]
 
-[ext_resource type="Script" uid="uid://cuiky650fqewo" path="res://scripts/shop_ui.gd" id="1_nwxdi"]
+[ext_resource type="Script" uid="uid://cuiky650fqewo" path="res://scripts/ui/shop_ui.gd" id="1_nwxdi"]
 [ext_resource type="Texture2D" uid="uid://b0t8l1xh88x4w" path="res://assets/sprites/ui/buystation.png" id="2_os6no"]
 [ext_resource type="FontFile" uid="uid://cgitxu1t30c4y" path="res://assets/sprites/ui/PressStart2P-Regular.ttf" id="3_f2epr"]
 

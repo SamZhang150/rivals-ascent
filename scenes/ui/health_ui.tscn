@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://cmu10ds2x6gbk"]
+
+[ext_resource type="Script" uid="uid://ddi3vwa2qtbao" path="res://scripts/ui/health_ui.gd" id="1_hdb0t"]
+[ext_resource type="Texture2D" uid="uid://bmwi5j1lu0iws" path="res://assets/sprites/heart.png" id="2_6rypn"]
+
+[node name="HealthUI" type="Control" unique_id=28729214]
+visible = false
+layout_mode = 3
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+grow_vertical = 2
+script = ExtResource("1_hdb0t")
+
+[node name="HealthContainer" type="HBoxContainer" parent="." unique_id=554175654]
+layout_mode = 0
+offset_right = 36.0
+offset_bottom = 23.0
+
+[node name="Heart" type="TextureRect" parent="HealthContainer" unique_id=346163848]
+layout_mode = 2
+texture = ExtResource("2_6rypn")
+expand_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="HealthContainer" unique_id=1014088296]
+layout_mode = 2
+show_percentage = false
+
+[node name="Label" type="Label" parent="HealthContainer" unique_id=1553139235]
+layout_mode = 2
+horizontal_alignment = 1

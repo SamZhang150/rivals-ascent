@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bcp2n7j5fkcne"]
 
-[ext_resource type="Script" uid="uid://cqaw3hf4xvhr7" path="res://scenes/ui/fade.gd" id="1_kgjcd"]
+[ext_resource type="Script" uid="uid://cqaw3hf4xvhr7" path="res://scripts/ui/fade.gd" id="1_kgjcd"]
 
 [sub_resource type="Animation" id="Animation_xw44n"]
 length = 0.001

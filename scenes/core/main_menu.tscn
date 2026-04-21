@@ -1,3 +1,29 @@
-[gd_scene format=3 uid="uid://dae1han7fpnec"]
+[gd_scene format=3 uid="uid://b06qrmyjpkxvu"]
 
-[node name="MainMenu" type="Node2D" unique_id=814839496]
+[ext_resource type="Script" uid="uid://133qxx52hcxq" path="res://scripts/core/main_menu.gd" id="1_wdlpg"]
+[ext_resource type="Texture2D" uid="uid://dkgcfxryu0qe2" path="res://assets/sprites/ui/play.png" id="2_p31qs"]
+[ext_resource type="Texture2D" uid="uid://p5wu83a55lgn" path="res://assets/sprites/ui/playpress.png" id="3_pa3yt"]
+[ext_resource type="Texture2D" uid="uid://do5f8jg22h2m4" path="res://assets/sprites/ui/playhover.png" id="4_hkd7v"]
+
+[node name="MainMenu" type="Control" unique_id=1201258221]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_wdlpg")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1210137148]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureButton" type="TextureButton" parent="." unique_id=170748528]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 56.0
+offset_right = 624.0
+offset_bottom = 236.0
+scale = Vector2(0.1, 0.1)
+texture_normal = ExtResource("2_p31qs")
+texture_pressed = ExtResource("3_pa3yt")
+texture_hover = ExtResource("4_hkd7v")
