@@ -5,8 +5,6 @@ extends Area2D
 func _on_body_entered(body: Node2D) -> void:
 	if body.has_method("set_near_shop_station"):
 		body.set_near_shop_station(self)
-	if body.has_method("open_shop_ui"):
-		body.open_shop_ui(station_type)
 
 
 func _on_body_exited(body: Node2D) -> void:

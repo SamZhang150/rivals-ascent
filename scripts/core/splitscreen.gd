@@ -109,12 +109,12 @@ func _center_viewport_on(vp: SubViewport, target_pos: Vector2):
 func _unhandled_input(event: InputEvent):
 	# Ready-up handling
 	if phase == Phase.LOBBY or phase == Phase.SHOP:
-		if event.is_action_pressed("p1_interact"):
-			p1_ready = true
+		if event.is_action_pressed("p1_ready"):
+			p1_ready = !p1_ready
 			_update_ready_ui()
 			_check_both_ready()
-		if event.is_action_pressed("p2_interact"):
-			p2_ready = true
+		if event.is_action_pressed("p2_ready"):
+			p2_ready = !p2_ready
 			_update_ready_ui()
 			_check_both_ready()
 
@@ -268,6 +268,11 @@ func _teleport_to_dungeon_room(player_id: int, room_index: int):
 
 
 func _on_room_cleared(player_id: int):
+	# Defer room transitions to avoid mutating physics objects during Area2D query flush.
+	call_deferred("_handle_room_cleared", player_id)
+
+
+func _handle_room_cleared(player_id: int):
 	if player_id == 1:
 		p1_room_index += 1
 		if p1_room_index >= 4:

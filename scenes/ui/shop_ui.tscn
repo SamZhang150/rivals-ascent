@@ -1,17 +1,18 @@
-[gd_scene format=3 uid="uid://dfxi5usn2c5ok"]
+[gd_scene format=3 uid="uid://ddh3y03ry2ldy"]
 
-[ext_resource type="Script" uid="uid://cuiky650fqewo" path="res://scripts/shop_ui.gd" id="1_c1njq"]
+[ext_resource type="Script" uid="uid://cuiky650fqewo" path="res://scripts/shop_ui.gd" id="1_nwxdi"]
 [ext_resource type="Texture2D" uid="uid://b0t8l1xh88x4w" path="res://assets/sprites/ui/buystation.png" id="2_os6no"]
 [ext_resource type="FontFile" uid="uid://cgitxu1t30c4y" path="res://assets/sprites/ui/PressStart2P-Regular.ttf" id="3_f2epr"]
 
 [node name="ShopUI" type="Control" unique_id=1017933386]
+modulate = Color(1, 1, 1, 0.6431373)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_c1njq")
+script = ExtResource("1_nwxdi")
 
 [node name="Root" type="Control" parent="." unique_id=649265417]
 anchors_preset = 0
@@ -77,25 +78,12 @@ offset_bottom = 69.007996
 [node name="OptionsContainer" type="VBoxContainer" parent="Root/P1ShopUI/MainPanel/OptionsScroll" unique_id=1317770370]
 layout_mode = 2
 
-[node name="CloseButton" type="Button" parent="Root/P1ShopUI/MainPanel" unique_id=179014629]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.7894737
-anchor_top = -0.097826086
-anchor_right = 0.9581579
-anchor_bottom = 0.16295652
-offset_right = -0.025001526
-offset_bottom = -3.9920006
-theme_override_font_sizes/font_size = 8
-text = "X"
-metadata/_edit_use_anchors_ = true
-
 [node name="P2ShopUI" type="Control" parent="Root" unique_id=1006910357]
 z_index = 1
 anchors_preset = 0
-offset_left = -3.0
+offset_left = 109.0
 offset_top = 3.0
-offset_right = -3.0
+offset_right = 109.0
 offset_bottom = 3.0
 
 [node name="MainPanel" type="Panel" parent="Root/P2ShopUI" unique_id=1147382573]
@@ -150,16 +138,3 @@ offset_bottom = 69.007996
 
 [node name="OptionsContainer" type="VBoxContainer" parent="Root/P2ShopUI/MainPanel/OptionsScroll" unique_id=451716862]
 layout_mode = 2
-
-[node name="CloseButton" type="Button" parent="Root/P2ShopUI/MainPanel" unique_id=1774165780]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.7894737
-anchor_top = -0.097826086
-anchor_right = 0.9581579
-anchor_bottom = 0.16295652
-offset_right = -0.025001526
-offset_bottom = -3.9920006
-theme_override_font_sizes/font_size = 8
-text = "X"
-metadata/_edit_use_anchors_ = true

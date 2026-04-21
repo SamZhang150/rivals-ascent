@@ -71,4 +71,4 @@ func _on_exit_trigger_body_entered(body: Node2D):
 	if body is CharacterBody2D:
 		room_cleared.emit()
 		# Disable trigger so it doesn't fire again
-		exit_trigger.monitoring = false
+		exit_trigger.set_deferred("monitoring", false)

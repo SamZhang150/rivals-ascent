@@ -6,7 +6,6 @@ extends Control
 @onready var p1_gold_label: Label = $Root/P1ShopUI/MainPanel/GoldLabel
 @onready var p1_options_scroll: ScrollContainer = $Root/P1ShopUI/MainPanel/OptionsScroll
 @onready var p1_options_container: VBoxContainer = $Root/P1ShopUI/MainPanel/OptionsScroll/OptionsContainer
-@onready var p1_close_button: Button = $Root/P1ShopUI/MainPanel/CloseButton
 
 @onready var p2_shop_ui: Control = $Root/P2ShopUI
 @onready var p2_main_panel: Panel = $Root/P2ShopUI/MainPanel
@@ -14,7 +13,6 @@ extends Control
 @onready var p2_gold_label: Label = $Root/P2ShopUI/MainPanel/GoldLabel
 @onready var p2_options_scroll: ScrollContainer = $Root/P2ShopUI/MainPanel/OptionsScroll
 @onready var p2_options_container: VBoxContainer = $Root/P2ShopUI/MainPanel/OptionsScroll/OptionsContainer
-@onready var p2_close_button: Button = $Root/P2ShopUI/MainPanel/CloseButton
 
 var p1_current_mode: String = ""
 var p2_current_mode: String = ""
@@ -26,9 +24,6 @@ var p2_current_player: CharacterBody2D = null
 func _ready() -> void:
 	p1_main_panel.visible = false
 	p2_main_panel.visible = false
-
-	p1_close_button.pressed.connect(_on_p1_close_button_pressed)
-	p2_close_button.pressed.connect(_on_p2_close_button_pressed)
 
 	# Optional: tighter spacing between option buttons
 	p1_options_container.add_theme_constant_override("separation", 6)
@@ -233,13 +228,3 @@ func _get_player_by_id(player_id: int) -> CharacterBody2D:
 	elif player_id == 2:
 		return p2_current_player
 	return null
-
-
-func _on_p1_close_button_pressed() -> void:
-	if p1_current_player != null and p1_current_player.has_method("close_shop_ui"):
-		p1_current_player.close_shop_ui()
-
-
-func _on_p2_close_button_pressed() -> void:
-	if p2_current_player != null and p2_current_player.has_method("close_shop_ui"):
-		p2_current_player.close_shop_ui()

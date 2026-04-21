@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b7fgp2hgf4f5g" path="res://scenes/levels/shared/lobby.tscn" id="1_nd0h1"]
 [ext_resource type="PackedScene" uid="uid://xx2gppykpk8e" path="res://scenes/levels/individual/dungeon.tscn" id="2_qjr4r"]
 [ext_resource type="PackedScene" uid="uid://dghjbmvjnkbp7" path="res://scenes/entities/player.tscn" id="5_w00f7"]
+[ext_resource type="PackedScene" uid="uid://ddh3y03ry2ldy" path="res://scenes/ui/shop_ui.tscn" id="6_w74f3"]
 
 [node name="Splitscreen" type="Node2D" unique_id=1386558526]
 z_index = -5
@@ -77,12 +78,6 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="ShopUI" type="Control" parent="UI" unique_id=798204320]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
 [node name="RoundOverUI" type="Control" parent="UI" unique_id=736761574]
 layout_mode = 3
 anchors_preset = 0
@@ -98,3 +93,5 @@ offset_bottom = 23.0
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="ShopUI" parent="UI" unique_id=1017933386 instance=ExtResource("6_w74f3")]

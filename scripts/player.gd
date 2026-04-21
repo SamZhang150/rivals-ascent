@@ -87,6 +87,8 @@ func _physics_process(_delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if shop_ui_open:
+		if event.is_action_pressed(_prefix + "back"):
+			close_shop_ui()
 		return
 
 	if nearby_station != null and event.is_action_pressed(_prefix + "interact"):
