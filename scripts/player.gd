@@ -187,11 +187,7 @@ func open_shop_ui(mode: String) -> void:
 func close_shop_ui() -> void:
 	shop_ui_open = false
 	can_move = true
-
-	# Restore whatever your normal attack state should be outside the shop.
-	# If players should only attack in combat phases, your game manager can
-	# override this later.
 	can_attack = true
 
-	if shop_ui != null and shop_ui.has_method("close_ui"):
-		shop_ui.close_ui()
+	if shop_ui != null and shop_ui.has_method("close_ui_for_player"):
+		shop_ui.close_ui_for_player(player_id)
