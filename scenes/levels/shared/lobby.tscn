@@ -530,6 +530,18 @@ texture_region_size = Vector2i(8, 8)
 tile_size = Vector2i(8, 8)
 sources/0 = SubResource("TileSetAtlasSource_7vqca")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_en3xm"]
+size = Vector2(223, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7vqca"]
+size = Vector2(2, 112)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g10y1"]
+size = Vector2(2, 113)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e3lt3"]
+size = Vector2(224, 2)
+
 [node name="Lobby" type="Node2D" unique_id=522539396]
 z_index = -1
 
@@ -544,3 +556,23 @@ tile_set = SubResource("TileSet_7vqca")
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=2031520815]
 position = Vector2(112, 64)
+
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1860658931]
+collision_mask = 6
+
+[node name="top" type="CollisionShape2D" parent="Walls" unique_id=352868130]
+position = Vector2(111, 14)
+rotation = 3.1415927
+shape = SubResource("RectangleShape2D_en3xm")
+
+[node name="left" type="CollisionShape2D" parent="Walls" unique_id=537958049]
+position = Vector2(-1, 72)
+shape = SubResource("RectangleShape2D_7vqca")
+
+[node name="right" type="CollisionShape2D" parent="Walls" unique_id=2073077360]
+position = Vector2(225, 71.5)
+shape = SubResource("RectangleShape2D_g10y1")
+
+[node name="bottom" type="CollisionShape2D" parent="Walls" unique_id=1431289410]
+position = Vector2(112, 129)
+shape = SubResource("RectangleShape2D_e3lt3")

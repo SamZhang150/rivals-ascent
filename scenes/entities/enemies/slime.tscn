@@ -33,6 +33,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iy50v"]
+size = Vector2(10, 7)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ljkv1"]
 size = Vector2(8, 5)
 
@@ -47,6 +50,10 @@ script = ExtResource("1_ljkv1")
 sprite_frames = SubResource("SpriteFrames_rw4dm")
 animation = &"run"
 autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1238288431]
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_iy50v")
 
 [node name="HitboxArea" type="Area2D" parent="." unique_id=765376750]
 collision_layer = 64

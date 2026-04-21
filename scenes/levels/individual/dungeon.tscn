@@ -572,6 +572,18 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0f117"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fsjsk"]
+size = Vector2(223, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y4cx7"]
+size = Vector2(2, 112)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ljrjq"]
+size = Vector2(2, 113)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_20khk"]
+size = Vector2(224, 2)
+
 [node name="Dungeon" type="Node2D" unique_id=156781219]
 script = ExtResource("1_0f117")
 
@@ -606,3 +618,24 @@ position = Vector2(206, 111)
 shape = SubResource("RectangleShape2D_0f117")
 
 [node name="Slime" parent="." unique_id=1718233248 instance=ExtResource("3_uvhcu")]
+position = Vector2(68, 29)
+
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1784569455]
+collision_mask = 6
+
+[node name="top" type="CollisionShape2D" parent="Walls" unique_id=1121551537]
+position = Vector2(111, 16)
+rotation = 3.1415927
+shape = SubResource("RectangleShape2D_fsjsk")
+
+[node name="left" type="CollisionShape2D" parent="Walls" unique_id=1642986842]
+position = Vector2(-1, 72)
+shape = SubResource("RectangleShape2D_y4cx7")
+
+[node name="right" type="CollisionShape2D" parent="Walls" unique_id=919678089]
+position = Vector2(225, 71.5)
+shape = SubResource("RectangleShape2D_ljrjq")
+
+[node name="bottom" type="CollisionShape2D" parent="Walls" unique_id=2006166720]
+position = Vector2(112, 129)
+shape = SubResource("RectangleShape2D_20khk")
