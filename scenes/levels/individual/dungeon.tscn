@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://blvjmqiox7fy" path="res://scenes/levels/individual/dungeon.gd" id="1_0f117"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="1_c23ac"]
+[ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="3_uvhcu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0f117"]
 texture = ExtResource("1_c23ac")
@@ -604,4 +605,4 @@ animation = &"closed"
 position = Vector2(206, 111)
 shape = SubResource("RectangleShape2D_0f117")
 
-[node name="Enemies" type="Node2D" parent="." unique_id=857047854]
+[node name="Slime" parent="." unique_id=1718233248 instance=ExtResource("3_uvhcu")]

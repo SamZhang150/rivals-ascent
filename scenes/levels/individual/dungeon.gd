@@ -29,17 +29,18 @@ signal room_cleared()
 
 @onready var exit_door: StaticBody2D = $ExitDoor
 @onready var exit_trigger: Area2D = $ExitTrigger
-@onready var enemies_node: Node2D = $Enemies
+#@onready var enemies_node: Node2D = $Enemies
 
 var enemies_alive: int = 0
 var is_cleared: bool = false
-
+var room_player: CharacterBody2D = null
 
 func _ready():
 	# Count enemies and connect their death signals
-	for child in enemies_node.get_children():
-		if child.has_signal("died"):
+	for child in get_children():
+		if child.is_in_group("enemies"):
 			enemies_alive += 1
+		if child.has_signal("died"):
 			child.died.connect(_on_enemy_died)
 
 	# Exit trigger is disabled until room is cleared
@@ -49,26 +50,38 @@ func _ready():
 	# If room has no enemies, open immediately
 	if enemies_alive == 0:
 		_open_exit()
+		
+func set_room_player(player: CharacterBody2D) -> void:
+	room_player = player
 
-
+	for child in get_children():
+		if child.is_in_group("enemies") and child.has_method("set_player"):
+			child.set_player(player)
+		
+			
 func _on_enemy_died():
 	enemies_alive -= 1
 	if enemies_alive <= 0:
 		_open_exit()
-
-
+		
 func _open_exit():
+	if is_cleared:
+		return
+		
 	is_cleared = true
+	
 	# Remove the physical door blocker
-	exit_door.queue_free()
+	if is_instance_valid(exit_door):
+		exit_door.queue_free()
+		
 	# Enable the trigger area so stepping on it fires room_cleared
 	exit_trigger.monitoring = true
 
 
 func _on_exit_trigger_body_entered(body: Node2D):
-	if body is CharacterBody2D and not is_cleared:
+	if not is_cleared:
 		return
-	if body is CharacterBody2D:
+	if body == room_player:
 		room_cleared.emit()
 		# Disable trigger so it doesn't fire again
 		exit_trigger.set_deferred("monitoring", false)

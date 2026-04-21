@@ -1,9 +1,5 @@
 extends Node
 
-# shared constants
-var attack_duration := 0.2
-var invuln_time := 0.75
-
 # different params by player
 var player_stats = {
 	1: {

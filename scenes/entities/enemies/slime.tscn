@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://eog7e6xoa48"]
+
+[ext_resource type="Script" uid="uid://corlw76dq4yhj" path="res://scripts/enemies/slime.gd" id="1_ljkv1"]
+[ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_jw1jb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iy50v"]
+atlas = ExtResource("2_jw1jb")
+region = Rect2(32, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_glkij"]
+atlas = ExtResource("2_jw1jb")
+region = Rect2(40, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rw4dm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iy50v")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iy50v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_glkij")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ljkv1"]
+size = Vector2(8, 5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jw1jb"]
+size = Vector2(10, 7)
+
+[node name="Slime" type="CharacterBody2D" unique_id=1718233248]
+collision_layer = 4
+script = ExtResource("1_ljkv1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1200022150]
+sprite_frames = SubResource("SpriteFrames_rw4dm")
+animation = &"run"
+autoplay = "idle"
+
+[node name="HitboxArea" type="Area2D" parent="." unique_id=765376750]
+collision_layer = 64
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea" unique_id=341592251]
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_ljkv1")
+
+[node name="HurtboxArea" type="Area2D" parent="." unique_id=1151634370]
+collision_layer = 16
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxArea" unique_id=1103982250]
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_jw1jb")
+
+[node name="HealthBar" type="Node2D" parent="." unique_id=1821913402]
+visible = false
+
+[node name="BarBG" type="ColorRect" parent="HealthBar" unique_id=395978934]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BarFill" type="ColorRect" parent="HealthBar" unique_id=469884138]
+offset_right = 40.0
+offset_bottom = 40.0

@@ -244,6 +244,7 @@ func _generate_dungeon_rooms():
 		)
 		p1_room.name = "P1_Room_%d" % i
 		p1_room.room_cleared.connect(_on_room_cleared.bind(1))
+		p1_room.set_room_player(p1)
 		p1_dungeon_rooms.append(p1_room)
 
 		# Player 2 rooms along the bottom row
@@ -253,6 +254,7 @@ func _generate_dungeon_rooms():
 		)
 		p2_room.name = "P2_Room_%d" % i
 		p2_room.room_cleared.connect(_on_room_cleared.bind(2))
+		p2_room.set_room_player(p2)
 		p2_dungeon_rooms.append(p2_room)
 
 

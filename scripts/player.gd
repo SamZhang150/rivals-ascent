@@ -48,12 +48,15 @@ signal died(player_id: int)
 
 
 func _ready() -> void:
+	add_to_group("player")
+	
 	_prefix = "p1_" if player_id == 1 else "p2_"
 	attack_area.monitoring = false
 	attack_timer.timeout.connect(_on_attack_cooldown_finished)
 
 	# Connect hitbox to receive damage
-	var hitbox := $HitboxArea as Area2D
+	var hitbox := $HitboxArea
+	hitbox.add_to_group("player_hitbox")
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
 
 	health = max_health
@@ -118,7 +121,11 @@ func _on_attack_cooldown_finished() -> void:
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	# Check if the incoming area is another player's AttackArea
 	var attacker := area.get_parent()
-	if attacker is CharacterBody2D and attacker != self:
+	
+	if attacker == null or attacker == self:
+		return
+
+	if attacker.is_in_group("player"):
 		take_damage(attacker.attack_damage)
 
 

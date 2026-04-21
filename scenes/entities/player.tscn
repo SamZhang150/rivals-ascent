@@ -67,6 +67,7 @@ size = Vector2(5, 7)
 
 [node name="Player" type="CharacterBody2D" unique_id=897775928]
 z_index = 1
+collision_layer = 2
 script = ExtResource("1_ucweq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1251588531]
@@ -80,12 +81,16 @@ frame_progress = 0.59354264
 shape = SubResource("RectangleShape2D_1ie0h")
 
 [node name="HitboxArea" type="Area2D" parent="." unique_id=191753898]
+collision_layer = 32
+collision_mask = 96
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea" unique_id=698855096]
 position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_08t41")
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=1296571934]
+collision_layer = 8
+collision_mask = 48
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1631421250]
 position = Vector2(-0.5, 0)
