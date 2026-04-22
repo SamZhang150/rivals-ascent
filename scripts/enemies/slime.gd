@@ -24,6 +24,7 @@ var player: CharacterBody2D = null
 
 func _ready() -> void:
 	add_to_group("enemies")
+	hitbox.add_to_group("enemy_hitbox")
 	hurtbox.area_entered.connect(_on_hurtbox_area_entered)
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
 
@@ -75,14 +76,15 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 		die()
 
 func _on_hurtbox_area_entered(body: Node) -> void:
-	if body == player and body.has_method("take_damage"):
-		body.take_damage(touch_damage)
+	#if body == player and body.has_method("take_damage"):
+		#body.take_damage(touch_damage)
+		pass
 		
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("player_hitbox"):
 		var player = area.get_parent()
-		if player.has_method("take_damage"):
-			player.take_damage(touch_damage)
+		#if player.has_method("take_damage"):
+			#player.take_damage(touch_damage, global_position)
 
 func die() -> void:
 	if dead:

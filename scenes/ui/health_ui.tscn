@@ -2,6 +2,11 @@
 
 [ext_resource type="Script" uid="uid://ddi3vwa2qtbao" path="res://scripts/ui/health_ui.gd" id="1_hdb0t"]
 [ext_resource type="Texture2D" uid="uid://bmwi5j1lu0iws" path="res://assets/sprites/heart.png" id="2_6rypn"]
+[ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/pixel_font.ttf" id="3_fht25"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_6rypn"]
+font = ExtResource("3_fht25")
+font_size = 10
 
 [node name="HealthUI" type="Control" unique_id=1253297385]
 layout_mode = 3
@@ -25,6 +30,7 @@ offset_top = 8.0
 offset_right = 70.0
 offset_bottom = 31.0
 text = "20/20"
+label_settings = SubResource("LabelSettings_6rypn")
 
 [node name="ProgressBar" type="ProgressBar" parent="." unique_id=801163750]
 custom_minimum_size = Vector2(70, 8)

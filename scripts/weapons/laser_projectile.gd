@@ -123,4 +123,4 @@ func _apply_enemy_damage(enemy: Node) -> void:
 
 func _apply_player_damage(player: Node) -> void:
 	if player.has_method("take_damage"):
-		player.take_damage(damage)
+		player.take_damage(damage, global_position)

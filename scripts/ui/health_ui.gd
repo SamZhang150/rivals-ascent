@@ -7,15 +7,15 @@ extends Control
 @export var is_left: bool = false
 
 func _ready() -> void:
-	position = Vector2(10, 230)
+	position = Vector2(5, 235)
 	
 	if !is_left:
-		position = Vector2(275, 230)
+		position = Vector2(305, 235)
 		
 	heart.position = Vector2(0, 0)
-	label.position = Vector2(22 + health_bar.custom_minimum_size.x, -7)
-	health_bar.position = Vector2(20, 2)
-	health_bar.custom_minimum_size = Vector2(60, 6)
+	label.position = Vector2(22 + health_bar.custom_minimum_size.x, 2)
+	health_bar.position = Vector2(17, 2)
+	health_bar.custom_minimum_size = Vector2(61, 6)
 
 	health_bar.show_percentage = false
 

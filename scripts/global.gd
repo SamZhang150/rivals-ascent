@@ -10,7 +10,7 @@ var player_stats = {
 		"attack_duration": 0.2,
 		"attack_cooldown": 1.75,
 		"invuln_time": 0.75,
-		"knockback_strength": 260.0,
+		"knockback_strength": 120.0,
 		"knockback_decay": 700.0
 	},
 	2: {
@@ -21,7 +21,7 @@ var player_stats = {
 		"attack_duration": 0.2,
 		"attack_cooldown": 1.75,
 		"invuln_time": 0.75,
-		"knockback_strength": 260.0,
+		"knockback_strength": 120.0,
 		"knockback_decay": 700.0
 	}
 }

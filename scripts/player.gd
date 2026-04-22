@@ -33,6 +33,12 @@ var last_move_direction: Vector2 = Vector2.RIGHT
 var equipped_weapon: Node2D = null
 
 var is_invulnerable: bool = false
+var damage_knockback: Vector2 = Vector2.ZERO
+
+# Contact damage tracking
+var _enemies_in_contact: Array[Node] = []
+var _contact_damage_timer: Timer = null
+@export var contact_damage_interval: float = 0.5  # How often to take damage while in contact
 
 # Shop / progression state
 var gold: int = 100
@@ -62,6 +68,17 @@ func _ready() -> void:
 	_prefix = "p1_" if player_id == 1 else "p2_"
 	attack_area.monitoring = false
 	attack_timer.timeout.connect(_on_attack_cooldown_finished)
+	
+	# Set up contact damage timer
+	_contact_damage_timer = Timer.new()
+	_contact_damage_timer.wait_time = contact_damage_interval
+	_contact_damage_timer.autostart = false
+	_contact_damage_timer.timeout.connect(_on_contact_damage_timer)
+	add_child(_contact_damage_timer)
+	
+	# Connect hitbox signals to track enemies in contact
+	hitbox.area_entered.connect(_on_hitbox_area_entered)
+	hitbox.area_exited.connect(_on_hitbox_area_exited)
 	
 	_set_health(get_max_health())
 	_update_health_ui()
@@ -98,6 +115,9 @@ func _physics_process(_delta: float) -> void:
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, speed)
 		sprite.play(_prefix + "idle")
+		
+	velocity += damage_knockback
+	damage_knockback = damage_knockback.move_toward(Vector2.ZERO, get_knockback_decay() * _delta)
 
 	move_and_slide()
 
@@ -235,20 +255,62 @@ func _on_attack_cooldown_finished() -> void:
 	is_attacking = false
 	attack_area.monitoring = false
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, from_position: Vector2) -> void:
 	if is_dead() or is_invulnerable:
 		return
 
 	_set_health(get_health() - amount)
 	_update_health_ui()
-
+	_start_invuln(get_invuln_time())
+	damage_knockback = (global_position - from_position).normalized() * get_knockback_strength()
+		
 	sprite.modulate = Color.RED
 	get_tree().create_timer(0.15).timeout.connect(func() -> void:
-		sprite.modulate = Color.WHITE
+		if not is_dead():
+			sprite.modulate = Color.WHITE
 	)
 
 	if get_health() <= 0:
 		_die()
+
+
+func _on_hitbox_area_entered(area: Area2D) -> void:
+	if area.is_in_group("enemy_hitbox"):
+		var enemy = area.get_parent()
+		if enemy != null and not _enemies_in_contact.has(enemy):
+			_enemies_in_contact.append(enemy)
+			# Start damage timer if not already running
+			if _contact_damage_timer.is_stopped():
+				_contact_damage_timer.start()
+
+
+func _on_hitbox_area_exited(area: Area2D) -> void:
+	if area.is_in_group("enemy_hitbox"):
+		var enemy = area.get_parent()
+		if enemy != null:
+			var idx = _enemies_in_contact.find(enemy)
+			if idx != -1:
+				_enemies_in_contact.remove_at(idx)
+			# Stop timer if no enemies in contact
+			if _enemies_in_contact.is_empty():
+				_contact_damage_timer.stop()
+
+
+func _on_contact_damage_timer() -> void:
+	if is_dead():
+		return
+		
+	_enemies_in_contact = _enemies_in_contact.filter(func(e): return is_instance_valid(e))
+	if _enemies_in_contact.is_empty():
+		_contact_damage_timer.stop()
+		return
+	
+	# Apply damage from all enemies in contact
+	for enemy in _enemies_in_contact:
+		var dmg = enemy.get("touch_damage")
+		if dmg != null:
+			take_damage(int(dmg), enemy.global_position)
+			break
 
 
 func _die() -> void:
