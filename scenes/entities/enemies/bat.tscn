@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://d2t617cwu2nsu"]
+
+[ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="1_f0pah"]
+[ext_resource type="Script" uid="uid://d0vwimxj5rb1x" path="res://scripts/enemies/bat.gd" id="2_7qqgy"]
+[ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_fwufd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7qqgy"]
+atlas = ExtResource("2_fwufd")
+region = Rect2(32, 24, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u58un"]
+atlas = ExtResource("2_fwufd")
+region = Rect2(48, 24, 16, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5l7s8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7qqgy")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7qqgy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u58un")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}]
+
+[node name="Bat" unique_id=1718233248 instance=ExtResource("1_f0pah")]
+script = ExtResource("2_7qqgy")
+max_health = 80
+touch_damage = 4
+coin_reward = 7
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1200022150]
+sprite_frames = SubResource("SpriteFrames_5l7s8")
+animation = &"idle"

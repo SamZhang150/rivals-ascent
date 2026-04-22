@@ -37,11 +37,13 @@ var room_player: CharacterBody2D = null
 func _ready():
 	enemies_alive = 0
 	# Count enemies and connect their death signals
-	for node in find_children("*", "", true, false):
-		if node.is_in_group("enemies"):
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if is_ancestor_of(enemy):
 			enemies_alive += 1
-			if node.has_signal("died") and not node.died.is_connected(_on_enemy_died):
-				node.died.connect(_on_enemy_died)
+			if enemy.has_signal("died") and not enemy.died.is_connected(_on_enemy_died):
+				enemy.died.connect(_on_enemy_died)
+	
+	print(name, " enemies_alive = ", enemies_alive)
 
 	# Exit trigger is disabled until room is cleared
 	exit_trigger.monitoring = false
@@ -59,6 +61,8 @@ func set_room_player(player: CharacterBody2D) -> void:
 			
 func _on_enemy_died():
 	enemies_alive -= 1
+	print(name, " enemy died, remaining = ", enemies_alive)
+
 	if enemies_alive <= 0:
 		_open_exit()
 		
