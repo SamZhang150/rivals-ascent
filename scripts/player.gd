@@ -13,8 +13,8 @@
 ##
 ## === INPUT MAP (Project > Input Map) ===
 ## You should have:
-##   p1_up, p1_down, p1_left, p1_right, p1_attack, p1_ready, p1_interact
-##   p2_up, p2_down, p2_left, p2_right, p2_attack, p2_ready, p2_interact
+##   p1_up, p1_down, p1_left, p1_right, p1_attack, p1_ready, p1_interact, p1_dash
+##   p2_up, p2_down, p2_left, p2_right, p2_attack, p2_ready, p2_interact, p2_dash
 
 extends CharacterBody2D
 
@@ -23,6 +23,9 @@ extends CharacterBody2D
 @export var max_health: int = 100
 @export var starter_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/pistol.tscn")
 @export var weapon_offset: Vector2 = Vector2(5, -1)
+@export var dash_speed: float = 300.0
+@export var dash_duration: float = 0.3
+@export var dash_cooldown: float = 0.9
 
 # ─── STATE ───────────────────────────────────────────────
 var player_id: int = 1  # set by game manager on spawn
@@ -54,6 +57,14 @@ var shop_ui_open: bool = false
 # Input action prefixes
 var _prefix: String = "p1_"
 
+# Dash
+var has_dash: bool = false
+var is_dashing: bool = false
+var can_dash: bool = true
+var dash_direction: Vector2 = Vector2.ZERO
+var _dash_timer: Timer = null
+var _dash_cooldown_timer: Timer = null
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_area: Area2D = $AttackArea
 @onready var attack_timer: Timer = $AttackCooldownTimer
@@ -65,7 +76,6 @@ var health_ui = get_node_or_null(health_ui_path)
 @export var coin_ui_path: NodePath
 var coin_ui = get_node_or_null(coin_ui_path)
 @export var coin_popup_scene: PackedScene = preload("res://scenes/ui/coin_popup.tscn")
-
 
 @onready var shop_ui: Node = get_tree().current_scene.get_node("UI/ShopUI")
 
@@ -87,6 +97,19 @@ func _ready() -> void:
 	_contact_damage_timer.timeout.connect(_on_contact_damage_timer)
 	add_child(_contact_damage_timer)
 	
+	# Dash timers
+	_dash_timer = Timer.new()
+	_dash_timer.one_shot = true
+	_dash_timer.wait_time = dash_duration
+	_dash_timer.timeout.connect(_on_dash_finished)
+	add_child(_dash_timer)
+
+	_dash_cooldown_timer = Timer.new()
+	_dash_cooldown_timer.one_shot = true
+	_dash_cooldown_timer.wait_time = dash_cooldown
+	_dash_cooldown_timer.timeout.connect(_on_dash_cooldown_finished)
+	add_child(_dash_cooldown_timer)
+	
 	# Connect hitbox signals to track enemies in contact
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
 	hitbox.area_exited.connect(_on_hitbox_area_exited)
@@ -107,6 +130,14 @@ func _physics_process(_delta: float) -> void:
 
 	if not can_move:
 		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
+	# During dash, ignore normal movement input
+	if is_dashing:
+		velocity = dash_direction * dash_speed
+		velocity += damage_knockback
+		damage_knockback = damage_knockback.move_toward(Vector2.ZERO, get_knockback_decay() * _delta)
 		move_and_slide()
 		return
 
@@ -144,9 +175,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		open_shop_ui(nearby_station.station_type)
 		return
 
-	if not can_attack:
+	if event.is_action_pressed(_prefix + "dash"):
+		_try_dash()
 		return
 
+	if not can_attack:
+		return
 
 func can_fire_weapon() -> bool:
 	return not shop_ui_open and can_move and visible
@@ -402,6 +436,10 @@ func reset_for_round() -> void:
 	is_attacking = false
 	attack_area.monitoring = false
 
+	is_dashing = false
+	can_dash = true
+	dash_direction = Vector2.ZERO
+
 
 func respawn_at(pos: Vector2) -> void:
 	reset_for_round()
@@ -420,6 +458,48 @@ func _start_invuln(duration: float) -> void:
 		is_invulnerable = false
 	)
 
+func _try_dash() -> void:
+	if not has_dash:
+		return
+	if not can_dash:
+		return
+	if not can_move:
+		return
+	if shop_ui_open:
+		return
+
+	var input_dir := Vector2.ZERO
+	input_dir.x = Input.get_axis(_prefix + "left", _prefix + "right")
+	input_dir.y = Input.get_axis(_prefix + "up", _prefix + "down")
+	input_dir = input_dir.normalized()
+
+	if input_dir == Vector2.ZERO:
+		input_dir = last_move_direction.normalized()
+
+	if input_dir == Vector2.ZERO:
+		return
+
+	is_dashing = true
+	can_dash = false
+	dash_direction = input_dir
+	last_move_direction = input_dir
+
+	if dash_direction.x != 0:
+		sprite.flip_h = dash_direction.x < 0
+		attack_area.scale.x = -1 if dash_direction.x < 0 else 1
+
+	_update_weapon_pose(dash_direction)
+
+	_dash_timer.start()
+	_dash_cooldown_timer.start()
+
+
+func _on_dash_finished() -> void:
+	is_dashing = false
+
+
+func _on_dash_cooldown_finished() -> void:
+	can_dash = true
 
 # ─── SHOP INTERACTION ────────────────────────────────────
 
