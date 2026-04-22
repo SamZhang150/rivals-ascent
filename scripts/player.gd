@@ -182,6 +182,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not can_attack:
 		return
 
+
 func can_fire_weapon() -> bool:
 	return not shop_ui_open and can_move and visible
 
@@ -271,7 +272,7 @@ func _show_coin_popup(amount: int) -> void:
 		popup.show_amount(amount)
 	else:
 		print("popup missing show_amount")
-		
+
 func _equip_starter_weapon() -> void:
 	if starter_weapon_scene == null:
 		return
@@ -335,7 +336,7 @@ func _on_attack_cooldown_finished() -> void:
 	attack_area.monitoring = false
 
 func take_damage(amount: int, from_position: Vector2) -> void:
-	if is_dead():
+	if is_dead() or is_invulnerable:
 		return
 		
 	if damage_uses_coins:
@@ -357,7 +358,7 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 	_update_health_ui()
 	_start_invuln(get_invuln_time())
 	damage_knockback = (global_position - from_position).normalized() * get_knockback_strength()
-		
+
 	sprite.modulate = Color.RED
 	get_tree().create_timer(0.15).timeout.connect(func() -> void:
 		if not is_dead():
