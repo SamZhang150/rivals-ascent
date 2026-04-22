@@ -150,12 +150,14 @@ func _spawn_players():
 	p1 = player_scene.instantiate() as CharacterBody2D
 	p1.name = "Player1"
 	p1.player_id = 1                    # set BEFORE add_child
+	p1.health_ui = $ScreenDisplay/ViewportContainer/Left/HealthUI
 	p1.set_meta("player_id", 1)
 	world.add_child(p1)                 # _ready() fires here
 
 	p2 = player_scene.instantiate() as CharacterBody2D
 	p2.name = "Player2"
 	p2.player_id = 2                    # set BEFORE add_child
+	p2.health_ui = $ScreenDisplay/ViewportContainer/Right/HealthUI
 	p2.set_meta("player_id", 2)
 	world.add_child(p2)
 

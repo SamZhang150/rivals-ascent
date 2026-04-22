@@ -1,15 +1,19 @@
 extends Control
 
-@onready var health_bar: ProgressBar = $HealthContainer/ProgressBar
-@onready var label: Label = $HealthContainer/Label
-@onready var heart_icon: TextureRect = $HealthContainer/Heart
+@onready var heart: TextureRect = $Heart
+@onready var label: Label = $Label
+@onready var health_bar: ProgressBar = $ProgressBar
 
 func _ready() -> void:
-	# health bar style
-	health_bar.show_percentage = false
-	health_bar.custom_minimum_size = Vector2(90, 12)
+	position = Vector2(2, 115)
+	heart.position = Vector2(0, 0)
+	label.position = Vector2(22 + health_bar.custom_minimum_size.x, -7)
+	health_bar.position = Vector2(20, 2)
+	health_bar.custom_minimum_size = Vector2(60, 6)
 
-	var fill = StyleBoxFlat.new()
+	health_bar.show_percentage = false
+
+	var fill := StyleBoxFlat.new()
 	fill.bg_color = Color("#d64562")
 	fill.corner_radius_top_left = 8
 	fill.corner_radius_top_right = 8
@@ -17,13 +21,15 @@ func _ready() -> void:
 	fill.corner_radius_bottom_right = 8
 	health_bar.add_theme_stylebox_override("fill", fill)
 
-	var bg = StyleBoxFlat.new()
+	var bg := StyleBoxFlat.new()
 	bg.bg_color = Color("#2a2a35")
 	bg.corner_radius_top_left = 8
 	bg.corner_radius_top_right = 8
 	bg.corner_radius_bottom_left = 8
 	bg.corner_radius_bottom_right = 8
 	health_bar.add_theme_stylebox_override("background", bg)
+
+	label.text = "20 / 20"
 
 func set_health(current: int, max_health: int) -> void:
 	health_bar.max_value = max_health

@@ -28,7 +28,6 @@ extends CharacterBody2D
 var player_id: int = 1  # set by game manager on spawn
 var can_move: bool = true
 var can_attack: bool = false
-var health: int = max_health
 var is_attacking: bool = false
 var last_move_direction: Vector2 = Vector2.RIGHT
 var equipped_weapon: Node2D = null
@@ -45,6 +44,10 @@ var _prefix: String = "p1_"
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_area: Area2D = $AttackArea
 @onready var attack_timer: Timer = $AttackCooldownTimer
+@onready var hitbox: Area2D = $HitboxArea
+
+@export var health_ui_path: NodePath
+var health_ui = get_node_or_null(health_ui_path)
 @onready var shop_ui: Node = get_tree().current_scene.get_node("UI/ShopUI")
 
 signal died(player_id: int)
@@ -52,17 +55,16 @@ signal died(player_id: int)
 
 func _ready() -> void:
 	add_to_group("player")
+	hitbox.add_to_group("player_hitbox")
 	
 	_prefix = "p1_" if player_id == 1 else "p2_"
 	attack_area.monitoring = false
 	attack_timer.timeout.connect(_on_attack_cooldown_finished)
-
-	# Connect hitbox to receive damage
-	var hitbox := $HitboxArea
-	hitbox.add_to_group("player_hitbox")
-
-	health = max_health
-	$AnimatedSprite2D.play(_prefix + "idle")
+	
+	_set_health(get_max_health())
+	_update_health_ui()
+	
+	sprite.play(_prefix + "idle")
 	_equip_starter_weapon()
 
 
@@ -82,24 +84,20 @@ func _physics_process(_delta: float) -> void:
 	input_dir.x = Input.get_axis(_prefix + "left", _prefix + "right")
 	input_dir.y = Input.get_axis(_prefix + "up", _prefix + "down")
 	input_dir = input_dir.normalized()
+	
 	if input_dir != Vector2.ZERO:
 		last_move_direction = input_dir
 		velocity = input_dir * speed
-		$AnimatedSprite2D.play(_prefix + "run")
+		sprite.play(_prefix + "run")
 		if input_dir.x != 0:
-			$AnimatedSprite2D.flip_h = input_dir.x < 0
+			sprite.flip_h = input_dir.x < 0
+			attack_area.scale.x = -1 if input_dir.x < 0 else 1
 		_update_weapon_pose(input_dir)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, speed)
-		$AnimatedSprite2D.play(_prefix + "idle")
+		sprite.play(_prefix + "idle")
 
-	velocity = input_dir * speed
 	move_and_slide()
-
-	# Flip sprite and attack area based on movement direction
-	if input_dir.x != 0:
-		sprite.flip_h = input_dir.x < 0
-		attack_area.scale.x = -1 if input_dir.x < 0 else 1
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -126,6 +124,51 @@ func get_last_move_direction() -> Vector2:
 
 func get_attack_action_name() -> String:
 	return _prefix + "attack"
+
+func get_attack_damage() -> int:
+	return Global.player_stats[player_id]["attack_damage"]
+
+
+func get_attack_duration() -> float:
+	return Global.player_stats[player_id]["attack_duration"]
+
+
+func get_attack_cooldown() -> float:
+	return Global.player_stats[player_id]["attack_cooldown"]
+	
+func get_invuln_time() -> float:
+	return Global.player_stats[player_id]["invuln_time"]
+
+
+func get_knockback_strength() -> float:
+	return Global.player_stats[player_id]["knockback_strength"]
+
+
+func get_knockback_decay() -> float:
+	return Global.player_stats[player_id]["knockback_decay"]
+
+
+func get_health() -> int:
+	return Global.player_stats[player_id]["health"]
+
+func get_max_health() -> int:
+	return Global.player_stats[player_id]["max_health"]
+
+
+func is_dead() -> bool:
+	return Global.player_stats[player_id]["is_dead"]
+
+
+func _set_health(value: int) -> void:
+	Global.player_stats[player_id]["health"] = clamp(value, 0, get_max_health())
+
+
+func _set_dead(value: bool) -> void:
+	Global.player_stats[player_id]["is_dead"] = value
+
+func _update_health_ui() -> void:
+	if health_ui != null and health_ui.has_method("set_health"):
+		health_ui.set_health(get_health(), get_max_health())
 
 
 func _equip_starter_weapon() -> void:
@@ -182,9 +225,8 @@ func _update_weapon_pose(move_dir: Vector2) -> void:
 func _perform_attack() -> void:
 	is_attacking = true
 	attack_area.monitoring = true
+	attack_timer.wait_time = get_attack_cooldown()
 	attack_timer.start()
-	# You could play an attack animation here
-	# sprite.play("attack")
 
 
 func _on_attack_cooldown_finished() -> void:
@@ -192,16 +234,18 @@ func _on_attack_cooldown_finished() -> void:
 	attack_area.monitoring = false
 
 func take_damage(amount: int) -> void:
-	health -= amount
+	if is_dead():
+		return
 
-	# Flash the sprite red briefly
+	_set_health(get_health() - amount)
+	_update_health_ui()
+
 	sprite.modulate = Color.RED
-	get_tree().create_timer(0.15).timeout.connect(
-		func() -> void:
-			sprite.modulate = Color.WHITE
+	get_tree().create_timer(0.15).timeout.connect(func() -> void:
+		sprite.modulate = Color.WHITE
 	)
 
-	if health <= 0:
+	if get_health() <= 0:
 		_die()
 
 
@@ -209,11 +253,11 @@ func _die() -> void:
 	if shop_ui_open:
 		close_shop_ui()
 
+	_set_dead(true)
 	can_move = false
 	can_attack = false
 	visible = false
 
-	# Notify game manager
 	var game_manager := get_tree().root.get_node("Main") if get_tree().root.has_node("Main") else null
 	if game_manager != null and game_manager.has_method("on_player_died"):
 		game_manager.on_player_died(player_id)
@@ -223,7 +267,10 @@ func reset_for_round() -> void:
 	if shop_ui_open:
 		close_shop_ui()
 
-	health = max_health
+	_set_dead(false)
+	_set_health(get_max_health())
+	_update_health_ui()
+
 	can_move = true
 	visible = true
 	sprite.modulate = Color.WHITE

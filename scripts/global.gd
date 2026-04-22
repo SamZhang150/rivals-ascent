@@ -3,8 +3,8 @@ extends Node
 # different params by player
 var player_stats = {
 	1: {
-		"health": 20,
-		"max_health": 20,
+		"health": 100,
+		"max_health": 100,
 		"is_dead": false,
 		"attack_damage": 2,
 		"attack_duration": 0.2,
@@ -14,8 +14,8 @@ var player_stats = {
 		"knockback_decay": 700.0
 	},
 	2: {
-		"health": 20,
-		"max_health": 20,
+		"health": 100,
+		"max_health": 100,
 		"is_dead": false,
 		"attack_damage": 2,
 		"attack_duration": 0.2,
