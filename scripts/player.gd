@@ -339,6 +339,9 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 		var enemy = area.get_parent()
 		if enemy != null and not _enemies_in_contact.has(enemy):
 			_enemies_in_contact.append(enemy)
+			
+			take_damage(enemy.get("touch_damage"), enemy.global_position)
+			
 			# Start damage timer if not already running
 			if _contact_damage_timer.is_stopped():
 				_contact_damage_timer.start()
