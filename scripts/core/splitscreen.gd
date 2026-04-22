@@ -72,8 +72,8 @@ var p2_dungeon_rooms: Array[Node2D] = []
 
 var difficulty_curves: Array = [
 	[1, 1, 2, 2],
-	[3, 3, 3, 3],
-	[3, 3, 3, 3],
+	[2, 2, 3, 3],
+	[2, 2, 3, 3],
 	[3, 3, 3, 3],
 	[3, 3, 3, 3],
 ]
@@ -228,6 +228,7 @@ func _transition_to(new_phase: Phase):
 			_set_screen_mode(ScreenMode.SPLIT)
 			p1.set_phase_state(false, false, false)
 			p2.set_phase_state(false, false, false)
+			shop_ui.visible = true
 
 		Phase.SHOP:
 			_set_screen_mode(ScreenMode.SHARED)
@@ -298,8 +299,12 @@ func _generate_dungeon_rooms():
 			Vector2(ROOM_SPACING * (i + 1), 0)
 		)
 		p1_room.name = "P1_Room_%d" % i
-		p1_room.room_cleared.connect(_on_room_cleared.bind(1))
-		p1_room.set_room_player(p1)
+		if p1_room.has_signal("room_cleared"):
+			p1_room.connect("room_cleared", _on_room_cleared.bind(1))
+		else:
+			push_warning("Room %s is missing 'room_cleared' signal" % p1_room.name)
+		if p1_room.has_method("set_room_player"):
+			p1_room.set_room_player(p1)
 		p1_dungeon_rooms.append(p1_room)
 
 		# Player 2 gets an independently random room of the same difficulty
@@ -309,8 +314,12 @@ func _generate_dungeon_rooms():
 			Vector2(ROOM_SPACING * (i + 1), ROOM_SPACING)
 		)
 		p2_room.name = "P2_Room_%d" % i
-		p2_room.room_cleared.connect(_on_room_cleared.bind(2))
-		p2_room.set_room_player(p2)
+		if p2_room.has_signal("room_cleared"):
+			p2_room.connect("room_cleared", _on_room_cleared.bind(2))
+		else:
+			push_warning("Room %s is missing 'room_cleared' signal" % p2_room.name)
+		if p2_room.has_method("set_room_player"):
+			p2_room.set_room_player(p2)
 		p2_dungeon_rooms.append(p2_room)
 
 

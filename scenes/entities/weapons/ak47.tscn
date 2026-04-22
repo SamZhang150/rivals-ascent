@@ -48,7 +48,7 @@ animations = [{
 [node name="Ak47" type="Node2D" unique_id=127409894]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_2rdav")
-fire_rate = 10.0
+fire_rate = 8.0
 is_auto = true
 damage = 10
 bullet_length = 8.0

@@ -130,12 +130,11 @@ func populate_ui_for_player(player_id: int) -> void:
 	match mode.to_lower():
 		"upgrade":
 			title_label.text = "Upgrade"
-			_add_upgrade_button(player_id, options_container, "Increase Max Health", 20)
-			_add_upgrade_button(player_id, options_container, "Increase Attack Damage", 30)
-			_add_upgrade_button(player_id, options_container, "Increase Speed", 25)
+			_add_upgrade_button(player_id, options_container, "+10 Max HP", 20)
+			_add_upgrade_button(player_id, options_container, "+10 Speed", 25)
 		"buy":
 			title_label.text = "Buy"
-			_add_buy_button(player_id, options_container, "AK47", 40)
+			_add_buy_button(player_id, options_container, "AK47", 80)
 			_add_buy_button(player_id, options_container, "Dash", 35)
 
 		_:
@@ -246,7 +245,7 @@ func _handle_player_shop_input(player_id: int) -> void:
 	elif Input.is_action_just_pressed(prefix + "down"):
 		_move_selection(player_id, 1)
 
-	if Input.is_action_just_pressed(prefix + "interact"):
+	if Input.is_action_just_pressed(prefix + "attack"):
 		_activate_selection(player_id)
 
 
@@ -324,16 +323,13 @@ func _attempt_upgrade(player_id: int, upgrade_name: String, cost: int) -> void:
 	var stats: Dictionary = Global.player_stats[player_id]
 
 	match upgrade_name:
-		"Increase Max Health":
+		"+10 Max HP":
 			stats["max_health"] = int(stats.get("max_health", 100)) + 10
 			stats["health"] = int(stats.get("health", 100)) + 10
 			if player.has_method("_update_health_ui"):
 				player._update_health_ui()
 
-		"Increase Attack Damage":
-			stats["attack_damage"] = int(stats.get("attack_damage", 2)) + 5
-
-		"Increase Speed":
+		"+10 Speed":
 			stats["speed"] = float(stats.get("speed", player.speed)) + 10.0
 
 		_:

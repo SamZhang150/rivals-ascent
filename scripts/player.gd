@@ -53,7 +53,7 @@ var _contact_damage_timer: Timer = null
 @export var contact_damage_interval: float = 0.5  # How often to take damage while in contact
 
 # Shop / progression state
-var gold: int = 100
+var gold: int = 20
 var inventory: Array[String] = []
 var nearby_station: Area2D = null
 var shop_ui_open: bool = false
