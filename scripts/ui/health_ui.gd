@@ -16,7 +16,7 @@ func _ready() -> void:
 		position = Vector2(338, 235)
 		heart.position = Vector2(22 + health_bar.custom_minimum_size.x, 0)
 		label.position = Vector2(-30, 2)
-		health_bar.position = Vector2(17, 2)
+		health_bar.position = Vector2(18, 2)
 		
 	
 	health_bar.custom_minimum_size = Vector2(61, 6)

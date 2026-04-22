@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://bf6d5rngwd3iq"]
+[gd_scene format=4 uid="uid://1udxsu3r4sur"]
 
 [ext_resource type="Script" uid="uid://blvjmqiox7fy" path="res://scenes/levels/dungeon/dungeon.gd" id="1_6r83x"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_bxnit"]
@@ -648,3 +648,8 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitTrigger" unique_id=2020918497]
 position = Vector2(206, 111)
 shape = SubResource("RectangleShape2D_4g36v")
+
+[node name="CamTopLeft" type="Marker2D" parent="." unique_id=2010384821]
+
+[node name="CamBottomRight" type="Marker2D" parent="." unique_id=1493777264]
+position = Vector2(224, 128)

@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://dhoul4p0uygfl"]
+[gd_scene format=4 uid="uid://dlo3yft8oagoa"]
 
 [ext_resource type="Script" uid="uid://blvjmqiox7fy" path="res://scenes/levels/dungeon/dungeon.gd" id="1_8f31f"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_ce81i"]
@@ -648,3 +648,8 @@ shape = SubResource("RectangleShape2D_ltd7a")
 
 [node name="Slime2" parent="." unique_id=1174348951 instance=ExtResource("3_ceg20")]
 position = Vector2(191, 92)
+
+[node name="CamTopLeft" type="Marker2D" parent="." unique_id=843591285]
+
+[node name="CamBottomRight" type="Marker2D" parent="." unique_id=981979828]
+position = Vector2(224, 128)

@@ -648,3 +648,8 @@ shape = SubResource("RectangleShape2D_okw1k")
 
 [node name="Slime2" parent="." unique_id=2018649948 instance=ExtResource("3_xxu7e")]
 position = Vector2(170, 63.5)
+
+[node name="CamTopLeft" type="Marker2D" parent="." unique_id=1664734835]
+
+[node name="CamBottomRight" type="Marker2D" parent="." unique_id=225006255]
+position = Vector2(224, 128)

@@ -380,6 +380,8 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 			return
 		gold = max(gold - amount, 0)
 		_update_coin_ui()
+		if not gold <= 0:
+			_show_coin_popup(-amount)
 		#print("lost ", amount, " coins")
 		#print("now has ", gold, " coins")
 		_start_invuln(get_invuln_time())

@@ -655,3 +655,8 @@ position = Vector2(133.5, 107)
 
 [node name="Bat2" parent="." unique_id=1989380203 instance=ExtResource("3_kehsv")]
 position = Vector2(58.5, 94)
+
+[node name="CamTopLeft" type="Marker2D" parent="." unique_id=240008024]
+
+[node name="CamBottomRight" type="Marker2D" parent="." unique_id=1363719785]
+position = Vector2(224, 128)

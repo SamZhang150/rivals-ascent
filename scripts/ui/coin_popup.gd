@@ -4,10 +4,18 @@ extends Control
 @onready var icon: TextureRect = $CoinIcon
 
 @export var rise_distance: float = 18.0
-@export var lifetime: float = 0.8
+@export var lifetime: float = 1.5
 
 func show_amount(amount: int) -> void:
-	label.text = "+" + str(amount)
+	
+	if amount >= 0:
+		label.text = "+" + str(amount)
+		label.modulate = Color(0.222, 0.891, 0.439, 1.0)
+	else:
+		label.text = str(amount)
+		label.modulate = Color(1.0, 0.3, 0.3, 1.0)
+		
+	visible = true
 	modulate.a = 1.5
 
 	var end_pos := global_position + Vector2(0, -rise_distance)

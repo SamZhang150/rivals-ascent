@@ -7,6 +7,8 @@
 [sub_resource type="LabelSettings" id="LabelSettings_6rypn"]
 font = ExtResource("3_fht25")
 font_size = 10
+outline_size = 3
+outline_color = Color(0.26666668, 0.19607843, 0.023529412, 1)
 
 [node name="HealthUI" type="Control" unique_id=1253297385]
 layout_mode = 3
@@ -29,6 +31,7 @@ offset_left = 27.0
 offset_top = 8.0
 offset_right = 70.0
 offset_bottom = 31.0
+theme_override_constants/shadow_outline_size = 2
 text = "20/20"
 label_settings = SubResource("LabelSettings_6rypn")
 

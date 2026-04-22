@@ -577,3 +577,8 @@ shape = SubResource("RectangleShape2D_g10y1")
 [node name="bottom" type="CollisionShape2D" parent="Walls" unique_id=1431289410]
 position = Vector2(112, 129)
 shape = SubResource("RectangleShape2D_e3lt3")
+
+[node name="CamTopLeft" type="Marker2D" parent="." unique_id=1225332922]
+
+[node name="CamBottomRight" type="Marker2D" parent="." unique_id=1979161008]
+position = Vector2(224, 128)

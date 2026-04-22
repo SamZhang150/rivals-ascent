@@ -43,7 +43,6 @@ enum ScreenMode { SPLIT, SHARED }
 @onready var shop_ui: Control = $UI/ShopUI
 @onready var round_over_ui: Control = $UI/RoundOverUI
 
-# ─── STATE ───────────────────────────────────────────────
 var phase: Phase = Phase.LOBBY
 var p1: CharacterBody2D
 var p2: CharacterBody2D
@@ -95,29 +94,51 @@ func _process(_delta: float):
 	if phase == Phase.LOBBY and lobby_instance:
 		var lobby_spawn = lobby_instance.get_node("SpawnPoint") as Marker2D
 		if lobby_spawn:
-			_center_viewport_on(left_viewport, lobby_spawn.global_position)
+			_center_viewport_on(left_viewport, lobby_spawn.global_position, lobby_instance)
 		return
 
 	if phase == Phase.SHOP and shop_instance:
 		var shop_spawn = shop_instance.get_node("SpawnPoint") as Marker2D
 		if shop_spawn:
-			_center_viewport_on(left_viewport, shop_spawn.global_position)
+			_center_viewport_on(left_viewport, shop_spawn.global_position, shop_instance)
 		return
 
 	if phase == Phase.PVP and pvp_instance:
 		var pvp_spawn = pvp_instance.get_node("SpawnPoint") as Marker2D
 		if pvp_spawn:
-			_center_viewport_on(left_viewport, pvp_spawn.global_position)
+			_center_viewport_on(left_viewport, pvp_spawn.global_position, pvp_instance)
 		return
 
 	if p1:
-		_center_viewport_on(left_viewport, p1.global_position)
+		_center_viewport_on(left_viewport, p1.global_position, p1_dungeon_rooms[p1_room_index])
 	if p2:
-		_center_viewport_on(right_viewport, p2.global_position)
+		_center_viewport_on(right_viewport, p2.global_position, p2_dungeon_rooms[p2_room_index])
 		
-func _center_viewport_on(vp: SubViewport, target_pos: Vector2):
-	var vp_size = Vector2(vp.size)
-	var offset = target_pos - vp_size / 2.0
+func _center_viewport_on(vp: SubViewport, target_pos: Vector2, room: Node2D) -> void:
+	if room == null:
+		return
+		
+	print("room=", room.name, " top_left=", room.get_node_or_null("CamTopLeft"), " bottom_right=", room.get_node_or_null("CamBottomRight"))
+
+	var top_left: Marker2D = room.get_node_or_null("CamTopLeft") as Marker2D
+	var bottom_right := room.get_node_or_null("CamBottomRight") as Marker2D
+		
+	var half_size := Vector2(vp.size) / 2.0
+
+	var clamped_x = clamp(
+		target_pos.x,
+		top_left.global_position.x + half_size.x,
+		bottom_right.global_position.x - half_size.x
+	)
+
+	var clamped_y = clamp(
+		target_pos.y,
+		top_left.global_position.y + half_size.y,
+		bottom_right.global_position.y - half_size.y
+	)
+
+	var clamped_target := Vector2(clamped_x, clamped_y)
+	var offset := clamped_target - half_size
 	vp.canvas_transform = Transform2D(0.0, -offset)
 
 

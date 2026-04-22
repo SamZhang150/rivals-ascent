@@ -4,6 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://cxis35niux1ot" path="res://assets/sprites/icons/coin_sprite.png" id="2_bq2r8"]
 [ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/fonts/pixel_font.ttf" id="3_bq2r8"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_bq2r8"]
+font = ExtResource("3_bq2r8")
+font_size = 10
+outline_size = 3
+outline_color = Color(0.26666668, 0.19607843, 0.023529412, 1)
+
 [node name="CoinUI" type="Control" unique_id=1805541628]
 layout_mode = 3
 anchors_preset = 15
@@ -22,9 +28,11 @@ texture = ExtResource("2_bq2r8")
 expand_mode = 2
 stretch_mode = 2
 
-[node name="CoinLabel" type="Label" parent="." unique_id=1457467911]
+[node name="CoinLabel" type="Label" parent="." unique_id=131831221]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-theme_override_fonts/font = ExtResource("3_bq2r8")
-theme_override_font_sizes/font_size = 10
+offset_left = 27.0
+offset_top = 8.0
+offset_right = 70.0
+offset_bottom = 31.0
+theme_override_constants/shadow_outline_size = 2
+label_settings = SubResource("LabelSettings_bq2r8")
