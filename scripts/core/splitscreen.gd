@@ -150,14 +150,14 @@ func _spawn_players():
 	p1 = player_scene.instantiate() as CharacterBody2D
 	p1.name = "Player1"
 	p1.player_id = 1                    # set BEFORE add_child
-	p1.health_ui = $ScreenDisplay/ViewportContainer/Left/HealthUI
+	p1.health_ui = $UI/HealthUILeft
 	p1.set_meta("player_id", 1)
 	world.add_child(p1)                 # _ready() fires here
 
 	p2 = player_scene.instantiate() as CharacterBody2D
 	p2.name = "Player2"
 	p2.player_id = 2                    # set BEFORE add_child
-	p2.health_ui = $ScreenDisplay/ViewportContainer/Right/HealthUI
+	p2.health_ui = $UI/HealthUIRight
 	p2.set_meta("player_id", 2)
 	world.add_child(p2)
 
@@ -329,9 +329,17 @@ func _player_finished_dungeon(player_id: int):
 		_transition_to(Phase.SHOP_WAITING)
 
 
-# ─── PVP RESOLUTION ─────────────────────────────────────
+# ─── PVP RESOLUTION / LOBBY RESPAWN ────────────────────
 ## Call this from the player script when a player dies
 func on_player_died(player_id: int):
+	if phase == Phase.LOBBY:
+		var player = p1 if player_id == 1 else p2
+		get_tree().create_timer(2.0).timeout.connect(func() -> void:
+			if phase == Phase.LOBBY and lobby_instance:
+				var spawn = lobby_instance.get_node("SpawnPoint") as Marker2D
+				player.respawn_at(spawn.global_position)
+		)
+		return
 	if phase != Phase.PVP:
 		return
 	if player_id == 1:

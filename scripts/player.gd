@@ -32,6 +32,8 @@ var is_attacking: bool = false
 var last_move_direction: Vector2 = Vector2.RIGHT
 var equipped_weapon: Node2D = null
 
+var is_invulnerable: bool = false
+
 # Shop / progression state
 var gold: int = 100
 var inventory: Array[String] = []
@@ -234,7 +236,7 @@ func _on_attack_cooldown_finished() -> void:
 	attack_area.monitoring = false
 
 func take_damage(amount: int) -> void:
-	if is_dead():
+	if is_dead() or is_invulnerable:
 		return
 
 	_set_health(get_health() - amount)
@@ -258,7 +260,7 @@ func _die() -> void:
 	can_attack = false
 	visible = false
 
-	var game_manager := get_tree().root.get_node("Main") if get_tree().root.has_node("Main") else null
+	var game_manager := get_tree().current_scene
 	if game_manager != null and game_manager.has_method("on_player_died"):
 		game_manager.on_player_died(player_id)
 
@@ -271,11 +273,30 @@ func reset_for_round() -> void:
 	_set_health(get_max_health())
 	_update_health_ui()
 
+	is_invulnerable = false
 	can_move = true
 	visible = true
 	sprite.modulate = Color.WHITE
 	is_attacking = false
 	attack_area.monitoring = false
+
+
+func respawn_at(pos: Vector2) -> void:
+	reset_for_round()
+	global_position = pos
+	_start_invuln(get_invuln_time())
+
+
+func _start_invuln(duration: float) -> void:
+	is_invulnerable = true
+	var tween = create_tween().set_loops()
+	tween.tween_property(sprite, "modulate:a", 0.2, 0.1)
+	tween.tween_property(sprite, "modulate:a", 1.0, 0.1)
+	get_tree().create_timer(duration).timeout.connect(func() -> void:
+		tween.kill()
+		sprite.modulate.a = 1.0
+		is_invulnerable = false
+	)
 
 
 # ─── SHOP INTERACTION ────────────────────────────────────

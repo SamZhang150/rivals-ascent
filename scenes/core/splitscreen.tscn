@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b7fgp2hgf4f5g" path="res://scenes/levels/shared/lobby.tscn" id="1_nd0h1"]
 [ext_resource type="Resource" uid="uid://m0kpf2rdypio" path="res://scripts/levels/dungeon_pool.tres" id="2_qrlqk"]
 [ext_resource type="PackedScene" uid="uid://dghjbmvjnkbp7" path="res://scenes/entities/player.tscn" id="5_w00f7"]
-[ext_resource type="PackedScene" path="res://scenes/ui/health_ui.tscn" id="6_uskqa"]
+[ext_resource type="PackedScene" uid="uid://cdydk6yspqiuv" path="res://scenes/ui/health_ui.tscn" id="6_uskqa"]
 [ext_resource type="PackedScene" uid="uid://ddh3y03ry2ldy" path="res://scenes/ui/shop_ui.tscn" id="6_w74f3"]
 
 [node name="Splitscreen" type="Node2D" unique_id=1386558526]
@@ -50,9 +50,6 @@ snap_2d_vertices_to_pixel = true
 size = Vector2i(216, 244)
 render_target_update_mode = 4
 
-[node name="HealthUI" parent="ScreenDisplay/ViewportContainer/Left" unique_id=830834019 instance=ExtResource("6_uskqa")]
-layout_mode = 2
-
 [node name="Right" type="SubViewportContainer" parent="ScreenDisplay/ViewportContainer" unique_id=546929494]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -63,9 +60,6 @@ snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
 size = Vector2i(216, 244)
 render_target_update_mode = 4
-
-[node name="HealthUI" parent="ScreenDisplay/ViewportContainer/Right" unique_id=695591265 instance=ExtResource("6_uskqa")]
-layout_mode = 2
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=347216691]
 
@@ -112,3 +106,8 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="ShopUI" parent="UI" unique_id=1017933386 instance=ExtResource("6_w74f3")]
+
+[node name="HealthUILeft" parent="UI" unique_id=1253297385 instance=ExtResource("6_uskqa")]
+is_left = true
+
+[node name="HealthUIRight" parent="UI" unique_id=1368796784 instance=ExtResource("6_uskqa")]

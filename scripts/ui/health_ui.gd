@@ -4,8 +4,14 @@ extends Control
 @onready var label: Label = $Label
 @onready var health_bar: ProgressBar = $ProgressBar
 
+@export var is_left: bool = false
+
 func _ready() -> void:
-	position = Vector2(2, 115)
+	position = Vector2(10, 230)
+	
+	if !is_left:
+		position = Vector2(275, 230)
+		
 	heart.position = Vector2(0, 0)
 	label.position = Vector2(22 + health_bar.custom_minimum_size.x, -7)
 	health_bar.position = Vector2(20, 2)
@@ -28,8 +34,6 @@ func _ready() -> void:
 	bg.corner_radius_bottom_left = 8
 	bg.corner_radius_bottom_right = 8
 	health_bar.add_theme_stylebox_override("background", bg)
-
-	label.text = "20 / 20"
 
 func set_health(current: int, max_health: int) -> void:
 	health_bar.max_value = max_health
