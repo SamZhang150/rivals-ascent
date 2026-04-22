@@ -70,6 +70,7 @@ var _weapon_scenes: Dictionary = {}
 # Dash
 var is_dashing: bool = false
 var dash_direction: Vector2 = Vector2.ZERO
+var _dash_anim_playing: bool = false
 var _dash_timer: Timer = null
 var _dash_recharge_timer: Timer = null
 
@@ -122,6 +123,7 @@ func _ready() -> void:
 	# Connect hitbox signals to track enemies in contact
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
 	hitbox.area_exited.connect(_on_hitbox_area_exited)
+	sprite.animation_finished.connect(_on_sprite_animation_finished)
 
 	# Keep movement speed source-of-truth in global stats.
 	if Global.player_stats.has(player_id):
@@ -165,10 +167,12 @@ func _physics_process(_delta: float) -> void:
 		if aim_dir == Vector2.ZERO:
 			last_aim_direction = input_dir.normalized()
 		velocity = input_dir * get_move_speed()
-		sprite.play(_prefix + "run")
+		if not _dash_anim_playing:
+			sprite.play(_prefix + "run")
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, get_move_speed())
-		sprite.play(_prefix + "idle")
+		if not _dash_anim_playing:
+			sprite.play(_prefix + "idle")
 
 	if aim_dir != Vector2.ZERO:
 		last_aim_direction = aim_dir
@@ -542,6 +546,7 @@ func reset_for_round() -> void:
 
 	is_dashing = false
 	dash_direction = Vector2.ZERO
+	_dash_anim_playing = false
 
 
 func respawn_at(pos: Vector2) -> void:
@@ -584,6 +589,7 @@ func _try_dash() -> void:
 		return
 
 	is_dashing = true
+	_dash_anim_playing = true
 	sprite.play(_prefix + "dash")
 	sprite.frame = 0
 	sprite.frame_progress = 0.0
@@ -608,6 +614,11 @@ func _try_dash() -> void:
 
 func _on_dash_finished() -> void:
 	is_dashing = false
+
+
+func _on_sprite_animation_finished() -> void:
+	if sprite.animation == _prefix + "dash":
+		_dash_anim_playing = false
 
 
 func _on_dash_recharge_finished() -> void:

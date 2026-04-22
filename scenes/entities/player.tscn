@@ -79,22 +79,22 @@ region = Rect2(24, 8, 8, 8)
 [sub_resource type="SpriteFrames" id="SpriteFrames_dnykm"]
 animations = [{
 "frames": [{
-"duration": 0.6,
+"duration": 0.15,
 "texture": SubResource("AtlasTexture_b6tgf")
 }, {
-"duration": 0.5,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_73kkf")
 }, {
-"duration": 0.9,
+"duration": 0.6,
 "texture": SubResource("AtlasTexture_n5sgd")
 }, {
-"duration": 0.6,
+"duration": 0.35,
 "texture": SubResource("AtlasTexture_5ki56")
 }, {
-"duration": 0.6,
+"duration": 0.25,
 "texture": SubResource("AtlasTexture_saib0")
 }],
-"loop": true,
+"loop": false,
 "name": &"p1_dash",
 "speed": 5.0
 }, {
@@ -124,22 +124,22 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.15,
 "texture": SubResource("AtlasTexture_ogpgs")
 }, {
-"duration": 1.0,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_spk56")
 }, {
-"duration": 1.0,
+"duration": 0.6,
 "texture": SubResource("AtlasTexture_1yk18")
 }, {
-"duration": 1.0,
+"duration": 0.35,
 "texture": SubResource("AtlasTexture_b4o2o")
 }, {
-"duration": 1.0,
+"duration": 0.25,
 "texture": SubResource("AtlasTexture_yr3on")
 }],
-"loop": true,
+"loop": false,
 "name": &"p2_dash",
 "speed": 5.0
 }, {
@@ -179,18 +179,17 @@ size = Vector2(5, 7)
 
 [node name="Player" type="CharacterBody2D" unique_id=897775928]
 z_index = 1
-scale = Vector2(2, 2)
+scale = Vector2(2.5, 2.5)
 collision_layer = 2
 script = ExtResource("1_ucweq")
 speed = 100.0
-dash_duration = 0.12
+dash_duration = 0.15
 dash_cooldown = 1.2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1251588531]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_dnykm")
-animation = &"p1_dash"
-frame_progress = 0.9713991
+animation = &"p2_dash"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=924631295]
 shape = SubResource("RectangleShape2D_1ie0h")

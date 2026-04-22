@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://lnf4k78q8ngj" path="res://scenes/ui/coin_ui.tscn" id="8_uskqa"]
 [ext_resource type="PackedScene" uid="uid://hsavvx8g3u5l" path="res://scenes/ui/coin_popup.tscn" id="9_crw4u"]
 [ext_resource type="Texture2D" uid="uid://bcoki44rgd7kj" path="res://assets/sprites/ui/controls.png" id="10_b1cd4"]
-[ext_resource type="Script" path="res://scripts/ui/controls_ui.gd" id="11_controls"]
+[ext_resource type="Script" uid="uid://c6b5bvrk28vni" path="res://scripts/ui/controls_ui.gd" id="11_controls"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_g2836"]
 font = ExtResource("8_3ls45")
