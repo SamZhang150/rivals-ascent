@@ -29,19 +29,19 @@ signal room_cleared()
 
 @onready var exit_door: StaticBody2D = $ExitDoor
 @onready var exit_trigger: Area2D = $ExitTrigger
-#@onready var enemies_node: Node2D = $Enemies
 
 var enemies_alive: int = 0
 var is_cleared: bool = false
 var room_player: CharacterBody2D = null
 
 func _ready():
+	enemies_alive = 0
 	# Count enemies and connect their death signals
-	for child in get_children():
-		if child.is_in_group("enemies"):
+	for node in find_children("*", "", true, false):
+		if node.is_in_group("enemies"):
 			enemies_alive += 1
-		if child.has_signal("died"):
-			child.died.connect(_on_enemy_died)
+			if node.has_signal("died") and not node.died.is_connected(_on_enemy_died):
+				node.died.connect(_on_enemy_died)
 
 	# Exit trigger is disabled until room is cleared
 	exit_trigger.monitoring = false
@@ -52,11 +52,9 @@ func _ready():
 		_open_exit()
 		
 func set_room_player(player: CharacterBody2D) -> void:
-	room_player = player
-
-	for child in get_children():
-		if child.is_in_group("enemies") and child.has_method("set_player"):
-			child.set_player(player)
+	for node in find_children("*", "", true, false):
+		if node.is_in_group("enemies") and node.has_method("set_player"):
+			node.set_player(player)
 		
 			
 func _on_enemy_died():
