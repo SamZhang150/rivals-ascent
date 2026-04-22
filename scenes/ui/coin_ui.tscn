@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://lnf4k78q8ngj"]
+
+[ext_resource type="Script" uid="uid://bsvwepqabu4w7" path="res://scripts/ui/coin_ui.gd" id="1_55f6b"]
+[ext_resource type="Texture2D" uid="uid://cxis35niux1ot" path="res://assets/sprites/icons/coin_sprite.png" id="2_bq2r8"]
+[ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/fonts/pixel_font.ttf" id="3_bq2r8"]
+
+[node name="CoinUI" type="Control" unique_id=1805541628]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_55f6b")
+
+[node name="CoinIcon" type="TextureRect" parent="." unique_id=593108442]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("2_bq2r8")
+expand_mode = 2
+stretch_mode = 2
+
+[node name="CoinLabel" type="Label" parent="." unique_id=1457467911]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("3_bq2r8")
+theme_override_font_sizes/font_size = 10

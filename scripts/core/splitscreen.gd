@@ -155,6 +155,7 @@ func _spawn_players():
 	p1.name = "Player1"
 	p1.player_id = 1                    # set BEFORE add_child
 	p1.health_ui = $UI/HealthUILeft
+	p1.coin_ui = $UI/CoinUILeft
 	p1.set_meta("player_id", 1)
 	world.add_child(p1)                 # _ready() fires here
 
@@ -162,6 +163,7 @@ func _spawn_players():
 	p2.name = "Player2"
 	p2.player_id = 2                    # set BEFORE add_child
 	p2.health_ui = $UI/HealthUIRight
+	p2.coin_ui = $UI/CoinUIRight
 	p2.set_meta("player_id", 2)
 	world.add_child(p2)
 
@@ -183,10 +185,16 @@ func _transition_to(new_phase: Phase):
 	p1_ready = false
 	p2_ready = false
 	_hide_all_ui()
+	
+	
 
 	match phase:
 		Phase.LOBBY:
 			_clear_rooms()
+			
+			p1.set_phase_state(true, true, false)
+			p2.set_phase_state(true, true, false)
+			
 			lobby_instance = _place_room(lobby_room_scene, Vector2.ZERO)
 			_set_screen_mode(ScreenMode.SHARED)
 			var spawn = lobby_instance.get_node("SpawnPoint") as Marker2D
@@ -196,9 +204,14 @@ func _transition_to(new_phase: Phase):
 			_set_players_combat(false)
 			ready_up_ui.visible = true
 			_update_ready_ui()
+			
 
 		Phase.DUNGEON:
 			_clear_rooms()
+			
+			p1.set_phase_state(false, true, true)
+			p2.set_phase_state(false, true, true)
+			
 			_set_screen_mode(ScreenMode.SPLIT)
 			p1_room_index = 0
 			p2_room_index = 0
@@ -213,9 +226,15 @@ func _transition_to(new_phase: Phase):
 			# One player is in shop, other still in dungeon
 			# Stay splitscreen
 			_set_screen_mode(ScreenMode.SPLIT)
+			p1.set_phase_state(false, false, false)
+			p2.set_phase_state(false, false, false)
 
 		Phase.SHOP:
 			_set_screen_mode(ScreenMode.SHARED)
+			
+			p1.set_phase_state(false, false, false)
+			p2.set_phase_state(false, false, false)
+			
 			if not shop_instance:
 				shop_instance = _place_room(shop_room_scene, Vector2(ROOM_SPACING * 5, 0))
 			var spawn = shop_instance.get_node("SpawnPoint") as Marker2D
@@ -228,6 +247,8 @@ func _transition_to(new_phase: Phase):
 		Phase.PVP:
 			duel_resolved = false
 			_set_screen_mode(ScreenMode.SHARED)
+			p1.set_phase_state(true, true, false)
+			p2.set_phase_state(true, true, false)
 			pvp_instance = _place_room(pvp_room_scene, Vector2(ROOM_SPACING * 6, 0))
 			var spawn = pvp_instance.get_node("SpawnPoint") as Marker2D
 			p1.global_position = spawn.global_position + Vector2(-80, 0)

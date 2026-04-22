@@ -26,13 +26,24 @@ extends CharacterBody2D
 
 # ─── STATE ───────────────────────────────────────────────
 var player_id: int = 1  # set by game manager on spawn
+
 var can_move: bool = true
 var can_attack: bool = false
+var can_take_damage: bool = false
+var damage_uses_coins: bool = false
+
+
 var is_attacking: bool = false
 var last_move_direction: Vector2 = Vector2.RIGHT
 var equipped_weapon: Node2D = null
 
 var is_invulnerable: bool = false
+var damage_knockback: Vector2 = Vector2.ZERO
+
+# Contact damage tracking
+var _enemies_in_contact: Array[Node] = []
+var _contact_damage_timer: Timer = null
+@export var contact_damage_interval: float = 0.5  # How often to take damage while in contact
 
 # Shop / progression state
 var gold: int = 100
@@ -50,6 +61,12 @@ var _prefix: String = "p1_"
 
 @export var health_ui_path: NodePath
 var health_ui = get_node_or_null(health_ui_path)
+
+@export var coin_ui_path: NodePath
+var coin_ui = get_node_or_null(coin_ui_path)
+@export var coin_popup_scene: PackedScene = preload("res://scenes/ui/coin_popup.tscn")
+
+
 @onready var shop_ui: Node = get_tree().current_scene.get_node("UI/ShopUI")
 
 signal died(player_id: int)
@@ -63,8 +80,20 @@ func _ready() -> void:
 	attack_area.monitoring = false
 	attack_timer.timeout.connect(_on_attack_cooldown_finished)
 	
+	# Set up contact damage timer
+	_contact_damage_timer = Timer.new()
+	_contact_damage_timer.wait_time = contact_damage_interval
+	_contact_damage_timer.autostart = false
+	_contact_damage_timer.timeout.connect(_on_contact_damage_timer)
+	add_child(_contact_damage_timer)
+	
+	# Connect hitbox signals to track enemies in contact
+	hitbox.area_entered.connect(_on_hitbox_area_entered)
+	hitbox.area_exited.connect(_on_hitbox_area_exited)
+	
 	_set_health(get_max_health())
 	_update_health_ui()
+	_update_coin_ui()
 	
 	sprite.play(_prefix + "idle")
 	_equip_starter_weapon()
@@ -98,6 +127,9 @@ func _physics_process(_delta: float) -> void:
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, speed)
 		sprite.play(_prefix + "idle")
+		
+	velocity += damage_knockback
+	damage_knockback = damage_knockback.move_toward(Vector2.ZERO, get_knockback_decay() * _delta)
 
 	move_and_slide()
 
@@ -167,12 +199,45 @@ func _set_health(value: int) -> void:
 
 func _set_dead(value: bool) -> void:
 	Global.player_stats[player_id]["is_dead"] = value
+	
+func set_phase_state(show_health: bool, damage_enabled: bool, use_coins: bool = false) -> void:
+	can_take_damage = damage_enabled
+	damage_uses_coins = use_coins
+	if health_ui != null:
+		health_ui.visible = show_health
 
 func _update_health_ui() -> void:
 	if health_ui != null and health_ui.has_method("set_health"):
 		health_ui.set_health(get_health(), get_max_health())
 
+func _update_coin_ui() -> void:
+	if coin_ui != null and coin_ui.has_method("set_coins"):
+		coin_ui.set_coins(gold)
+		
+func add_gold(amount: int) -> void:
+	gold += amount
+	_update_coin_ui()
+	_show_coin_popup(amount)
 
+func _show_coin_popup(amount: int) -> void:
+	if coin_popup_scene == null:
+		print("no coin popup scene assigned")
+		return
+
+	var popup = coin_popup_scene.instantiate()
+	var world = get_tree().current_scene.get_node("World")
+	world.add_child(popup)
+
+	popup.position = global_position + Vector2(0, -30)
+	popup.visible = true
+
+	print("spawned popup at ", popup.position)
+
+	if popup.has_method("show_amount"):
+		popup.show_amount(amount)
+	else:
+		print("popup missing show_amount")
+		
 func _equip_starter_weapon() -> void:
 	if starter_weapon_scene == null:
 		return
@@ -235,20 +300,80 @@ func _on_attack_cooldown_finished() -> void:
 	is_attacking = false
 	attack_area.monitoring = false
 
-func take_damage(amount: int) -> void:
-	if is_dead() or is_invulnerable:
+func take_damage(amount: int, from_position: Vector2) -> void:
+	if is_dead():
 		return
+		
+	if damage_uses_coins:
+		if is_invulnerable:
+			return
+		gold = max(gold - amount, 0)
+		_update_coin_ui()
+		#print("lost ", amount, " coins")
+		#print("now has ", gold, " coins")
+		_start_invuln(get_invuln_time())
+		damage_knockback = (global_position - from_position).normalized() * get_knockback_strength()
+		return
+
+	if not can_take_damage or is_invulnerable:
+		return
+
 
 	_set_health(get_health() - amount)
 	_update_health_ui()
-
+	_start_invuln(get_invuln_time())
+	damage_knockback = (global_position - from_position).normalized() * get_knockback_strength()
+		
 	sprite.modulate = Color.RED
 	get_tree().create_timer(0.15).timeout.connect(func() -> void:
-		sprite.modulate = Color.WHITE
+		if not is_dead():
+			sprite.modulate = Color.WHITE
 	)
 
 	if get_health() <= 0:
 		_die()
+
+
+func _on_hitbox_area_entered(area: Area2D) -> void:
+	if area.is_in_group("enemy_hitbox"):
+		var enemy = area.get_parent()
+		if enemy != null and not _enemies_in_contact.has(enemy):
+			_enemies_in_contact.append(enemy)
+			
+			take_damage(enemy.get("touch_damage"), enemy.global_position)
+			
+			# Start damage timer if not already running
+			if _contact_damage_timer.is_stopped():
+				_contact_damage_timer.start()
+
+
+func _on_hitbox_area_exited(area: Area2D) -> void:
+	if area.is_in_group("enemy_hitbox"):
+		var enemy = area.get_parent()
+		if enemy != null:
+			var idx = _enemies_in_contact.find(enemy)
+			if idx != -1:
+				_enemies_in_contact.remove_at(idx)
+			# Stop timer if no enemies in contact
+			if _enemies_in_contact.is_empty():
+				_contact_damage_timer.stop()
+
+
+func _on_contact_damage_timer() -> void:
+	if is_dead():
+		return
+		
+	_enemies_in_contact = _enemies_in_contact.filter(func(e): return is_instance_valid(e))
+	if _enemies_in_contact.is_empty():
+		_contact_damage_timer.stop()
+		return
+	
+	# Apply damage from all enemies in contact
+	for enemy in _enemies_in_contact:
+		var dmg = enemy.get("touch_damage")
+		if dmg != null:
+			take_damage(int(dmg), enemy.global_position)
+			break
 
 
 func _die() -> void:

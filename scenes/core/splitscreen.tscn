@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://dghjbmvjnkbp7" path="res://scenes/entities/player.tscn" id="5_w00f7"]
 [ext_resource type="PackedScene" uid="uid://cdydk6yspqiuv" path="res://scenes/ui/health_ui.tscn" id="6_uskqa"]
 [ext_resource type="PackedScene" uid="uid://ddh3y03ry2ldy" path="res://scenes/ui/shop_ui.tscn" id="6_w74f3"]
+[ext_resource type="PackedScene" uid="uid://lnf4k78q8ngj" path="res://scenes/ui/coin_ui.tscn" id="8_uskqa"]
+[ext_resource type="PackedScene" uid="uid://hsavvx8g3u5l" path="res://scenes/ui/coin_popup.tscn" id="9_crw4u"]
 
 [node name="Splitscreen" type="Node2D" unique_id=1386558526]
 z_index = -5
@@ -19,6 +21,8 @@ pvp_room_scene = ExtResource("1_nd0h1")
 player_scene = ExtResource("5_w00f7")
 
 [node name="World" type="Node2D" parent="." unique_id=907279618]
+
+[node name="CoinPopup" parent="World" unique_id=2138822105 instance=ExtResource("9_crw4u")]
 
 [node name="ScreenDisplay" type="CanvasLayer" parent="." unique_id=25438073]
 
@@ -111,3 +115,8 @@ offset_bottom = 23.0
 is_left = true
 
 [node name="HealthUIRight" parent="UI" unique_id=1368796784 instance=ExtResource("6_uskqa")]
+
+[node name="CoinUILeft" parent="UI" unique_id=1805541628 instance=ExtResource("8_uskqa")]
+is_left = true
+
+[node name="CoinUIRight" parent="UI" unique_id=1042570206 instance=ExtResource("8_uskqa")]

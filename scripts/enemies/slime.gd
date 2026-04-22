@@ -2,10 +2,11 @@ extends CharacterBody2D
 
 signal died
 
-@export var speed := randf_range(10, 15)
+@export var speed := randf_range(15, 25)
 @export var max_health := 70
 @export var touch_damage := 2
 @export var knockback_strength := 110.0
+@export var coin_reward: int = 5
 
 @onready var sprite = $AnimatedSprite2D
 @onready var hurtbox = $HurtboxArea
@@ -19,11 +20,13 @@ const BAR_HEIGHT := 2.0
 
 var health := 0
 var dead := false
+var last_damager: Node = null
 var knockback := Vector2.ZERO
 var player: CharacterBody2D = null
 
 func _ready() -> void:
 	add_to_group("enemies")
+	hitbox.add_to_group("enemy_hitbox")
 	hurtbox.area_entered.connect(_on_hurtbox_area_entered)
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
 
@@ -58,9 +61,13 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-func take_damage(amount: int, from_position: Vector2) -> void:
+func take_damage(amount: int, from_position: Vector2, damager: Node = null) -> void:
 	if dead:
 		return
+		
+	if damager != null:
+		last_damager = damager
+
 
 	health -= amount
 	health = clamp(health, 0, max_health)
@@ -72,17 +79,20 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 	knockback = (global_position - from_position).normalized() * knockback_strength
 
 	if health <= 0:
+		if last_damager != null and last_damager.has_method("add_gold"):
+			last_damager.add_gold(coin_reward)
 		die()
 
 func _on_hurtbox_area_entered(body: Node) -> void:
-	if body == player and body.has_method("take_damage"):
-		body.take_damage(touch_damage)
+	#if body == player and body.has_method("take_damage"):
+		#body.take_damage(touch_damage)
+		pass
 		
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("player_hitbox"):
 		var player = area.get_parent()
-		if player.has_method("take_damage"):
-			player.take_damage(touch_damage)
+		#if player.has_method("take_damage"):
+			#player.take_damage(touch_damage, global_position)
 
 func die() -> void:
 	if dead:
