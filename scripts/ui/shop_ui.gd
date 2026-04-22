@@ -110,7 +110,7 @@ func populate_ui_for_player(player_id: int) -> void:
 			title_label.text = "Buy"
 			_add_buy_button(player_id, options_container, "Health Potion", 15)
 			_add_buy_button(player_id, options_container, "Battle Axe", 40)
-			_add_buy_button(player_id, options_container, "Dash Charm", 35)
+			_add_buy_button(player_id, options_container, "Dash", 35)
 
 		_:
 			title_label.text = "Shop"
@@ -159,8 +159,18 @@ func _add_buy_button(player_id: int, container: VBoxContainer, item_name: String
 	button.custom_minimum_size = Vector2(0, 24)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
+	var disable := false
 	if player == null or player.gold < cost:
-		button.disabled = true
+		disable = true
+
+	if player != null:
+		match item_name:
+			"Dash":
+				if player.has_dash:
+					disable = true
+					button.text = "Dash - Owned"
+
+	button.disabled = disable
 
 	button.pressed.connect(func() -> void:
 		_attempt_purchase(player_id, item_name, cost)
@@ -201,10 +211,15 @@ func _attempt_purchase(player_id: int, item_name: String, cost: int) -> void:
 	if player == null:
 		return
 
+	if item_name == "Dash" and player.has_dash:
+		return
+
 	if player.gold < cost:
 		return
 
 	player.gold -= cost
+	if player.has_method("_update_coin_ui"):
+		player._update_coin_ui()
 
 	match item_name:
 		"Health Potion":
@@ -213,8 +228,9 @@ func _attempt_purchase(player_id: int, item_name: String, cost: int) -> void:
 		"Battle Axe":
 			player.inventory.append("battle_axe")
 
-		"Dash Charm":
-			player.inventory.append("dash_charm")
+		"Dash":
+			player.has_dash = true
+			player.inventory.append("dash")
 
 		_:
 			push_warning("Unknown item: " + item_name)

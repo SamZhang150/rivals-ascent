@@ -56,6 +56,9 @@ var p1_room_index: int = 0
 var p2_room_index: int = 0
 var p1_finished_dungeon: bool = false
 var p2_finished_dungeon: bool = false
+var duel_resolved: bool = false
+
+const DUELS_TO_WIN := 3
 
 # Room spacing in world coordinates
 const ROOM_SPACING := 300.0
@@ -85,6 +88,7 @@ func _ready():
 	right_viewport.world_2d = world.get_world_2d()
 	_set_screen_mode(ScreenMode.SPLIT)
 	_spawn_players()
+	reset_match_state()
 	_transition_to(Phase.LOBBY)
 
 func _process(_delta: float):
@@ -165,6 +169,17 @@ func _spawn_players():
 
 
 # ─── STATE TRANSITIONS ──────────────────────────────────
+func reset_match_state() -> void:
+	p1_wins = 0
+	p2_wins = 0
+	current_round = 0
+	p1_ready = false
+	p2_ready = false
+	p1_room_index = 0
+	p2_room_index = 0
+	p1_finished_dungeon = false
+	p2_finished_dungeon = false
+
 func _transition_to(new_phase: Phase):
 	phase = new_phase
 	p1_ready = false
@@ -230,6 +245,7 @@ func _transition_to(new_phase: Phase):
 			_update_ready_ui()
 
 		Phase.PVP:
+			duel_resolved = false
 			_set_screen_mode(ScreenMode.SHARED)
 			p1.set_phase_state(true, true, false)
 			p2.set_phase_state(true, true, false)
@@ -247,10 +263,10 @@ func _transition_to(new_phase: Phase):
 			var winner_label = round_over_ui.get_node("WinnerLabel") as Label
 			var score_label = round_over_ui.get_node("ScoreLabel") as Label
 			score_label.text = "Score: %d - %d" % [p1_wins, p2_wins]
-			if p1_wins >= 3:
+			if p1_wins >= DUELS_TO_WIN:
 				winner_label.text = "Player 1 Wins the Match!"
 				phase = Phase.GAME_OVER
-			elif p2_wins >= 3:
+			elif p2_wins >= DUELS_TO_WIN:
 				winner_label.text = "Player 2 Wins the Match!"
 				phase = Phase.GAME_OVER
 			else:
@@ -351,6 +367,14 @@ func _player_finished_dungeon(player_id: int):
 
 
 # ─── PVP RESOLUTION / LOBBY RESPAWN ────────────────────
+func register_duel_result(loser_id: int) -> void:
+	if loser_id == 1:
+		p2_wins += 1
+	else:
+		p1_wins += 1
+	current_round += 1
+	_transition_to(Phase.ROUND_END)
+
 ## Call this from the player script when a player dies
 func on_player_died(player_id: int):
 	if phase == Phase.LOBBY:
@@ -361,14 +385,10 @@ func on_player_died(player_id: int):
 				player.respawn_at(spawn.global_position)
 		)
 		return
-	if phase != Phase.PVP:
+	if phase != Phase.PVP or duel_resolved:
 		return
-	if player_id == 1:
-		p2_wins += 1
-	else:
-		p1_wins += 1
-	current_round += 1
-	_transition_to(Phase.ROUND_END)
+	duel_resolved = true
+	register_duel_result(player_id)
 
 
 # ─── READY-UP ───────────────────────────────────────────
