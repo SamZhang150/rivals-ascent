@@ -6,6 +6,7 @@ signal died
 @export var max_health := 70
 @export var touch_damage := 2
 @export var knockback_strength := 110.0
+@export var coin_reward: int = 5
 
 @onready var sprite = $AnimatedSprite2D
 @onready var hurtbox = $HurtboxArea
@@ -19,6 +20,7 @@ const BAR_HEIGHT := 2.0
 
 var health := 0
 var dead := false
+var last_damager: Node = null
 var knockback := Vector2.ZERO
 var player: CharacterBody2D = null
 
@@ -59,9 +61,13 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-func take_damage(amount: int, from_position: Vector2) -> void:
+func take_damage(amount: int, from_position: Vector2, damager: Node = null) -> void:
 	if dead:
 		return
+		
+	if damager != null:
+		last_damager = damager
+
 
 	health -= amount
 	health = clamp(health, 0, max_health)
@@ -73,6 +79,8 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 	knockback = (global_position - from_position).normalized() * knockback_strength
 
 	if health <= 0:
+		if last_damager != null and last_damager.has_method("add_gold"):
+			last_damager.add_gold(coin_reward)
 		die()
 
 func _on_hurtbox_area_entered(body: Node) -> void:

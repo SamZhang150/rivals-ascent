@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cdydk6yspqiuv"]
 
 [ext_resource type="Script" uid="uid://ddi3vwa2qtbao" path="res://scripts/ui/health_ui.gd" id="1_hdb0t"]
-[ext_resource type="Texture2D" uid="uid://bmwi5j1lu0iws" path="res://assets/sprites/heart.png" id="2_6rypn"]
-[ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/pixel_font.ttf" id="3_fht25"]
+[ext_resource type="Texture2D" uid="uid://bmwi5j1lu0iws" path="res://assets/sprites/icons/heart.png" id="2_6rypn"]
+[ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/fonts/pixel_font.ttf" id="3_fht25"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_6rypn"]
 font = ExtResource("3_fht25")

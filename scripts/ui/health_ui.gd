@@ -7,20 +7,25 @@ extends Control
 @export var is_left: bool = false
 
 func _ready() -> void:
-	position = Vector2(5, 235)
-	
-	if !is_left:
-		position = Vector2(305, 235)
+	if is_left:
+		position = Vector2(5, 235)
+		heart.position = Vector2(0, 1)
+		label.position = Vector2(22 + health_bar.custom_minimum_size.x, 2)
+		health_bar.position = Vector2(17, 2)
+	else:
+		position = Vector2(338, 235)
+		heart.position = Vector2(22 + health_bar.custom_minimum_size.x, 0)
+		label.position = Vector2(-30, 2)
+		health_bar.position = Vector2(17, 2)
 		
-	heart.position = Vector2(0, 0)
-	label.position = Vector2(22 + health_bar.custom_minimum_size.x, 2)
-	health_bar.position = Vector2(17, 2)
+	
 	health_bar.custom_minimum_size = Vector2(61, 6)
 
 	health_bar.show_percentage = false
 
 	var fill := StyleBoxFlat.new()
-	fill.bg_color = Color("#d64562")
+	fill.bg_color = Color("e52f44ff")
+	fill.border_color = Color("630a16ff")
 	fill.corner_radius_top_left = 8
 	fill.corner_radius_top_right = 8
 	fill.corner_radius_bottom_left = 8

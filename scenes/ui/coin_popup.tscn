@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://hsavvx8g3u5l"]
+
+[ext_resource type="Script" uid="uid://cfmj80avmenfl" path="res://scripts/ui/coin_popup.gd" id="1_0gtlh"]
+[ext_resource type="Texture2D" uid="uid://cxis35niux1ot" path="res://assets/sprites/icons/coin_sprite.png" id="1_13knk"]
+
+[node name="CoinPopup" type="Control" unique_id=2138822105]
+custom_minimum_size = Vector2(40, 20)
+layout_mode = 3
+anchors_preset = 0
+scale = Vector2(0.85, 0.85)
+script = ExtResource("1_0gtlh")
+
+[node name="CoinIcon" type="TextureRect" parent="." unique_id=1181116214]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("1_13knk")
+expand_mode = 2
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="." unique_id=1389079302]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

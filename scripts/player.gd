@@ -26,8 +26,13 @@ extends CharacterBody2D
 
 # ─── STATE ───────────────────────────────────────────────
 var player_id: int = 1  # set by game manager on spawn
+
 var can_move: bool = true
 var can_attack: bool = false
+var can_take_damage: bool = false
+var damage_uses_coins: bool = false
+
+
 var is_attacking: bool = false
 var last_move_direction: Vector2 = Vector2.RIGHT
 var equipped_weapon: Node2D = null
@@ -56,6 +61,12 @@ var _prefix: String = "p1_"
 
 @export var health_ui_path: NodePath
 var health_ui = get_node_or_null(health_ui_path)
+
+@export var coin_ui_path: NodePath
+var coin_ui = get_node_or_null(coin_ui_path)
+@export var coin_popup_scene: PackedScene = preload("res://scenes/ui/coin_popup.tscn")
+
+
 @onready var shop_ui: Node = get_tree().current_scene.get_node("UI/ShopUI")
 
 signal died(player_id: int)
@@ -82,6 +93,7 @@ func _ready() -> void:
 	
 	_set_health(get_max_health())
 	_update_health_ui()
+	_update_coin_ui()
 	
 	sprite.play(_prefix + "idle")
 	_equip_starter_weapon()
@@ -187,12 +199,45 @@ func _set_health(value: int) -> void:
 
 func _set_dead(value: bool) -> void:
 	Global.player_stats[player_id]["is_dead"] = value
+	
+func set_phase_state(show_health: bool, damage_enabled: bool, use_coins: bool = false) -> void:
+	can_take_damage = damage_enabled
+	damage_uses_coins = use_coins
+	if health_ui != null:
+		health_ui.visible = show_health
 
 func _update_health_ui() -> void:
 	if health_ui != null and health_ui.has_method("set_health"):
 		health_ui.set_health(get_health(), get_max_health())
 
+func _update_coin_ui() -> void:
+	if coin_ui != null and coin_ui.has_method("set_coins"):
+		coin_ui.set_coins(gold)
+		
+func add_gold(amount: int) -> void:
+	gold += amount
+	_update_coin_ui()
+	_show_coin_popup(amount)
 
+func _show_coin_popup(amount: int) -> void:
+	if coin_popup_scene == null:
+		print("no coin popup scene assigned")
+		return
+
+	var popup = coin_popup_scene.instantiate()
+	var world = get_tree().current_scene.get_node("World")
+	world.add_child(popup)
+
+	popup.position = global_position + Vector2(0, -30)
+	popup.visible = true
+
+	print("spawned popup at ", popup.position)
+
+	if popup.has_method("show_amount"):
+		popup.show_amount(amount)
+	else:
+		print("popup missing show_amount")
+		
 func _equip_starter_weapon() -> void:
 	if starter_weapon_scene == null:
 		return
@@ -256,8 +301,23 @@ func _on_attack_cooldown_finished() -> void:
 	attack_area.monitoring = false
 
 func take_damage(amount: int, from_position: Vector2) -> void:
-	if is_dead() or is_invulnerable:
+	if is_dead():
 		return
+		
+	if damage_uses_coins:
+		if is_invulnerable:
+			return
+		gold = max(gold - amount, 0)
+		_update_coin_ui()
+		#print("lost ", amount, " coins")
+		#print("now has ", gold, " coins")
+		_start_invuln(get_invuln_time())
+		damage_knockback = (global_position - from_position).normalized() * get_knockback_strength()
+		return
+
+	if not can_take_damage or is_invulnerable:
+		return
+
 
 	_set_health(get_health() - amount)
 	_update_health_ui()

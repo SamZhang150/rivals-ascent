@@ -118,7 +118,7 @@ func _apply_enemy_damage(enemy: Node) -> void:
 	if enemy.has_method("lower_health"):
 		enemy.lower_health(damage)
 	elif enemy.has_method("take_damage"):
-		enemy.take_damage(damage, global_position)
+		enemy.take_damage(damage, global_position, projectile_owner)
 
 
 func _apply_player_damage(player: Node) -> void:
