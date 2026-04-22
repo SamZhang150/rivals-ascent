@@ -533,7 +533,7 @@ texture_region_size = Vector2i(8, 8)
 tile_size = Vector2i(8, 8)
 sources/0 = SubResource("TileSetAtlasSource_e7jtv")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_14nd8"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uioin"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0f117"]
 atlas = ExtResource("1_sr5oa")
@@ -551,7 +551,7 @@ region = Rect2(32, 48, 16, 16)
 atlas = ExtResource("1_sr5oa")
 region = Rect2(48, 48, 16, 16)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_0outo"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_1ky1g"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -571,7 +571,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mqq6v"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e7jtv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8h3uh"]
 size = Vector2(223, 2)
@@ -602,28 +602,31 @@ tile_set = SubResource("TileSet_ev2ob")
 z_index = -1
 position = Vector2(112, 64)
 
-[node name="ExitDoor" type="StaticBody2D" parent="." unique_id=710285201]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=504347080]
-position = Vector2(206, 111)
-shape = SubResource("RectangleShape2D_14nd8")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ExitDoor" unique_id=1278507353]
-position = Vector2(207, 111)
-sprite_frames = SubResource("SpriteFrames_0outo")
-animation = &"closed"
-
-[node name="ExitTrigger" type="Area2D" parent="." unique_id=1724342736]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitTrigger" unique_id=503754872]
-position = Vector2(206, 111)
-shape = SubResource("RectangleShape2D_mqq6v")
-
 [node name="Slime" parent="." unique_id=1718233248 instance=ExtResource("3_xxu7e")]
 position = Vector2(68, 29)
 
 [node name="Bat" parent="." unique_id=790856433 instance=ExtResource("4_uioin")]
 position = Vector2(24, 99.5)
+
+[node name="ExitDoor" type="StaticBody2D" parent="." unique_id=1025827598]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1376886633]
+position = Vector2(24, 51)
+shape = SubResource("RectangleShape2D_uioin")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ExitDoor" unique_id=2039017450]
+position = Vector2(21.5, 52.5)
+sprite_frames = SubResource("SpriteFrames_1ky1g")
+animation = &"closed"
+autoplay = "closed"
+
+[node name="ExitTrigger" type="Area2D" parent="." unique_id=699200906]
+collision_layer = 128
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitTrigger" unique_id=1559017785]
+position = Vector2(23.5, 52)
+shape = SubResource("RectangleShape2D_e7jtv")
 
 [node name="Walls" type="StaticBody2D" parent="." unique_id=2052145338]
 collision_mask = 6

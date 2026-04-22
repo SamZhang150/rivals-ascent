@@ -604,18 +604,21 @@ position = Vector2(112, 64)
 [node name="ExitDoor" type="StaticBody2D" parent="." unique_id=565268677]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1609907398]
-position = Vector2(206, 111)
+position = Vector2(24, 51)
 shape = SubResource("RectangleShape2D_dfmoq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ExitDoor" unique_id=2145611677]
-position = Vector2(207, 111)
+position = Vector2(21.5, 52.5)
 sprite_frames = SubResource("SpriteFrames_b2bcd")
 animation = &"closed"
+autoplay = "closed"
 
 [node name="ExitTrigger" type="Area2D" parent="." unique_id=563538761]
+collision_layer = 128
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitTrigger" unique_id=813423476]
-position = Vector2(206, 111)
+position = Vector2(23.5, 52)
 shape = SubResource("RectangleShape2D_ibfpi")
 
 [node name="Slime" parent="." unique_id=1718233248 instance=ExtResource("3_thw7r")]

@@ -35,6 +35,11 @@ var is_cleared: bool = false
 var room_player: CharacterBody2D = null
 
 func _ready():
+	$ExitDoor.visible = true
+	$ExitDoor/AnimatedSprite2D.visible = true
+	$ExitDoor/AnimatedSprite2D.play()
+	$ExitDoor/AnimatedSprite2D.z_index = 100
+	
 	enemies_alive = 0
 	# Count enemies and connect their death signals
 	for enemy in get_tree().get_nodes_in_group("enemies"):
@@ -45,6 +50,13 @@ func _ready():
 	
 	print(name, " enemies_alive = ", enemies_alive)
 
+	# hide exit until room is cleared
+	exit_door.visible = false
+	exit_door.process_mode = Node.PROCESS_MODE_DISABLED
+	if exit_door.has_node("CollisionShape2D"):
+		exit_door.get_node("CollisionShape2D").disabled = true
+
+
 	# Exit trigger is disabled until room is cleared
 	exit_trigger.monitoring = false
 	exit_trigger.body_entered.connect(_on_exit_trigger_body_entered)
@@ -54,9 +66,14 @@ func _ready():
 		_open_exit()
 		
 func set_room_player(player: CharacterBody2D) -> void:
+	room_player = player
 	for node in find_children("*", "", true, false):
 		if node.is_in_group("enemies") and node.has_method("set_player"):
 			node.set_player(player)
+			
+	#for enemy in get_tree().get_nodes_in_group("enemies"):
+		#if is_ancestor_of(enemy) and enemy.has_method("set_player"):
+			#enemy.set_player(player)
 		
 			
 func _on_enemy_died():
@@ -72,15 +89,24 @@ func _open_exit():
 		
 	is_cleared = true
 	
+	exit_door.visible = true
+	exit_door.process_mode = Node.PROCESS_MODE_INHERIT
+	
+	if exit_door.has_node("CollisionShape2D"):
+		exit_door.get_node("CollisionShape2D").disabled = true
+	
 	# Remove the physical door blocker
-	if is_instance_valid(exit_door):
-		exit_door.queue_free()
+	#if is_instance_valid(exit_door):
+		#exit_door.queue_free()
+	
 		
 	# Enable the trigger area so stepping on it fires room_cleared
 	exit_trigger.monitoring = true
 
 
 func _on_exit_trigger_body_entered(body: Node2D):
+	print("trigger hit by: ", body.name, " room_player: ", room_player.name if room_player != null else "null")
+
 	if not is_cleared:
 		return
 	if body == room_player:
