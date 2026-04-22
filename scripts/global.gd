@@ -32,6 +32,8 @@ func _add_controller_mapping(player_id: int, device_id: int) -> void:
 	_add_joy_motion_event(prefix + "attack", device_id, JOY_AXIS_TRIGGER_RIGHT, 1.0)
 	_add_joy_button_event(prefix + "interact", device_id, JOY_BUTTON_X)
 	_add_joy_button_event(prefix + "dash", device_id, JOY_BUTTON_A)
+	_add_joy_button_event(prefix + "invprev", device_id, JOY_BUTTON_LEFT_SHOULDER)
+	_add_joy_button_event(prefix + "invnext", device_id, JOY_BUTTON_RIGHT_SHOULDER)
 	_add_joy_button_event(prefix + "back", device_id, JOY_BUTTON_B)
 	_add_joy_button_event(prefix + "ready", device_id, JOY_BUTTON_Y)
 
@@ -82,7 +84,9 @@ var player_stats = {
 		"attack_cooldown": 1.75,
 		"invuln_time": 0.75,
 		"knockback_strength": 120.0,
-		"knockback_decay": 700.0
+		"knockback_decay": 700.0,
+		"dashes_max": 1,
+		"dashes_available": 1
 	},
 	2: {
 		"health": 100,
@@ -94,6 +98,8 @@ var player_stats = {
 		"attack_cooldown": 1.75,
 		"invuln_time": 0.75,
 		"knockback_strength": 120.0,
-		"knockback_decay": 700.0
+		"knockback_decay": 700.0,
+		"dashes_max": 1,
+		"dashes_available": 1
 	}
 }

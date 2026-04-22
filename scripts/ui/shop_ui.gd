@@ -1,6 +1,8 @@
 extends Control
 
 const AK47_SCENE: PackedScene = preload("res://scenes/entities/weapons/ak47.tscn")
+const FIFTY_CAL_SCENE: PackedScene = preload("res://scenes/entities/weapons/50cal.tscn")
+const GOLD_AK_SCENE: PackedScene = preload("res://scenes/entities/weapons/goldak47.tscn")
 
 @onready var p1_shop_ui: Control = $Root/P1ShopUI
 @onready var p1_main_panel: Panel = $Root/P1ShopUI/MainPanel
@@ -132,10 +134,12 @@ func populate_ui_for_player(player_id: int) -> void:
 			title_label.text = "Upgrade"
 			_add_upgrade_button(player_id, options_container, "+10 Max HP", 20)
 			_add_upgrade_button(player_id, options_container, "+10 Speed", 25)
+			_add_dash_upgrade_buttons(player_id, options_container)
 		"buy":
 			title_label.text = "Buy"
-			_add_buy_button(player_id, options_container, "AK47", 80)
-			_add_buy_button(player_id, options_container, "Dash", 35)
+			_add_buy_button(player_id, options_container, "AK47", 50)
+			_add_buy_button(player_id, options_container, "50Cal", 80)
+			_add_buy_button(player_id, options_container, "Gold AK", 100)
 
 		_:
 			title_label.text = "Shop"
@@ -201,10 +205,14 @@ func _add_buy_button(player_id: int, container: VBoxContainer, item_name: String
 				if player.inventory.has("ak47"):
 					disable = true
 					button.text = "AK47 - Owned"
-			"Dash":
-				if player.has_dash:
+			"50Cal":
+				if player.inventory.has("50cal"):
 					disable = true
-					button.text = "Dash - Owned"
+					button.text = "50Cal - Owned"
+			"Gold AK":
+				if player.inventory.has("gold_ak"):
+					disable = true
+					button.text = "Gold AK - Owned"
 
 	button.disabled = disable
 
@@ -343,9 +351,11 @@ func _attempt_purchase(player_id: int, item_name: String, cost: int) -> void:
 	if player == null:
 		return
 
-	if item_name == "Dash" and player.has_dash:
-		return
 	if item_name == "AK47" and player.inventory.has("ak47"):
+		return
+	if item_name == "50Cal" and player.inventory.has("50cal"):
+		return
+	if item_name == "Gold AK" and player.inventory.has("gold_ak"):
 		return
 
 	if player.gold < cost:
@@ -360,16 +370,98 @@ func _attempt_purchase(player_id: int, item_name: String, cost: int) -> void:
 			if AK47_SCENE == null:
 				push_warning("AK47 scene is missing")
 				return
-			if player.has_method("equip_weapon_scene"):
+			if player.has_method("add_weapon_to_inventory"):
+				player.add_weapon_to_inventory("ak47", true)
+			elif player.has_method("equip_weapon_scene"):
 				player.equip_weapon_scene(AK47_SCENE)
-			player.inventory.append("ak47")
+				if not player.inventory.has("ak47"):
+					player.inventory.append("ak47")
 
-		"Dash":
-			player.has_dash = true
-			player.inventory.append("dash")
+		"50Cal":
+			if FIFTY_CAL_SCENE == null:
+				push_warning("50Cal scene is missing")
+				return
+			if player.has_method("add_weapon_to_inventory"):
+				player.add_weapon_to_inventory("50cal", true)
+			elif player.has_method("equip_weapon_scene"):
+				player.equip_weapon_scene(FIFTY_CAL_SCENE)
+				if not player.inventory.has("50cal"):
+					player.inventory.append("50cal")
+
+		"Gold AK":
+			if GOLD_AK_SCENE == null:
+				push_warning("Gold AK scene is missing")
+				return
+			if player.has_method("add_weapon_to_inventory"):
+				player.add_weapon_to_inventory("gold_ak", true)
+			elif player.has_method("equip_weapon_scene"):
+				player.equip_weapon_scene(GOLD_AK_SCENE)
+				if not player.inventory.has("gold_ak"):
+					player.inventory.append("gold_ak")
 
 		_:
 			push_warning("Unknown item: " + item_name)
+
+	populate_ui_for_player(player_id)
+
+
+func _add_dash_upgrade_buttons(player_id: int, container: VBoxContainer) -> void:
+	var player := _get_player_by_id(player_id)
+	if player == null:
+		return
+
+	if not Global.player_stats.has(player_id):
+		return
+
+	var stats: Dictionary = Global.player_stats[player_id]
+	var dashes_max: int = int(stats.get("dashes_max", 0))
+	var cost: int = 40
+
+	# Allow purchasing up to 3 dash upgrades
+	if dashes_max < 3:
+		var button := Button.new()
+		var charge_num := dashes_max + 1
+		button.text = "+1 Dash (" + str(charge_num) + "/3) - " + str(cost) + "g"
+		button.custom_minimum_size = Vector2(0, option_button_height)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		button.add_theme_font_size_override("font_size", 10)
+
+		if player.gold < cost:
+			button.disabled = true
+
+		button.pressed.connect(func() -> void:
+			_attempt_dash_upgrade(player_id, cost)
+		)
+
+		_add_button_row(container, button)
+		_register_option_button(player_id, button)
+
+
+func _attempt_dash_upgrade(player_id: int, cost: int) -> void:
+	var player := _get_player_by_id(player_id)
+	if player == null:
+		return
+
+	if player.gold < cost:
+		return
+
+	if not Global.player_stats.has(player_id):
+		return
+
+	var stats: Dictionary = Global.player_stats[player_id]
+	var dashes_max: int = int(stats.get("dashes_max", 0))
+
+	if dashes_max >= 3:
+		return
+
+	player.gold -= cost
+	if player.has_method("_update_coin_ui"):
+		player._update_coin_ui()
+
+	dashes_max += 1
+	stats["dashes_max"] = dashes_max
+	stats["dashes_available"] = dashes_max
 
 	populate_ui_for_player(player_id)
 

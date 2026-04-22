@@ -110,9 +110,15 @@ func _process(_delta: float):
 		return
 
 	if p1:
-		_center_viewport_on(left_viewport, p1.global_position, p1_dungeon_rooms[p1_room_index])
+		if phase == Phase.SHOP_WAITING and p1_finished_dungeon and shop_instance:
+			_center_viewport_on(left_viewport, p1.global_position, shop_instance)
+		elif p1_room_index >= 0 and p1_room_index < p1_dungeon_rooms.size():
+			_center_viewport_on(left_viewport, p1.global_position, p1_dungeon_rooms[p1_room_index])
 	if p2:
-		_center_viewport_on(right_viewport, p2.global_position, p2_dungeon_rooms[p2_room_index])
+		if phase == Phase.SHOP_WAITING and p2_finished_dungeon and shop_instance:
+			_center_viewport_on(right_viewport, p2.global_position, shop_instance)
+		elif p2_room_index >= 0 and p2_room_index < p2_dungeon_rooms.size():
+			_center_viewport_on(right_viewport, p2.global_position, p2_dungeon_rooms[p2_room_index])
 		
 func _center_viewport_on(vp: SubViewport, target_pos: Vector2, room: Node2D) -> void:
 	if room == null:

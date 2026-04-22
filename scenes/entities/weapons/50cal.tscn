@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://c7cpfrihfo4vk"]
+
+[ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_w1bjy"]
+[ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/laser_projectile.tscn" id="2_28i2p"]
+[ext_resource type="Texture2D" uid="uid://cwnnkwxyfyclo" path="res://assets/sprites/weapons/50cal.png" id="3_w1bjy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_28i2p"]
+atlas = ExtResource("3_w1bjy")
+region = Rect2(42, 0, 42, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3bna"]
+atlas = ExtResource("3_w1bjy")
+region = Rect2(84, 0, 42, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_et1bk"]
+atlas = ExtResource("3_w1bjy")
+region = Rect2(126, 0, 42, 12)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
+animations = [{
+"frames": [{
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_28i2p")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_x3bna")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_et1bk")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_et1bk")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="50Cal" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_w1bjy")
+fire_rate = 2.0
+damage = 50
+bullet_speed = 500.0
+max_ammo = 5
+reload_time = 5.0
+current_ammo = 5
+projectile_scene = ExtResource("2_28i2p")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
+sprite_frames = SubResource("SpriteFrames_kkxoa")
+animation = &"idle"

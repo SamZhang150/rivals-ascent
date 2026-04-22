@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://bd48fr7dajlel"]
+
+[ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_qimld"]
+[ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/laser_projectile.tscn" id="2_a11vi"]
+[ext_resource type="Texture2D" uid="uid://c2ym6ud5luneh" path="res://assets/sprites/weapons/goldak47.png" id="3_qimld"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a11vi"]
+atlas = ExtResource("3_qimld")
+region = Rect2(22, 0, 22, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vml03"]
+atlas = ExtResource("3_qimld")
+region = Rect2(44, 0, 22, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5lhnl"]
+atlas = ExtResource("3_qimld")
+region = Rect2(66, 0, 22, 12)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lnll2"]
+animations = [{
+"frames": [{
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_a11vi")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_vml03")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5lhnl")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5lhnl")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="GoldAK47" type="Node2D" unique_id=127409894]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_qimld")
+fire_rate = 12.0
+is_auto = true
+damage = 10
+bullet_length = 8.0
+bullet_speed = 300.0
+max_ammo = 20
+reload_time = 2.0
+current_ammo = 20
+projectile_scene = ExtResource("2_a11vi")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1560634533]
+sprite_frames = SubResource("SpriteFrames_lnll2")
+animation = &"fire"
+frame = 2
+frame_progress = 1.0

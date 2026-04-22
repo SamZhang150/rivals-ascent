@@ -587,6 +587,11 @@ shape = SubResource("RectangleShape2D_t0dvs")
 position = Vector2(47, 52)
 texture = ExtResource("3_rn1qy")
 
+[node name="CamTopLeft" type="Marker2D" parent="." unique_id=897993050]
+
+[node name="CamBottomRight" type="Marker2D" parent="." unique_id=931638209]
+position = Vector2(224, 128)
+
 [connection signal="body_entered" from="ShopStations/UpgradeStation" to="ShopStations/UpgradeStation" method="_on_body_entered"]
 [connection signal="body_exited" from="ShopStations/UpgradeStation" to="ShopStations/UpgradeStation" method="_on_body_exited"]
 [connection signal="body_entered" from="ShopStations/BuyStation" to="ShopStations/BuyStation" method="_on_body_entered"]

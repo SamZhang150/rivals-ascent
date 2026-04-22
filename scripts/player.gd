@@ -24,6 +24,9 @@ extends CharacterBody2D
 @export var speed: float = 50.0
 @export var max_health: int = 100
 @export var starter_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/pistol.tscn")
+@export var ak47_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/ak47.tscn")
+@export var fifty_cal_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/50cal.tscn")
+@export var gold_ak_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/goldak47.tscn")
 @export var weapon_offset: Vector2 = Vector2(5, -1)
 @export var aim_deadzone: float = 0.25
 @export var dash_speed: float = 300.0
@@ -43,6 +46,7 @@ var is_attacking: bool = false
 var last_move_direction: Vector2 = Vector2.RIGHT
 var last_aim_direction: Vector2 = Vector2.RIGHT
 var equipped_weapon: Node2D = null
+var current_weapon_index: int = 0
 
 var is_invulnerable: bool = false
 var damage_knockback: Vector2 = Vector2.ZERO
@@ -61,13 +65,13 @@ var shop_ui_open: bool = false
 # Input action prefixes
 var _prefix: String = "p1_"
 
+var _weapon_scenes: Dictionary = {}
+
 # Dash
-var has_dash: bool = false
 var is_dashing: bool = false
-var can_dash: bool = true
 var dash_direction: Vector2 = Vector2.ZERO
 var _dash_timer: Timer = null
-var _dash_cooldown_timer: Timer = null
+var _dash_recharge_timer: Timer = null
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_area: Area2D = $AttackArea
@@ -91,6 +95,7 @@ func _ready() -> void:
 	hitbox.add_to_group("player_hitbox")
 	
 	_prefix = "p1_" if player_id == 1 else "p2_"
+	_register_weapon_scenes()
 	attack_area.monitoring = false
 	attack_timer.timeout.connect(_on_attack_cooldown_finished)
 	
@@ -108,11 +113,11 @@ func _ready() -> void:
 	_dash_timer.timeout.connect(_on_dash_finished)
 	add_child(_dash_timer)
 
-	_dash_cooldown_timer = Timer.new()
-	_dash_cooldown_timer.one_shot = true
-	_dash_cooldown_timer.wait_time = dash_cooldown
-	_dash_cooldown_timer.timeout.connect(_on_dash_cooldown_finished)
-	add_child(_dash_cooldown_timer)
+	_dash_recharge_timer = Timer.new()
+	_dash_recharge_timer.one_shot = true
+	_dash_recharge_timer.wait_time = dash_cooldown
+	_dash_recharge_timer.timeout.connect(_on_dash_recharge_finished)
+	add_child(_dash_recharge_timer)
 	
 	# Connect hitbox signals to track enemies in contact
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
@@ -193,6 +198,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed(_prefix + "dash"):
 		_try_dash()
+		return
+
+	if event.is_action_pressed(_prefix + "invprev"):
+		cycle_weapon(-1)
+		return
+
+	if event.is_action_pressed(_prefix + "invnext"):
+		cycle_weapon(1)
 		return
 
 	if not can_attack:
@@ -302,7 +315,56 @@ func _show_coin_popup(amount: int) -> void:
 		print("popup missing show_amount")
 
 func _equip_starter_weapon() -> void:
+	if not inventory.has("pistol"):
+		inventory.append("pistol")
+	current_weapon_index = inventory.find("pistol")
 	equip_weapon_scene(starter_weapon_scene)
+
+
+func _register_weapon_scenes() -> void:
+	_weapon_scenes.clear()
+	if starter_weapon_scene != null:
+		_weapon_scenes["pistol"] = starter_weapon_scene
+	if ak47_weapon_scene != null:
+		_weapon_scenes["ak47"] = ak47_weapon_scene
+	if fifty_cal_weapon_scene != null:
+		_weapon_scenes["50cal"] = fifty_cal_weapon_scene
+	if gold_ak_weapon_scene != null:
+		_weapon_scenes["gold_ak"] = gold_ak_weapon_scene
+
+
+func add_weapon_to_inventory(weapon_key: String, auto_equip: bool = true) -> bool:
+	if weapon_key == "":
+		return false
+	if not _weapon_scenes.has(weapon_key):
+		push_warning("Unknown weapon key: " + weapon_key)
+		return false
+	if not inventory.has(weapon_key):
+		inventory.append(weapon_key)
+
+	if auto_equip:
+		var idx := inventory.find(weapon_key)
+		if idx != -1:
+			current_weapon_index = idx
+		equip_weapon_scene(_weapon_scenes[weapon_key])
+
+	return true
+
+
+func cycle_weapon(direction: int) -> void:
+	if inventory.size() <= 1:
+		return
+	if shop_ui_open or not can_move:
+		return
+	if is_dashing:
+		return
+
+	current_weapon_index = wrapi(current_weapon_index + direction, 0, inventory.size())
+	var weapon_key: String = inventory[current_weapon_index]
+	if not _weapon_scenes.has(weapon_key):
+		return
+
+	equip_weapon_scene(_weapon_scenes[weapon_key])
 
 
 func equip_weapon_scene(weapon_scene: PackedScene) -> void:
@@ -479,7 +541,6 @@ func reset_for_round() -> void:
 	attack_area.monitoring = false
 
 	is_dashing = false
-	can_dash = true
 	dash_direction = Vector2.ZERO
 
 
@@ -501,9 +562,12 @@ func _start_invuln(duration: float) -> void:
 	)
 
 func _try_dash() -> void:
-	if not has_dash:
+	var stats = Global.player_stats[player_id]
+	var dashes_available: int = int(stats.get("dashes_available", 0))
+	
+	if dashes_available <= 0:
 		return
-	if not can_dash:
+	if _dash_recharge_timer.is_stopped() == false:
 		return
 	if not can_move:
 		return
@@ -520,7 +584,12 @@ func _try_dash() -> void:
 		return
 
 	is_dashing = true
-	can_dash = false
+	sprite.play(_prefix + "dash")
+	sprite.frame = 0
+	sprite.frame_progress = 0.0
+	dashes_available -= 1
+	stats["dashes_available"] = dashes_available
+	
 	dash_direction = input_dir
 	last_move_direction = input_dir
 
@@ -531,15 +600,19 @@ func _try_dash() -> void:
 	_update_weapon_pose(dash_direction)
 
 	_dash_timer.start()
-	_dash_cooldown_timer.start()
+	
+	# If all dashes used, start recharge timer
+	if dashes_available <= 0:
+		_dash_recharge_timer.start()
 
 
 func _on_dash_finished() -> void:
 	is_dashing = false
 
 
-func _on_dash_cooldown_finished() -> void:
-	can_dash = true
+func _on_dash_recharge_finished() -> void:
+	var stats = Global.player_stats[player_id]
+	stats["dashes_available"] = int(stats.get("dashes_max", 0))
 
 # ─── SHOP INTERACTION ────────────────────────────────────
 
