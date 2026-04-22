@@ -65,7 +65,7 @@ func try_fire() -> void:
 	if projectile == null:
 		return
 
-	var shoot_dir := owner_player.call("get_last_move_direction") as Vector2
+	var shoot_dir := owner_player.call("get_weapon_aim_direction") as Vector2
 	if shoot_dir == Vector2.ZERO:
 		shoot_dir = Vector2.RIGHT
 
@@ -82,9 +82,20 @@ func try_fire() -> void:
 		world = get_tree().root
 	world.add_child(projectile)
 
-	sprite.play("fire")
+	_play_fire_animation_from_start()
 	if current_ammo <= 0:
 		_start_reload()
+
+
+func _play_fire_animation_from_start() -> void:
+	# Restarting guarantees visual shot timing stays aligned with actual projectile spawns.
+	if sprite == null:
+		return
+	if sprite.animation == "fire":
+		sprite.stop()
+	sprite.play("fire")
+	sprite.frame = 0
+	sprite.frame_progress = 0.0
 
 
 func _start_reload() -> void:

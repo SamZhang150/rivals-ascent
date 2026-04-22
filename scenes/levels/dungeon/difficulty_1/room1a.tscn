@@ -602,6 +602,7 @@ z_index = -1
 position = Vector2(112, 64)
 
 [node name="ExitDoor" type="StaticBody2D" parent="." unique_id=565268677]
+position = Vector2(91.5, -37.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1609907398]
 position = Vector2(24, 51)
@@ -614,6 +615,7 @@ animation = &"closed"
 autoplay = "closed"
 
 [node name="ExitTrigger" type="Area2D" parent="." unique_id=563538761]
+position = Vector2(91.5, -37.5)
 collision_layer = 128
 collision_mask = 2
 
@@ -625,7 +627,7 @@ shape = SubResource("RectangleShape2D_ibfpi")
 position = Vector2(68, 29)
 
 [node name="Slime2" parent="." unique_id=417117902 instance=ExtResource("3_thw7r")]
-position = Vector2(85, 25)
+position = Vector2(47.5, 91)
 
 [node name="Walls" type="StaticBody2D" parent="." unique_id=1029651196]
 collision_mask = 6

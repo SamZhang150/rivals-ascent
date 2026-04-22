@@ -93,7 +93,7 @@ func _open_exit():
 	exit_door.process_mode = Node.PROCESS_MODE_INHERIT
 	
 	if exit_door.has_node("CollisionShape2D"):
-		exit_door.get_node("CollisionShape2D").disabled = true
+		exit_door.get_node("CollisionShape2D").set_deferred("disabled", true)
 	
 	# Remove the physical door blocker
 	#if is_instance_valid(exit_door):

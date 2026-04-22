@@ -4,11 +4,20 @@
 [ext_resource type="Script" uid="uid://dxa0chs7qg7k" path="res://scripts/core/splitscreen.gd" id="1_70hwx"]
 [ext_resource type="PackedScene" uid="uid://b7fgp2hgf4f5g" path="res://scenes/levels/shared/lobby.tscn" id="1_nd0h1"]
 [ext_resource type="Resource" uid="uid://m0kpf2rdypio" path="res://scripts/levels/dungeon_pool.tres" id="2_qrlqk"]
+[ext_resource type="PackedScene" uid="uid://rytiifpwxlrh" path="res://scenes/levels/shared/pvp.tscn" id="5_r6vru"]
 [ext_resource type="PackedScene" uid="uid://dghjbmvjnkbp7" path="res://scenes/entities/player.tscn" id="5_w00f7"]
 [ext_resource type="PackedScene" uid="uid://cdydk6yspqiuv" path="res://scenes/ui/health_ui.tscn" id="6_uskqa"]
 [ext_resource type="PackedScene" uid="uid://ddh3y03ry2ldy" path="res://scenes/ui/shop_ui.tscn" id="6_w74f3"]
+[ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/fonts/pixel_font.ttf" id="8_3ls45"]
 [ext_resource type="PackedScene" uid="uid://lnf4k78q8ngj" path="res://scenes/ui/coin_ui.tscn" id="8_uskqa"]
 [ext_resource type="PackedScene" uid="uid://hsavvx8g3u5l" path="res://scenes/ui/coin_popup.tscn" id="9_crw4u"]
+[ext_resource type="Texture2D" uid="uid://bcoki44rgd7kj" path="res://assets/sprites/ui/controls.png" id="10_b1cd4"]
+[ext_resource type="Script" uid="uid://c6b5bvrk28vni" path="res://scripts/ui/controls_ui.gd" id="11_controls"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_g2836"]
+font = ExtResource("8_3ls45")
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
 
 [node name="Splitscreen" type="Node2D" unique_id=1386558526]
 z_index = -5
@@ -17,7 +26,7 @@ script = ExtResource("1_70hwx")
 dungeon_pool = ExtResource("2_qrlqk")
 lobby_room_scene = ExtResource("1_nd0h1")
 shop_room_scene = ExtResource("1_6s57n")
-pvp_room_scene = ExtResource("1_nd0h1")
+pvp_room_scene = ExtResource("5_r6vru")
 player_scene = ExtResource("5_w00f7")
 
 [node name="World" type="Node2D" parent="." unique_id=907279618]
@@ -101,13 +110,18 @@ offset_bottom = 40.0
 
 [node name="WinnerLabel" type="Label" parent="UI/RoundOverUI" unique_id=1438685620]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 46.0
+offset_bottom = 29.0
+label_settings = SubResource("LabelSettings_g2836")
 
 [node name="ScoreLabel" type="Label" parent="UI/RoundOverUI" unique_id=926518458]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 6.0
+offset_top = 33.0
+offset_right = 46.0
+offset_bottom = 56.0
 
 [node name="ShopUI" parent="UI" unique_id=1017933386 instance=ExtResource("6_w74f3")]
 
@@ -120,3 +134,14 @@ is_left = true
 is_left = true
 
 [node name="CoinUIRight" parent="UI" unique_id=1042570206 instance=ExtResource("8_uskqa")]
+
+[node name="ControlsUI" type="Control" parent="UI" unique_id=1979661846]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("11_controls")
+
+[node name="Sprite2D" type="Sprite2D" parent="UI/ControlsUI" unique_id=2127476574]
+position = Vector2(34, 66)
+texture = ExtResource("10_b1cd4")

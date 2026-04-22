@@ -61,7 +61,7 @@ var duel_resolved: bool = false
 const DUELS_TO_WIN := 3
 
 # Room spacing in world coordinates
-const ROOM_SPACING := 300.0
+const ROOM_SPACING := 1000.0
 
 # Room instance references
 var lobby_instance: Node2D
@@ -72,10 +72,10 @@ var p2_dungeon_rooms: Array[Node2D] = []
 
 var difficulty_curves: Array = [
 	[1, 1, 2, 2],
-	[1, 1, 2, 2],
-	[1, 1, 2, 2],
-	[1, 1, 2, 2],
-	[1, 1, 2, 2],
+	[3, 3, 3, 3],
+	[3, 3, 3, 3],
+	[3, 3, 3, 3],
+	[3, 3, 3, 3],
 ]
 
 func _get_difficulty_curve() -> Array:
@@ -198,8 +198,8 @@ func _transition_to(new_phase: Phase):
 			lobby_instance = _place_room(lobby_room_scene, Vector2.ZERO)
 			_set_screen_mode(ScreenMode.SHARED)
 			var spawn = lobby_instance.get_node("SpawnPoint") as Marker2D
-			p1.global_position = spawn.global_position + Vector2(-40, 0)
-			p2.global_position = spawn.global_position + Vector2(40, 0)
+			p1.respawn_at(spawn.global_position + Vector2(-40, 0))
+			p2.respawn_at(spawn.global_position + Vector2(40, 0))
 			_enable_players(true)
 			_set_players_combat(false)
 			ready_up_ui.visible = true

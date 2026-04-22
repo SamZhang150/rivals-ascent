@@ -15,6 +15,8 @@
 ## You should have:
 ##   p1_up, p1_down, p1_left, p1_right, p1_attack, p1_ready, p1_interact, p1_dash
 ##   p2_up, p2_down, p2_left, p2_right, p2_attack, p2_ready, p2_interact, p2_dash
+##   p1_aim_up, p1_aim_down, p1_aim_left, p1_aim_right
+##   p2_aim_up, p2_aim_down, p2_aim_left, p2_aim_right
 
 extends CharacterBody2D
 
@@ -23,6 +25,7 @@ extends CharacterBody2D
 @export var max_health: int = 100
 @export var starter_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/pistol.tscn")
 @export var weapon_offset: Vector2 = Vector2(5, -1)
+@export var aim_deadzone: float = 0.25
 @export var dash_speed: float = 300.0
 @export var dash_duration: float = 0.3
 @export var dash_cooldown: float = 0.9
@@ -38,6 +41,7 @@ var damage_uses_coins: bool = false
 
 var is_attacking: bool = false
 var last_move_direction: Vector2 = Vector2.RIGHT
+var last_aim_direction: Vector2 = Vector2.RIGHT
 var equipped_weapon: Node2D = null
 
 var is_invulnerable: bool = false
@@ -113,6 +117,12 @@ func _ready() -> void:
 	# Connect hitbox signals to track enemies in contact
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
 	hitbox.area_exited.connect(_on_hitbox_area_exited)
+
+	# Keep movement speed source-of-truth in global stats.
+	if Global.player_stats.has(player_id):
+		if not Global.player_stats[player_id].has("speed"):
+			Global.player_stats[player_id]["speed"] = speed
+		speed = float(Global.player_stats[player_id]["speed"])
 	
 	_set_health(get_max_health())
 	_update_health_ui()
@@ -141,23 +151,29 @@ func _physics_process(_delta: float) -> void:
 		move_and_slide()
 		return
 
-	# Gather directional input
-	var input_dir := Vector2.ZERO
-	input_dir.x = Input.get_axis(_prefix + "left", _prefix + "right")
-	input_dir.y = Input.get_axis(_prefix + "up", _prefix + "down")
-	input_dir = input_dir.normalized()
+	# Gather movement and aiming input. Movement keeps analog magnitude for controllers.
+	var input_dir := _get_move_input()
+	var aim_dir := _get_aim_input()
 	
 	if input_dir != Vector2.ZERO:
 		last_move_direction = input_dir
-		velocity = input_dir * speed
+		if aim_dir == Vector2.ZERO:
+			last_aim_direction = input_dir.normalized()
+		velocity = input_dir * get_move_speed()
 		sprite.play(_prefix + "run")
-		if input_dir.x != 0:
-			sprite.flip_h = input_dir.x < 0
-			attack_area.scale.x = -1 if input_dir.x < 0 else 1
-		_update_weapon_pose(input_dir)
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, speed)
+		velocity = velocity.move_toward(Vector2.ZERO, get_move_speed())
 		sprite.play(_prefix + "idle")
+
+	if aim_dir != Vector2.ZERO:
+		last_aim_direction = aim_dir
+
+	var facing_dir := input_dir if input_dir != Vector2.ZERO else last_aim_direction
+	if facing_dir.x != 0:
+		sprite.flip_h = facing_dir.x < 0
+		attack_area.scale.x = -1 if facing_dir.x < 0 else 1
+
+	_update_weapon_pose(last_aim_direction)
 		
 	velocity += damage_knockback
 	damage_knockback = damage_knockback.move_toward(Vector2.ZERO, get_knockback_decay() * _delta)
@@ -188,6 +204,12 @@ func can_fire_weapon() -> bool:
 
 
 func get_last_move_direction() -> Vector2:
+	return last_move_direction
+
+
+func get_weapon_aim_direction() -> Vector2:
+	if last_aim_direction != Vector2.ZERO:
+		return last_aim_direction
 	return last_move_direction
 
 
@@ -222,6 +244,12 @@ func get_health() -> int:
 
 func get_max_health() -> int:
 	return Global.player_stats[player_id]["max_health"]
+
+
+func get_move_speed() -> float:
+	if Global.player_stats.has(player_id):
+		return float(Global.player_stats[player_id].get("speed", speed))
+	return speed
 
 
 func is_dead() -> bool:
@@ -274,18 +302,42 @@ func _show_coin_popup(amount: int) -> void:
 		print("popup missing show_amount")
 
 func _equip_starter_weapon() -> void:
-	if starter_weapon_scene == null:
+	equip_weapon_scene(starter_weapon_scene)
+
+
+func equip_weapon_scene(weapon_scene: PackedScene) -> void:
+	if weapon_scene == null:
 		return
 	if equipped_weapon != null and is_instance_valid(equipped_weapon):
 		equipped_weapon.queue_free()
 
-	equipped_weapon = starter_weapon_scene.instantiate() as Node2D
+	equipped_weapon = weapon_scene.instantiate() as Node2D
 	if equipped_weapon == null:
 		return
 
 	equipped_weapon.position = weapon_offset
 	add_child(equipped_weapon)
-	_update_weapon_pose(last_move_direction)
+	_update_weapon_pose(last_aim_direction)
+
+
+func _get_move_input() -> Vector2:
+	var input_dir := Vector2.ZERO
+	input_dir.x = Input.get_axis(_prefix + "left", _prefix + "right")
+	input_dir.y = Input.get_axis(_prefix + "up", _prefix + "down")
+	if input_dir.length() > 1.0:
+		input_dir = input_dir.normalized()
+	return input_dir
+
+
+func _get_aim_input() -> Vector2:
+	var aim_dir := Vector2.ZERO
+	aim_dir.x = Input.get_axis(_prefix + "aim_left", _prefix + "aim_right")
+	aim_dir.y = Input.get_axis(_prefix + "aim_up", _prefix + "aim_down")
+	if aim_dir.length() < aim_deadzone:
+		return Vector2.ZERO
+	if aim_dir.length() > 1.0:
+		aim_dir = aim_dir.normalized()
+	return aim_dir
 
 
 func _update_weapon_pose(move_dir: Vector2) -> void:
@@ -296,27 +348,11 @@ func _update_weapon_pose(move_dir: Vector2) -> void:
 		move_dir = last_move_direction
 	move_dir = move_dir.normalized()
 
-	var x: float = absf(weapon_offset.x)
-	var y: float = weapon_offset.y
-	var on_right_semicircle: bool = move_dir.x > 0.0
+	var radius: float = absf(weapon_offset.x)
+	equipped_weapon.position = (move_dir * radius) + Vector2(0.0, weapon_offset.y)
+	equipped_weapon.rotation = move_dir.angle() + PI
 
-	if absf(move_dir.x) >= absf(move_dir.y):
-		if move_dir.x < 0.0:
-			equipped_weapon.position = Vector2(-x, y)
-		else:
-			equipped_weapon.position = Vector2(x, y)
-	else:
-		if move_dir.y < 0.0:
-			equipped_weapon.position = Vector2(y, -x)
-		else:
-			equipped_weapon.position = Vector2(y, x)
-
-	if on_right_semicircle:
-		var right_angle: float = atan2(move_dir.y, move_dir.x)
-		equipped_weapon.rotation = PI + right_angle
-	else:
-		var left_angle: float = atan2(-move_dir.y, -move_dir.x)
-		equipped_weapon.rotation = left_angle
+	var on_right_semicircle: bool = move_dir.x >= 0.0
 
 	var weapon_sprite := equipped_weapon.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	if weapon_sprite != null:
@@ -472,9 +508,7 @@ func _try_dash() -> void:
 	if shop_ui_open:
 		return
 
-	var input_dir := Vector2.ZERO
-	input_dir.x = Input.get_axis(_prefix + "left", _prefix + "right")
-	input_dir.y = Input.get_axis(_prefix + "up", _prefix + "down")
+	var input_dir := _get_move_input()
 	input_dir = input_dir.normalized()
 
 	if input_dir == Vector2.ZERO:

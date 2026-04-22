@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://blvjmqiox7fy" path="res://scenes/levels/dungeon/dungeon.gd" id="1_87hwi"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="1_sr5oa"]
 [ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="3_xxu7e"]
-[ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="4_uioin"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uioin"]
 texture = ExtResource("1_sr5oa")
@@ -605,10 +604,8 @@ position = Vector2(112, 64)
 [node name="Slime" parent="." unique_id=1718233248 instance=ExtResource("3_xxu7e")]
 position = Vector2(68, 29)
 
-[node name="Bat" parent="." unique_id=790856433 instance=ExtResource("4_uioin")]
-position = Vector2(24, 99.5)
-
 [node name="ExitDoor" type="StaticBody2D" parent="." unique_id=1025827598]
+position = Vector2(94, -37)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1376886633]
 position = Vector2(24, 51)
@@ -621,6 +618,7 @@ animation = &"closed"
 autoplay = "closed"
 
 [node name="ExitTrigger" type="Area2D" parent="." unique_id=699200906]
+position = Vector2(94, -37)
 collision_layer = 128
 collision_mask = 2
 
@@ -647,3 +645,6 @@ shape = SubResource("RectangleShape2D_bb444")
 [node name="bottom" type="CollisionShape2D" parent="Walls" unique_id=1282783282]
 position = Vector2(112, 129)
 shape = SubResource("RectangleShape2D_okw1k")
+
+[node name="Slime2" parent="." unique_id=2018649948 instance=ExtResource("3_xxu7e")]
+position = Vector2(170, 63.5)

@@ -559,7 +559,10 @@ position = Vector2(112, 64)
 
 [node name="UpgradeStation" type="Area2D" parent="ShopStations" unique_id=728984281]
 position = Vector2(80, -29)
+collision_layer = 0
+collision_mask = 2
 script = ExtResource("3_t0dvs")
+station_type = "upgrade"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ShopStations/UpgradeStation" unique_id=962765458]
 position = Vector2(125, 65)
@@ -571,6 +574,8 @@ texture = ExtResource("3_ql8nn")
 
 [node name="BuyStation" type="Area2D" parent="ShopStations" unique_id=1855519570]
 position = Vector2(-28, -16)
+collision_layer = 0
+collision_mask = 2
 script = ExtResource("3_t0dvs")
 station_type = "buy"
 
