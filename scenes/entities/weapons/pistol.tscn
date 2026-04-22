@@ -46,6 +46,7 @@ animations = [{
 }]
 
 [node name="Pistol" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
 script = ExtResource("1_pojl6")
 fire_rate = 6.0
 damage = 10

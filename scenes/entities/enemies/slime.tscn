@@ -47,6 +47,7 @@ collision_layer = 4
 script = ExtResource("1_ljkv1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1200022150]
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_rw4dm")
 animation = &"run"
 autoplay = "idle"

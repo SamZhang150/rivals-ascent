@@ -585,6 +585,7 @@ size = Vector2(2, 113)
 size = Vector2(224, 2)
 
 [node name="Room1b" type="Node2D" unique_id=243359576]
+scale = Vector2(2, 2)
 script = ExtResource("1_87hwi")
 
 [node name="TileMapLayerFloor" type="TileMapLayer" parent="." unique_id=165642663]

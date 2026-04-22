@@ -98,10 +98,13 @@ size = Vector2(5, 7)
 
 [node name="Player" type="CharacterBody2D" unique_id=897775928]
 z_index = 1
+scale = Vector2(2, 2)
 collision_layer = 2
 script = ExtResource("1_ucweq")
+speed = 100.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1251588531]
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_dnykm")
 animation = &"p1_run"
 

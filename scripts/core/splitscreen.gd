@@ -136,13 +136,13 @@ func _set_screen_mode(mode: ScreenMode):
 		ScreenMode.SPLIT:
 			left_container.visible = true
 			right_container.visible = true
-			left_viewport.size = Vector2i(112, 126)
-			right_viewport.size = Vector2i(112, 126)
+			left_viewport.size = Vector2i(224, 252)
+			right_viewport.size = Vector2i(224, 252)
 		ScreenMode.SHARED:
 			left_container.visible = true
 			right_container.visible = false
 			# Full logical width when taking the whole screen
-			left_viewport.size = Vector2i(224, 126)
+			left_viewport.size = Vector2i(448, 252)
 
 
 # ─── PLAYER SPAWNING ────────────────────────────────────
