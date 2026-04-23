@@ -11,13 +11,61 @@
 [ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/fonts/pixel_font.ttf" id="8_3ls45"]
 [ext_resource type="PackedScene" uid="uid://lnf4k78q8ngj" path="res://scenes/ui/coin_ui.tscn" id="8_uskqa"]
 [ext_resource type="PackedScene" uid="uid://hsavvx8g3u5l" path="res://scenes/ui/coin_popup.tscn" id="9_crw4u"]
-[ext_resource type="Texture2D" uid="uid://bcoki44rgd7kj" path="res://assets/sprites/ui/controls.png" id="10_b1cd4"]
+[ext_resource type="PackedScene" uid="uid://c107h8er231fu" path="res://scenes/ui/ammo.tscn" id="10_ammo"]
 [ext_resource type="Script" uid="uid://c6b5bvrk28vni" path="res://scripts/ui/controls_ui.gd" id="11_controls"]
+[ext_resource type="Texture2D" uid="uid://clxpt1sa7gvpf" path="res://assets/sprites/ui/controls1.png" id="13_g2836"]
+[ext_resource type="Texture2D" uid="uid://xgithtjledua" path="res://assets/sprites/ui/controls2.png" id="14_2ejtj"]
+[ext_resource type="Texture2D" uid="uid://bbu21iucmm2uv" path="res://assets/sprites/ui/controls1key.png" id="14_g2836"]
+[ext_resource type="Texture2D" uid="uid://c34fpn4ww6v6x" path="res://assets/sprites/ui/controls2key.png" id="16_dey7g"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_05jgh"]
+font = ExtResource("8_3ls45")
+font_size = 40
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_g2836"]
 font = ExtResource("8_3ls45")
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2ejtj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_g2836")
+}],
+"loop": true,
+"name": &"controls",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_g2836")
+}],
+"loop": true,
+"name": &"controlskey",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_05jgh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_2ejtj")
+}],
+"loop": true,
+"name": &"controls",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_dey7g")
+}],
+"loop": true,
+"name": &"controlskey",
+"speed": 5.0
+}]
 
 [node name="Splitscreen" type="Node2D" unique_id=1386558526]
 z_index = -5
@@ -102,6 +150,15 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 
+[node name="CountdownLabel" type="Label" parent="UI/ReadyUpUI" unique_id=1243620375]
+layout_mode = 0
+offset_left = 205.0
+offset_top = 104.0
+offset_right = 245.0
+offset_bottom = 127.0
+label_settings = SubResource("LabelSettings_05jgh")
+horizontal_alignment = 1
+
 [node name="RoundOverUI" type="Control" parent="UI" unique_id=736761574]
 layout_mode = 3
 anchors_preset = 0
@@ -135,13 +192,33 @@ is_left = true
 
 [node name="CoinUIRight" parent="UI" unique_id=1042570206 instance=ExtResource("8_uskqa")]
 
-[node name="ControlsUI" type="Control" parent="UI" unique_id=1979661846]
+[node name="AmmoUILeft" parent="UI" unique_id=205541622 instance=ExtResource("10_ammo")]
+is_left = true
+
+[node name="AmmoUIRight" parent="UI" unique_id=917244202 instance=ExtResource("10_ammo")]
+
+[node name="ControlsUILeft" type="Control" parent="UI" unique_id=1979661846]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("11_controls")
+player_id = 1
 
-[node name="Sprite2D" type="Sprite2D" parent="UI/ControlsUI" unique_id=2127476574]
-position = Vector2(34, 66)
-texture = ExtResource("10_b1cd4")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UI/ControlsUILeft" unique_id=948204056]
+position = Vector2(39, 76)
+sprite_frames = SubResource("SpriteFrames_2ejtj")
+animation = &"controlskey"
+
+[node name="ControlsUIRight" type="Control" parent="UI" unique_id=1536005814]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("11_controls")
+player_id = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UI/ControlsUIRight" unique_id=245021596]
+position = Vector2(409, 76)
+sprite_frames = SubResource("SpriteFrames_05jgh")
+animation = &"controlskey"

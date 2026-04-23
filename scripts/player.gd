@@ -84,16 +84,20 @@ var health_ui = get_node_or_null(health_ui_path)
 
 @export var coin_ui_path: NodePath
 var coin_ui = get_node_or_null(coin_ui_path)
+var ammo_ui = null
 @export var coin_popup_scene: PackedScene = preload("res://scenes/ui/coin_popup.tscn")
 
 @onready var shop_ui: Node = get_tree().current_scene.get_node("UI/ShopUI")
 
 signal died(player_id: int)
+signal weapon_changed(weapon: Node2D)
 
 
 func _ready() -> void:
 	add_to_group("player")
 	hitbox.add_to_group("player_hitbox")
+	hitbox.monitoring = true
+	hitbox.monitorable = true
 	
 	_prefix = "p1_" if player_id == 1 else "p2_"
 	_register_weapon_scenes()
@@ -385,6 +389,10 @@ func equip_weapon_scene(weapon_scene: PackedScene) -> void:
 	add_child(equipped_weapon)
 	_update_weapon_pose(last_aim_direction)
 
+	if ammo_ui != null and ammo_ui.has_method("set_weapon"):
+		ammo_ui.call("set_weapon", equipped_weapon)
+	weapon_changed.emit(equipped_weapon)
+
 
 func _get_move_input() -> Vector2:
 	var input_dir := Vector2.ZERO
@@ -438,7 +446,7 @@ func _on_attack_cooldown_finished() -> void:
 	attack_area.monitoring = false
 
 func take_damage(amount: int, from_position: Vector2) -> void:
-	if is_dead() or is_invulnerable:
+	if is_dead() or is_invulnerable or is_dashing:
 		return
 		
 	if damage_uses_coins:
@@ -515,6 +523,41 @@ func _on_contact_damage_timer() -> void:
 			break
 
 
+func _set_dash_collision_ignored(ignored: bool) -> void:
+	hitbox.monitoring = not ignored
+	hitbox.monitorable = not ignored
+	if ignored:
+		_enemies_in_contact.clear()
+		_contact_damage_timer.stop()
+		return
+	call_deferred("_refresh_enemy_contacts")
+
+
+func _refresh_enemy_contacts() -> void:
+	if hitbox == null or not hitbox.monitoring:
+		return
+
+	_enemies_in_contact.clear()
+	for area in hitbox.get_overlapping_areas():
+		if not area.is_in_group("enemy_hitbox"):
+			continue
+		var enemy := area.get_parent()
+		if enemy != null and is_instance_valid(enemy) and not _enemies_in_contact.has(enemy):
+			_enemies_in_contact.append(enemy)
+
+	if _enemies_in_contact.is_empty():
+		_contact_damage_timer.stop()
+		return
+
+	var enemy := _enemies_in_contact[0]
+	var touch_damage = enemy.get("touch_damage")
+	if touch_damage != null:
+		take_damage(int(touch_damage), enemy.global_position)
+
+	if _contact_damage_timer.is_stopped():
+		_contact_damage_timer.start()
+
+
 func _die() -> void:
 	if shop_ui_open:
 		close_shop_ui()
@@ -543,6 +586,7 @@ func reset_for_round() -> void:
 	sprite.modulate = Color.WHITE
 	is_attacking = false
 	attack_area.monitoring = false
+	_set_dash_collision_ignored(false)
 
 	is_dashing = false
 	dash_direction = Vector2.ZERO
@@ -589,6 +633,7 @@ func _try_dash() -> void:
 		return
 
 	is_dashing = true
+	_set_dash_collision_ignored(true)
 	_dash_anim_playing = true
 	sprite.play(_prefix + "dash")
 	sprite.frame = 0
@@ -614,6 +659,7 @@ func _try_dash() -> void:
 
 func _on_dash_finished() -> void:
 	is_dashing = false
+	_set_dash_collision_ignored(false)
 
 
 func _on_sprite_animation_finished() -> void:

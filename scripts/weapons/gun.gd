@@ -1,5 +1,10 @@
 extends Node2D
 
+signal ammo_changed(current: int, max_ammo: int)
+signal reload_started(duration: float)
+signal reload_progress(progress: float)
+signal reload_finished()
+
 @export var fire_rate: float = 5.0
 @export var is_auto: bool = false
 @export var damage: int = 2
@@ -9,6 +14,7 @@ extends Node2D
 @export var max_ammo: int = 8
 @export var reload_time: float = 1.1
 @export var current_ammo: int = 8
+@export var ammo_icon: Texture2D
 @export var projectile_scene: PackedScene
 
 var _fire_cooldown: float = 0.0
@@ -22,6 +28,7 @@ func _ready() -> void:
 	current_ammo = clamp(current_ammo, 0, max_ammo)
 	sprite.animation_finished.connect(_on_gun_animation_finished)
 	sprite.play("idle")
+	ammo_changed.emit(current_ammo, max_ammo)
 
 
 func _process(delta: float) -> void:
@@ -29,6 +36,8 @@ func _process(delta: float) -> void:
 
 	if _is_reloading:
 		_reload_cooldown -= delta
+		var progress: float = 1.0 - (_reload_cooldown / maxf(reload_time, 0.05))
+		reload_progress.emit(clampf(progress, 0.0, 1.0))
 		if _reload_cooldown <= 0.0:
 			_finish_reload()
 		return
@@ -70,6 +79,7 @@ func try_fire() -> void:
 		shoot_dir = Vector2.RIGHT
 
 	current_ammo -= 1
+	ammo_changed.emit(current_ammo, max_ammo)
 	_fire_cooldown = 1.0 / max(fire_rate, 0.01)
 
 	var spawn_distance := (bullet_length * 0.5) + (bullet_radius * 3.0)
@@ -103,11 +113,15 @@ func _start_reload() -> void:
 		return
 	_is_reloading = true
 	_reload_cooldown = max(reload_time, 0.05)
+	reload_started.emit(_reload_cooldown)
+	reload_progress.emit(0.0)
 
 
 func _finish_reload() -> void:
 	_is_reloading = false
 	current_ammo = max_ammo
+	ammo_changed.emit(current_ammo, max_ammo)
+	reload_finished.emit()
 
 
 func _can_owner_shoot() -> bool:

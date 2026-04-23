@@ -40,6 +40,7 @@ enum ScreenMode { SPLIT, SHARED }
 @onready var left_viewport: SubViewport = $ScreenDisplay/ViewportContainer/Left/SubViewport
 @onready var right_viewport: SubViewport = $ScreenDisplay/ViewportContainer/Right/SubViewport
 @onready var ready_up_ui: Control = $UI/ReadyUpUI
+@onready var countdown_label: Label = $UI/ReadyUpUI/CountdownLabel
 @onready var shop_ui: Control = $UI/ShopUI
 @onready var round_over_ui: Control = $UI/RoundOverUI
 
@@ -56,6 +57,10 @@ var p2_room_index: int = 0
 var p1_finished_dungeon: bool = false
 var p2_finished_dungeon: bool = false
 var duel_resolved: bool = false
+var ready_countdown_timer: Timer
+var ready_countdown_remaining: int = 0
+var ready_countdown_active: bool = false
+var ready_countdown_target_phase: Phase = Phase.DUNGEON
 
 const DUELS_TO_WIN := 3
 
@@ -85,6 +90,12 @@ func _ready():
 	# Make both viewports render the same world
 	left_viewport.world_2d = world.get_world_2d()
 	right_viewport.world_2d = world.get_world_2d()
+	ready_countdown_timer = Timer.new()
+	ready_countdown_timer.wait_time = 1.0
+	ready_countdown_timer.one_shot = false
+	ready_countdown_timer.timeout.connect(_on_ready_countdown_tick)
+	add_child(ready_countdown_timer)
+	countdown_label.text = ""
 	_set_screen_mode(ScreenMode.SPLIT)
 	_spawn_players()
 	reset_match_state()
@@ -124,7 +135,7 @@ func _center_viewport_on(vp: SubViewport, target_pos: Vector2, room: Node2D) -> 
 	if room == null:
 		return
 		
-	print("room=", room.name, " top_left=", room.get_node_or_null("CamTopLeft"), " bottom_right=", room.get_node_or_null("CamBottomRight"))
+	## print("room=", room.name, " top_left=", room.get_node_or_null("CamTopLeft"), " bottom_right=", room.get_node_or_null("CamBottomRight"))
 
 	var top_left: Marker2D = room.get_node_or_null("CamTopLeft") as Marker2D
 	var bottom_right := room.get_node_or_null("CamBottomRight") as Marker2D
@@ -183,6 +194,7 @@ func _spawn_players():
 	p1.player_id = 1                    # set BEFORE add_child
 	p1.health_ui = $UI/HealthUILeft
 	p1.coin_ui = $UI/CoinUILeft
+	p1.ammo_ui = $UI/AmmoUILeft
 	p1.set_meta("player_id", 1)
 	world.add_child(p1)                 # _ready() fires here
 
@@ -191,6 +203,7 @@ func _spawn_players():
 	p2.player_id = 2                    # set BEFORE add_child
 	p2.health_ui = $UI/HealthUIRight
 	p2.coin_ui = $UI/CoinUIRight
+	p2.ammo_ui = $UI/AmmoUIRight
 	p2.set_meta("player_id", 2)
 	world.add_child(p2)
 
@@ -211,6 +224,7 @@ func _transition_to(new_phase: Phase):
 	phase = new_phase
 	p1_ready = false
 	p2_ready = false
+	_cancel_ready_countdown()
 	_hide_all_ui()
 	
 	
@@ -429,12 +443,17 @@ func on_player_died(player_id: int):
 
 # ─── READY-UP ───────────────────────────────────────────
 func _check_both_ready():
-	if p1_ready and p2_ready:
-		match phase:
-			Phase.LOBBY:
-				_transition_to(Phase.DUNGEON)
-			Phase.SHOP:
-				_transition_to(Phase.PVP)
+	match phase:
+		Phase.LOBBY:
+			if p1_ready and p2_ready:
+				_start_ready_countdown(Phase.DUNGEON)
+			else:
+				_cancel_ready_countdown()
+		Phase.SHOP:
+			if p1_ready and p2_ready:
+				_start_ready_countdown(Phase.PVP)
+			else:
+				_cancel_ready_countdown()
 
 
 func _update_ready_ui():
@@ -442,6 +461,44 @@ func _update_ready_ui():
 	var p2_label = ready_up_ui.get_node("P2ReadyLabel") as Label
 	p1_label.text = "P1: READY" if p1_ready else "P1: Not Ready"
 	p2_label.text = "P2: READY" if p2_ready else "P2: Not Ready"
+
+
+func _start_ready_countdown(target_phase: Phase) -> void:
+	if ready_countdown_active and ready_countdown_target_phase == target_phase:
+		return
+	ready_countdown_active = true
+	ready_countdown_target_phase = target_phase
+	ready_countdown_remaining = 5
+	countdown_label.text = "%d" % ready_countdown_remaining
+	ready_countdown_timer.start()
+
+
+func _cancel_ready_countdown() -> void:
+	ready_countdown_active = false
+	ready_countdown_remaining = 0
+	if ready_countdown_timer:
+		ready_countdown_timer.stop()
+	if countdown_label:
+		countdown_label.text = ""
+
+
+func _on_ready_countdown_tick() -> void:
+	if not ready_countdown_active:
+		ready_countdown_timer.stop()
+		return
+
+	if (phase != Phase.LOBBY and phase != Phase.SHOP) or not (p1_ready and p2_ready):
+		_cancel_ready_countdown()
+		return
+
+	ready_countdown_remaining -= 1
+	if ready_countdown_remaining <= 0:
+		var target_phase = ready_countdown_target_phase
+		_cancel_ready_countdown()
+		_transition_to(target_phase)
+		return
+
+	countdown_label.text = "%d" % ready_countdown_remaining
 
 
 # ─── HELPERS ─────────────────────────────────────────────

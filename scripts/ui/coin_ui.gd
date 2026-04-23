@@ -13,7 +13,7 @@ func _ready() -> void:
 		label.position = Vector2(18, 1)
 		
 	else:
-		position = Vector2(412, 218)
+		position = Vector2(413, 218)
 		coin_icon.position = Vector2(18, -1)
 		label.position = Vector2(1, 2)
 	

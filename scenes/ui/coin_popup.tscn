@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cfmj80avmenfl" path="res://scripts/ui/coin_popup.gd" id="1_0gtlh"]
 [ext_resource type="Texture2D" uid="uid://cxis35niux1ot" path="res://assets/sprites/icons/coin_sprite.png" id="1_13knk"]
+[ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/fonts/pixel_font.ttf" id="3_ycs2r"]
 
 [node name="CoinPopup" type="Control" unique_id=2138822105]
 custom_minimum_size = Vector2(40, 20)
@@ -21,5 +22,11 @@ stretch_mode = 2
 
 [node name="Label" type="Label" parent="." unique_id=1389079302]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 4.7058825
+offset_top = -8.235294
+offset_right = 44.705883
+offset_bottom = 14.764706
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3_ycs2r")
+theme_override_font_sizes/font_size = 18

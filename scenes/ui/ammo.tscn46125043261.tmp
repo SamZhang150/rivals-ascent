@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://c107h8er231fu"]
+
+[ext_resource type="Script" uid="uid://c1swn06dkauds" path="res://scripts/ui/ammo.gd" id="1_ammo"]
+
+[node name="AmmoUI" type="Control" unique_id=1664001373]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_ammo")
+is_left = null
+panel_size = null
+used_alpha = null
+full_alpha = null
+
+[node name="AmmoPanel" type="Panel" parent="." unique_id=133021774]
+custom_minimum_size = Vector2(12, 72)
+layout_mode = 0
+offset_right = 12.0
+offset_bottom = 72.0
+
+[node name="ColorRect" type="ColorRect" parent="AmmoPanel" unique_id=456776267]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = -35.0
+offset_right = 2.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.3529412)
+
+[node name="AmmoStack" type="Control" parent="AmmoPanel" unique_id=507406301]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ReloadBar" type="ProgressBar" parent="." unique_id=1619051846]
+custom_minimum_size = Vector2(18, 6)
+layout_mode = 0
+offset_left = -3.0
+offset_top = -9.0
+offset_right = 15.0
+offset_bottom = -3.0
+scale = Vector2(0.9, 0.8)
+show_percentage = false

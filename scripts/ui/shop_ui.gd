@@ -29,6 +29,8 @@ var p1_option_buttons: Array[Button] = []
 var p2_option_buttons: Array[Button] = []
 var p1_selected_index: int = 0
 var p2_selected_index: int = 0
+var p1_just_opened: bool = false
+var p2_just_opened: bool = false
 
 
 func _ready() -> void:
@@ -56,11 +58,13 @@ func open_ui(mode: String, player: CharacterBody2D) -> void:
 		p1_current_mode = mode
 		p1_current_player = player
 		p1_main_panel.visible = true
+		p1_just_opened = true
 		populate_ui_for_player(1)
 	elif player.player_id == 2:
 		p2_current_mode = mode
 		p2_current_player = player
 		p2_main_panel.visible = true
+		p2_just_opened = true
 		populate_ui_for_player(2)
 
 
@@ -246,6 +250,13 @@ func _register_option_button(player_id: int, button: Button) -> void:
 
 
 func _handle_player_shop_input(player_id: int) -> void:
+	if player_id == 1 and p1_just_opened:
+		p1_just_opened = false
+		return
+	if player_id == 2 and p2_just_opened:
+		p2_just_opened = false
+		return
+
 	var prefix := "p1_" if player_id == 1 else "p2_"
 
 	if Input.is_action_just_pressed(prefix + "up"):
@@ -253,7 +264,7 @@ func _handle_player_shop_input(player_id: int) -> void:
 	elif Input.is_action_just_pressed(prefix + "down"):
 		_move_selection(player_id, 1)
 
-	if Input.is_action_just_pressed(prefix + "attack"):
+	if Input.is_action_just_pressed(prefix + "interact"):
 		_activate_selection(player_id)
 
 

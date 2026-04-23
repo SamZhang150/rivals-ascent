@@ -8,8 +8,12 @@ func _configure_controller_input_map() -> void:
 	# Device 0 controls player 1, device 1 controls player 2.
 	_add_controller_mapping(1, 0)
 	_add_controller_mapping(2, 1)
-	_add_joy_motion_event("toggle_controls", 0, JOY_AXIS_TRIGGER_LEFT, 1.0)
-	_add_joy_motion_event("toggle_controls", 1, JOY_AXIS_TRIGGER_LEFT, 1.0)
+	_ensure_action_exists("p1_toggle_controls", 0.85)
+	_ensure_action_exists("p2_toggle_controls", 0.85)
+	InputMap.action_set_deadzone("p1_toggle_controls", 0.85)
+	InputMap.action_set_deadzone("p2_toggle_controls", 0.85)
+	_add_joy_motion_event("p1_toggle_controls", 0, JOY_AXIS_TRIGGER_LEFT, 1.0)
+	_add_joy_motion_event("p2_toggle_controls", 1, JOY_AXIS_TRIGGER_LEFT, 1.0)
 
 
 func _add_controller_mapping(player_id: int, device_id: int) -> void:
@@ -82,7 +86,7 @@ var player_stats = {
 		"attack_damage": 2,
 		"attack_duration": 0.2,
 		"attack_cooldown": 1.75,
-		"invuln_time": 0.75,
+		"invuln_time": 0.6,
 		"knockback_strength": 120.0,
 		"knockback_decay": 700.0,
 		"dashes_max": 1,
@@ -96,7 +100,7 @@ var player_stats = {
 		"attack_damage": 2,
 		"attack_duration": 0.2,
 		"attack_cooldown": 1.75,
-		"invuln_time": 0.75,
+		"invuln_time": 0.6,
 		"knockback_strength": 120.0,
 		"knockback_decay": 700.0,
 		"dashes_max": 1,

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_w1bjy"]
 [ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/laser_projectile.tscn" id="2_28i2p"]
+[ext_resource type="Texture2D" uid="uid://jj44ijhirru0" path="res://assets/sprites/weapons/ammo/50bmp.png" id="2_x3bna"]
 [ext_resource type="Texture2D" uid="uid://cwnnkwxyfyclo" path="res://assets/sprites/weapons/50cal.png" id="3_w1bjy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_28i2p"]
@@ -44,12 +45,14 @@ animations = [{
 [node name="50Cal" type="Node2D" unique_id=1518235098]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_w1bjy")
-fire_rate = 2.0
-damage = 50
+fire_rate = 1.5
+damage = 40
+bullet_length = 12.0
 bullet_speed = 500.0
 max_ammo = 5
 reload_time = 5.0
 current_ammo = 5
+ammo_icon = ExtResource("2_x3bna")
 projectile_scene = ExtResource("2_28i2p")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
