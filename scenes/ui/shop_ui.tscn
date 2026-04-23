@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cuiky650fqewo" path="res://scripts/ui/shop_ui.gd" id="1_nwxdi"]
 [ext_resource type="Texture2D" uid="uid://b0t8l1xh88x4w" path="res://assets/sprites/ui/buystation.png" id="2_os6no"]
 [ext_resource type="FontFile" uid="uid://cgitxu1t30c4y" path="res://assets/sprites/ui/PressStart2P-Regular.ttf" id="3_f2epr"]
+[ext_resource type="Texture2D" uid="uid://cxis35niux1ot" path="res://assets/sprites/icons/coin_sprite.png" id="4_a65e2"]
 
 [node name="ShopUI" type="Control" unique_id=1017933386]
 modulate = Color(1, 1, 1, 0.6431373)
@@ -43,26 +44,28 @@ texture = ExtResource("2_os6no")
 
 [node name="TitleLabel" type="Label" parent="Root/P1ShopUI/MainPanel" unique_id=749703741]
 layout_mode = 0
-offset_left = 6.0
+offset_left = 8.5
 offset_top = -9.0
-offset_right = 75.0
+offset_right = 77.5
 offset_bottom = 11.0
+scale = Vector2(0.7, 0.7)
 theme_override_fonts/font = ExtResource("3_f2epr")
 theme_override_font_sizes/font_size = 8
 text = "Station"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="GoldLabel" type="Label" parent="Root/P1ShopUI/MainPanel" unique_id=864460815]
 layout_mode = 0
-offset_left = 5.0
-offset_top = 78.0
-offset_right = 91.0
-offset_bottom = 86.0
+offset_left = 66.5
+offset_top = -9.0
+offset_right = 86.5
+offset_bottom = 11.0
+scale = Vector2(0.7, 0.7)
 theme_override_fonts/font = ExtResource("3_f2epr")
 theme_override_font_sizes/font_size = 8
-text = "Gold: 0"
-horizontal_alignment = 1
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="OptionsScroll" type="ScrollContainer" parent="Root/P1ShopUI/MainPanel" unique_id=31817145]
 layout_mode = 1
@@ -74,10 +77,17 @@ anchor_bottom = 0.076000005
 offset_left = -0.035000324
 offset_top = 0.00799942
 offset_right = 85.965
-offset_bottom = 69.007996
+offset_bottom = 100.007996
+scale = Vector2(0.5, 0.5)
 
 [node name="OptionsContainer" type="VBoxContainer" parent="Root/P1ShopUI/MainPanel/OptionsScroll" unique_id=1317770370]
 layout_mode = 2
+alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="Root/P1ShopUI/MainPanel" unique_id=917881061]
+position = Vector2(85.5, -2.5)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_a65e2")
 
 [node name="P2ShopUI" type="Control" parent="Root" unique_id=1006910357]
 z_index = 1
@@ -104,26 +114,28 @@ texture = ExtResource("2_os6no")
 
 [node name="TitleLabel" type="Label" parent="Root/P2ShopUI/MainPanel" unique_id=645163661]
 layout_mode = 0
-offset_left = 6.0
+offset_left = 10.0
 offset_top = -9.0
-offset_right = 75.0
+offset_right = 79.0
 offset_bottom = 11.0
+scale = Vector2(0.7, 0.7)
 theme_override_fonts/font = ExtResource("3_f2epr")
 theme_override_font_sizes/font_size = 8
 text = "Station"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="GoldLabel" type="Label" parent="Root/P2ShopUI/MainPanel" unique_id=1567948859]
 layout_mode = 0
-offset_left = 5.0
-offset_top = 78.0
-offset_right = 91.0
-offset_bottom = 86.0
+offset_left = 66.5
+offset_top = -9.0
+offset_right = 86.78572
+offset_bottom = 11.000002
+scale = Vector2(0.7, 0.7)
 theme_override_fonts/font = ExtResource("3_f2epr")
 theme_override_font_sizes/font_size = 8
-text = "Gold: 0"
-horizontal_alignment = 1
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="OptionsScroll" type="ScrollContainer" parent="Root/P2ShopUI/MainPanel" unique_id=15628291]
 layout_mode = 1
@@ -135,7 +147,14 @@ anchor_bottom = 0.076000005
 offset_left = -0.035000324
 offset_top = 0.00799942
 offset_right = 85.965
-offset_bottom = 69.007996
+offset_bottom = 100.007996
+scale = Vector2(0.5, 0.5)
 
 [node name="OptionsContainer" type="VBoxContainer" parent="Root/P2ShopUI/MainPanel/OptionsScroll" unique_id=451716862]
 layout_mode = 2
+alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="Root/P2ShopUI/MainPanel" unique_id=275627317]
+position = Vector2(85.5, -2.5)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_a65e2")

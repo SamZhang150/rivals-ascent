@@ -1,8 +1,7 @@
 extends Control
 
-const AK47_SCENE: PackedScene = preload("res://scenes/entities/weapons/ak47.tscn")
-const FIFTY_CAL_SCENE: PackedScene = preload("res://scenes/entities/weapons/50cal.tscn")
-const GOLD_AK_SCENE: PackedScene = preload("res://scenes/entities/weapons/goldak47.tscn")
+@export var weapon_pool: WeaponPool = preload("res://scripts/weapons/weapon_pool.tres")
+@export var shop_weapon_offer_count: int = 3
 
 @onready var p1_shop_ui: Control = $Root/P1ShopUI
 @onready var p1_main_panel: Panel = $Root/P1ShopUI/MainPanel
@@ -31,6 +30,7 @@ var p1_selected_index: int = 0
 var p2_selected_index: int = 0
 var p1_just_opened: bool = false
 var p2_just_opened: bool = false
+var current_weapon_offers: Array[PackedScene] = []
 
 
 func _ready() -> void:
@@ -41,6 +41,27 @@ func _ready() -> void:
 	# Optional: tighter spacing between option buttons
 	p1_options_container.add_theme_constant_override("separation", 6)
 	p2_options_container.add_theme_constant_override("separation", 6)
+	refresh_weapon_offers(0)
+
+
+func refresh_weapon_offers(duels_occurred: int) -> void:
+	current_weapon_offers.clear()
+	if weapon_pool == null:
+		push_warning("Weapon pool is not assigned on ShopUI")
+		return
+
+	var allowed_range := _get_power_range_for_duels(duels_occurred)
+	var min_power: int = int(allowed_range.x)
+	var max_power: int = int(allowed_range.y)
+	var candidates := weapon_pool.get_weapons_in_power_range(min_power, max_power)
+	if candidates.is_empty():
+		push_warning("No shop weapon candidates for power range %d-%d" % [min_power, max_power])
+		return
+
+	candidates.shuffle()
+	var offer_count := mini(shop_weapon_offer_count, candidates.size())
+	for i in range(offer_count):
+		current_weapon_offers.append(candidates[i])
 
 
 func _process(_delta: float) -> void:
@@ -135,15 +156,14 @@ func populate_ui_for_player(player_id: int) -> void:
 
 	match mode.to_lower():
 		"upgrade":
-			title_label.text = "Upgrade"
+			title_label.text = "Upgrades"
 			_add_upgrade_button(player_id, options_container, "+10 Max HP", 20)
 			_add_upgrade_button(player_id, options_container, "+10 Speed", 25)
 			_add_dash_upgrade_buttons(player_id, options_container)
 		"buy":
-			title_label.text = "Buy"
-			_add_buy_button(player_id, options_container, "AK47", 50)
-			_add_buy_button(player_id, options_container, "50Cal", 80)
-			_add_buy_button(player_id, options_container, "Gold AK", 100)
+			title_label.text = "Gun Shop"
+			for weapon_scene in current_weapon_offers:
+				_add_buy_button(player_id, options_container, weapon_scene)
 
 		_:
 			title_label.text = "Shop"
@@ -162,10 +182,10 @@ func _clear_options(container: VBoxContainer) -> void:
 
 func _update_gold_label(player: CharacterBody2D, gold_label: Label) -> void:
 	if player == null:
-		gold_label.text = "Gold: ?"
+		gold_label.text = "?"
 		return
 
-	gold_label.text = "Gold: " + str(player.gold)
+	gold_label.text = str(player.gold)
 
 
 func _add_upgrade_button(player_id: int, container: VBoxContainer, upgrade_name: String, cost: int) -> void:
@@ -189,8 +209,12 @@ func _add_upgrade_button(player_id: int, container: VBoxContainer, upgrade_name:
 	_register_option_button(player_id, button)
 
 
-func _add_buy_button(player_id: int, container: VBoxContainer, item_name: String, cost: int) -> void:
+func _add_buy_button(player_id: int, container: VBoxContainer, weapon_scene: PackedScene) -> void:
 	var player := _get_player_by_id(player_id)
+	if weapon_scene == null:
+		return
+	var item_name := _get_weapon_display_name(weapon_scene)
+	var cost := _get_weapon_price(weapon_scene)
 
 	var button := Button.new()
 	button.text = item_name + " - " + str(cost) + "g"
@@ -203,25 +227,14 @@ func _add_buy_button(player_id: int, container: VBoxContainer, item_name: String
 	if player == null or player.gold < cost:
 		disable = true
 
-	if player != null:
-		match item_name:
-			"AK47":
-				if player.inventory.has("ak47"):
-					disable = true
-					button.text = "AK47 - Owned"
-			"50Cal":
-				if player.inventory.has("50cal"):
-					disable = true
-					button.text = "50Cal - Owned"
-			"Gold AK":
-				if player.inventory.has("gold_ak"):
-					disable = true
-					button.text = "Gold AK - Owned"
+	if player != null and player.has_method("has_weapon_scene") and player.has_weapon_scene(weapon_scene):
+		disable = true
+		button.text = item_name + " - Owned"
 
 	button.disabled = disable
 
 	button.pressed.connect(func() -> void:
-		_attempt_purchase(player_id, item_name, cost)
+		_attempt_purchase(player_id, weapon_scene)
 	)
 
 	_add_button_row(container, button)
@@ -357,16 +370,17 @@ func _attempt_upgrade(player_id: int, upgrade_name: String, cost: int) -> void:
 	populate_ui_for_player(player_id)
 
 
-func _attempt_purchase(player_id: int, item_name: String, cost: int) -> void:
+func _attempt_purchase(player_id: int, weapon_scene: PackedScene) -> void:
 	var player := _get_player_by_id(player_id)
 	if player == null:
 		return
+	if weapon_scene == null:
+		return
 
-	if item_name == "AK47" and player.inventory.has("ak47"):
-		return
-	if item_name == "50Cal" and player.inventory.has("50cal"):
-		return
-	if item_name == "Gold AK" and player.inventory.has("gold_ak"):
+	var item_name := _get_weapon_display_name(weapon_scene)
+	var cost := _get_weapon_price(weapon_scene)
+
+	if player.has_method("has_weapon_scene") and player.has_weapon_scene(weapon_scene):
 		return
 
 	if player.gold < cost:
@@ -376,42 +390,22 @@ func _attempt_purchase(player_id: int, item_name: String, cost: int) -> void:
 	if player.has_method("_update_coin_ui"):
 		player._update_coin_ui()
 
-	match item_name:
-		"AK47":
-			if AK47_SCENE == null:
-				push_warning("AK47 scene is missing")
-				return
-			if player.has_method("add_weapon_to_inventory"):
-				player.add_weapon_to_inventory("ak47", true)
-			elif player.has_method("equip_weapon_scene"):
-				player.equip_weapon_scene(AK47_SCENE)
-				if not player.inventory.has("ak47"):
-					player.inventory.append("ak47")
-
-		"50Cal":
-			if FIFTY_CAL_SCENE == null:
-				push_warning("50Cal scene is missing")
-				return
-			if player.has_method("add_weapon_to_inventory"):
-				player.add_weapon_to_inventory("50cal", true)
-			elif player.has_method("equip_weapon_scene"):
-				player.equip_weapon_scene(FIFTY_CAL_SCENE)
-				if not player.inventory.has("50cal"):
-					player.inventory.append("50cal")
-
-		"Gold AK":
-			if GOLD_AK_SCENE == null:
-				push_warning("Gold AK scene is missing")
-				return
-			if player.has_method("add_weapon_to_inventory"):
-				player.add_weapon_to_inventory("gold_ak", true)
-			elif player.has_method("equip_weapon_scene"):
-				player.equip_weapon_scene(GOLD_AK_SCENE)
-				if not player.inventory.has("gold_ak"):
-					player.inventory.append("gold_ak")
-
-		_:
-			push_warning("Unknown item: " + item_name)
+	if player.has_method("add_weapon_scene_to_inventory"):
+		var added: bool = player.add_weapon_scene_to_inventory(weapon_scene, true)
+		if not added:
+			push_warning("Failed to purchase weapon scene: " + item_name)
+			player.gold += cost
+			if player.has_method("_update_coin_ui"):
+				player._update_coin_ui()
+			return
+	elif player.has_method("equip_weapon_scene"):
+		player.equip_weapon_scene(weapon_scene)
+	else:
+		push_warning("Player cannot equip purchased weapon: " + item_name)
+		player.gold += cost
+		if player.has_method("_update_coin_ui"):
+			player._update_coin_ui()
+		return
 
 	populate_ui_for_player(player_id)
 
@@ -483,3 +477,38 @@ func _get_player_by_id(player_id: int) -> CharacterBody2D:
 	elif player_id == 2:
 		return p2_current_player
 	return null
+
+
+func _get_power_range_for_duels(duels_occurred: int) -> Vector2i:
+	if duels_occurred <= 0:
+		return Vector2i(1, 1)
+	if duels_occurred == 1:
+		return Vector2i(1, 2)
+	if duels_occurred == 2:
+		return Vector2i(2, 3)
+	return Vector2i(2, 4)
+
+
+func _get_weapon_display_name(weapon_scene: PackedScene) -> String:
+	if weapon_scene == null:
+		return "Unknown"
+	var path := weapon_scene.resource_path
+	if path.is_empty():
+		return "Weapon"
+	var file_name := path.get_file().get_basename()
+	var pretty := file_name.replace("_", " ")
+	return pretty.capitalize()
+
+
+func _get_weapon_price(weapon_scene: PackedScene) -> int:
+	if weapon_scene == null:
+		return 0
+	var weapon_instance := weapon_scene.instantiate()
+	if weapon_instance == null:
+		return 0
+
+	var price := 0
+	if "price" in weapon_instance:
+		price = int(weapon_instance.price)
+	weapon_instance.queue_free()
+	return max(price, 0)

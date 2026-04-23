@@ -5,6 +5,7 @@ extends Area2D
 @export var bullet_length: float = 10.0
 @export var bullet_speed: float = 220.0
 @export var life_time: float = 2.0
+@export var base_color: Color = Color(0.95, 0.12, 0.12, 1.0)
 
 var direction: Vector2 = Vector2.RIGHT
 var projectile_owner: Node = null
@@ -29,13 +30,14 @@ func _process(delta: float) -> void:
 		queue_free()
 
 
-func setup(new_damage: int, new_radius: float, new_length: float, new_speed: float, new_direction: Vector2, new_owner: Node = null) -> void:
+func setup(new_damage: int, new_radius: float, new_length: float, new_speed: float, new_direction: Vector2, new_owner: Node = null, new_base_color: Color = Color(0.95, 0.12, 0.12, 1.0)) -> void:
 	damage = new_damage
 	bullet_radius = max(new_radius, 0.5)
 	bullet_length = max(new_length, 0.0)
 	bullet_speed = max(new_speed, 1.0)
 	direction = new_direction.normalized() if new_direction != Vector2.ZERO else Vector2.RIGHT
 	projectile_owner = new_owner
+	base_color = new_base_color
 	rotation = direction.angle()
 	_update_collision_shape()
 	queue_redraw()
@@ -56,12 +58,13 @@ func _draw() -> void:
 	var half_capsule := (body_len * 0.5) + r
 	var left_center := Vector2(-body_len * 0.5, 0.0)
 	var right_center := Vector2(body_len * 0.5, 0.0)
+	var outer_color := base_color
 
-	# Outer red pill
+	# Outer colored pill
 	var outer_rect := Rect2(Vector2(-body_len * 0.5, -r), Vector2(body_len, r * 2.0))
-	draw_rect(outer_rect, Color(0.95, 0.12, 0.12, 1.0), true)
-	draw_circle(left_center, r, Color(0.95, 0.12, 0.12, 1.0))
-	draw_circle(right_center, r, Color(0.95, 0.12, 0.12, 1.0))
+	draw_rect(outer_rect, outer_color, true)
+	draw_circle(left_center, r, outer_color)
+	draw_circle(right_center, r, outer_color)
 
 	# Inner white core
 	var inner_r: float = max(r - 0.8, 0.2)
@@ -75,11 +78,12 @@ func _draw() -> void:
 
 	# Soft glow on the right side
 	var glow_center := Vector2(half_capsule + (r * 0.6), 0.0)
+	var glow_tint := outer_color.lerp(Color.WHITE, 0.35)
 	for i in range(4):
 		var t := float(i) / 3.0
 		var glow_r := r * (1.6 + t * 1.2)
 		var alpha := 0.16 * (1.0 - t)
-		draw_circle(glow_center, glow_r, Color(1.0, 0.45, 0.45, alpha))
+		draw_circle(glow_center, glow_r, Color(glow_tint.r, glow_tint.g, glow_tint.b, alpha))
 
 
 func _on_area_entered(area: Area2D) -> void:

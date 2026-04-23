@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://ch23bekp7x3u0"]
+
+[ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_ehjk5"]
+[ext_resource type="Texture2D" uid="uid://dcvp73bjau2bb" path="res://assets/sprites/weapons/ammo/water.png" id="2_ehjk5"]
+[ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/projectiles/laser_projectile.tscn" id="3_wuidb"]
+[ext_resource type="Texture2D" uid="uid://csvaejwvj0alm" path="res://assets/sprites/weapons/watergun.png" id="4_vs0ud"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wuidb"]
+atlas = ExtResource("4_vs0ud")
+region = Rect2(16, 0, 16, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ejq4"]
+atlas = ExtResource("4_vs0ud")
+region = Rect2(32, 0, 16, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pmddc"]
+atlas = ExtResource("4_vs0ud")
+region = Rect2(48, 0, 16, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehjk5"]
+atlas = ExtResource("4_vs0ud")
+region = Rect2(0, 0, 16, 12)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
+animations = [{
+"frames": [{
+"duration": 0.6,
+"texture": SubResource("AtlasTexture_wuidb")
+}, {
+"duration": 0.6,
+"texture": SubResource("AtlasTexture_8ejq4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pmddc")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ehjk5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="WaterGun" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_ehjk5")
+fire_rate = 20.0
+is_auto = true
+damage = 3
+bullet_length = 3.0
+bullet_speed = 160.0
+projectile_base_color = Color(0.16491106, 0.26065895, 1, 1)
+max_ammo = 50
+reload_time = 3.0
+current_ammo = 50
+ammo_icon = ExtResource("2_ehjk5")
+projectile_scene = ExtResource("3_wuidb")
+price = 30
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
+sprite_frames = SubResource("SpriteFrames_kkxoa")
+animation = &"idle"

@@ -539,6 +539,18 @@ size = Vector2(12, 16)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t0dvs"]
 size = Vector2(12, 16)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ql8nn"]
+size = Vector2(223, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qnkii"]
+size = Vector2(2, 112)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cvgtf"]
+size = Vector2(2, 113)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0o025"]
+size = Vector2(224, 2)
+
 [node name="Shop" type="Node2D" unique_id=1031458622]
 z_index = -1
 scale = Vector2(2, 2)
@@ -591,6 +603,26 @@ texture = ExtResource("3_rn1qy")
 
 [node name="CamBottomRight" type="Marker2D" parent="." unique_id=931638209]
 position = Vector2(224, 128)
+
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1234993924]
+collision_mask = 6
+
+[node name="top" type="CollisionShape2D" parent="Walls" unique_id=1125904744]
+position = Vector2(111, 14)
+rotation = 3.1415927
+shape = SubResource("RectangleShape2D_ql8nn")
+
+[node name="left" type="CollisionShape2D" parent="Walls" unique_id=1970161996]
+position = Vector2(-1, 72)
+shape = SubResource("RectangleShape2D_qnkii")
+
+[node name="right" type="CollisionShape2D" parent="Walls" unique_id=1227465096]
+position = Vector2(225, 71.5)
+shape = SubResource("RectangleShape2D_cvgtf")
+
+[node name="bottom" type="CollisionShape2D" parent="Walls" unique_id=696567033]
+position = Vector2(112, 129)
+shape = SubResource("RectangleShape2D_0o025")
 
 [connection signal="body_entered" from="ShopStations/UpgradeStation" to="ShopStations/UpgradeStation" method="_on_body_entered"]
 [connection signal="body_exited" from="ShopStations/UpgradeStation" to="ShopStations/UpgradeStation" method="_on_body_exited"]

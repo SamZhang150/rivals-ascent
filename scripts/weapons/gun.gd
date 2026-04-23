@@ -11,15 +11,18 @@ signal reload_finished()
 @export var bullet_radius: float = 2.0
 @export var bullet_length: float = 10.0
 @export var bullet_speed: float = 260.0
+@export var projectile_base_color: Color = Color(0.95, 0.12, 0.12, 1.0)
 @export var max_ammo: int = 8
 @export var reload_time: float = 1.1
 @export var current_ammo: int = 8
 @export var ammo_icon: Texture2D
 @export var projectile_scene: PackedScene
+@export var price: int = 0
 
 var _fire_cooldown: float = 0.0
 var _reload_cooldown: float = 0.0
 var _is_reloading: bool = false
+var _is_equipped: bool = true
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -40,6 +43,9 @@ func _process(delta: float) -> void:
 		reload_progress.emit(clampf(progress, 0.0, 1.0))
 		if _reload_cooldown <= 0.0:
 			_finish_reload()
+		return
+
+	if not _is_equipped:
 		return
 
 	if not _can_owner_shoot():
@@ -85,7 +91,7 @@ func try_fire() -> void:
 	var spawn_distance := (bullet_length * 0.5) + (bullet_radius * 3.0)
 	projectile.global_position = global_position + (shoot_dir * spawn_distance)
 	projectile.rotation = shoot_dir.angle()
-	projectile.call("setup", damage, bullet_radius, bullet_length, bullet_speed, shoot_dir, owner_player)
+	projectile.call("setup", damage, bullet_radius, bullet_length, bullet_speed, shoot_dir, owner_player, projectile_base_color)
 
 	var world := get_tree().current_scene
 	if world == null:
@@ -125,6 +131,8 @@ func _finish_reload() -> void:
 
 
 func _can_owner_shoot() -> bool:
+	if not _is_equipped:
+		return false
 	var owner_player := get_parent()
 	if owner_player == null:
 		return false
@@ -138,3 +146,8 @@ func _can_owner_shoot() -> bool:
 func _on_gun_animation_finished() -> void:
 	if sprite.animation == "fire":
 		sprite.play("idle")
+
+
+func set_equipped(active: bool) -> void:
+	_is_equipped = active
+	visible = active

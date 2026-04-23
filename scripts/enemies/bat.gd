@@ -54,7 +54,7 @@ func _physics_process(delta: float) -> void:
 		velocity = dir * speed
 		sprite.play("run")
 		if dir.x != 0:
-			sprite.flip_h = dir.x < 0
+			sprite.flip_h = dir.x >= 0
 	else:
 		velocity = Vector2.ZERO
 		sprite.play("idle")

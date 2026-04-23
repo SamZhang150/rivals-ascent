@@ -219,11 +219,13 @@ func reset_match_state() -> void:
 	p2_room_index = 0
 	p1_finished_dungeon = false
 	p2_finished_dungeon = false
+	_sync_player_ready_states()
 
 func _transition_to(new_phase: Phase):
 	phase = new_phase
 	p1_ready = false
 	p2_ready = false
+	_sync_player_ready_states()
 	_cancel_ready_countdown()
 	_hide_all_ui()
 	
@@ -276,6 +278,8 @@ func _transition_to(new_phase: Phase):
 			
 			p1.set_phase_state(false, false, false)
 			p2.set_phase_state(false, false, false)
+			if shop_ui and shop_ui.has_method("refresh_weapon_offers"):
+				shop_ui.refresh_weapon_offers(current_round)
 			
 			if not shop_instance:
 				shop_instance = _place_room(shop_room_scene, Vector2(ROOM_SPACING * 5, 0))
@@ -289,8 +293,11 @@ func _transition_to(new_phase: Phase):
 		Phase.PVP:
 			duel_resolved = false
 			_set_screen_mode(ScreenMode.SHARED)
+			p1.reset_for_round()
+			p2.reset_for_round()
 			p1.set_phase_state(true, true, false)
 			p2.set_phase_state(true, true, false)
+			
 			pvp_instance = _place_room(pvp_room_scene, Vector2(ROOM_SPACING * 6, 0))
 			var spawn = pvp_instance.get_node("SpawnPoint") as Marker2D
 			p1.global_position = spawn.global_position + Vector2(-80, 0)
@@ -461,6 +468,7 @@ func _update_ready_ui():
 	var p2_label = ready_up_ui.get_node("P2ReadyLabel") as Label
 	p1_label.text = "P1: READY" if p1_ready else "P1: Not Ready"
 	p2_label.text = "P2: READY" if p2_ready else "P2: Not Ready"
+	_sync_player_ready_states()
 
 
 func _start_ready_countdown(target_phase: Phase) -> void:
@@ -499,6 +507,13 @@ func _on_ready_countdown_tick() -> void:
 		return
 
 	countdown_label.text = "%d" % ready_countdown_remaining
+
+
+func _sync_player_ready_states() -> void:
+	if p1 and p1.has_method("set_ready_state"):
+		p1.set_ready_state(p1_ready)
+	if p2 and p2.has_method("set_ready_state"):
+		p2.set_ready_state(p2_ready)
 
 
 # ─── HELPERS ─────────────────────────────────────────────

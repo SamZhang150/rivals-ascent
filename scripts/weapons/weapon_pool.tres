@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponPool" format=3 uid="uid://clhx3w2tq6lpe"]
+
+[ext_resource type="Script" uid="uid://0v6tj1ef1bb4" path="res://scripts/weapons/weapon_pool.gd" id="1_qenqu"]
+[ext_resource type="PackedScene" uid="uid://dyxkbejxvykkn" path="res://scenes/entities/weapons/revolver.tscn" id="1_v8nrh"]
+[ext_resource type="PackedScene" uid="uid://c7cpfrihfo4vk" path="res://scenes/entities/weapons/50cal.tscn" id="2_6w11v"]
+[ext_resource type="PackedScene" uid="uid://ch23bekp7x3u0" path="res://scenes/entities/weapons/watergun.tscn" id="2_u0aoc"]
+[ext_resource type="PackedScene" uid="uid://b3tiu2vjdd56k" path="res://scenes/entities/weapons/ak47.tscn" id="3_u0aoc"]
+[ext_resource type="PackedScene" uid="uid://bd48fr7dajlel" path="res://scenes/entities/weapons/goldak47.tscn" id="4_glpsx"]
+
+[resource]
+script = ExtResource("1_qenqu")
+power_1 = Array[PackedScene]([ExtResource("1_v8nrh"), ExtResource("1_v8nrh"), ExtResource("2_u0aoc")])
+power_2 = Array[PackedScene]([ExtResource("2_6w11v"), ExtResource("3_u0aoc"), ExtResource("4_glpsx")])
+metadata/_custom_type_script = "uid://0v6tj1ef1bb4"

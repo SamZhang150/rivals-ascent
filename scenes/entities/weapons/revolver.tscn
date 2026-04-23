@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://dyxkbejxvykkn"]
+
+[ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_02dct"]
+[ext_resource type="Texture2D" uid="uid://2f865a7a0354" path="res://assets/sprites/weapons/ammo/45.png" id="2_02dct"]
+[ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/projectiles/laser_projectile.tscn" id="3_cdsai"]
+[ext_resource type="Texture2D" uid="uid://eshoqr88iupv" path="res://assets/sprites/weapons/revolver.png" id="4_02dct"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6uf2d"]
+atlas = ExtResource("4_02dct")
+region = Rect2(18, 0, 18, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cdsai"]
+atlas = ExtResource("4_02dct")
+region = Rect2(36, 0, 18, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rb2jx"]
+atlas = ExtResource("4_02dct")
+region = Rect2(54, 0, 18, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8nwi4"]
+atlas = ExtResource("4_02dct")
+region = Rect2(0, 0, 18, 10)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
+animations = [{
+"frames": [{
+"duration": 0.6,
+"texture": SubResource("AtlasTexture_6uf2d")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_cdsai")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rb2jx")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8nwi4")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="Revolver" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_02dct")
+fire_rate = 2.0
+damage = 18
+bullet_length = 3.0
+bullet_speed = 300.0
+projectile_base_color = Color(0.6715103, 0.078714274, 0.008204657, 1)
+max_ammo = 6
+reload_time = 0.8
+current_ammo = 10
+ammo_icon = ExtResource("2_02dct")
+projectile_scene = ExtResource("3_cdsai")
+price = 40
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
+sprite_frames = SubResource("SpriteFrames_kkxoa")
+animation = &"fire"
+frame = 2
+frame_progress = 1.0

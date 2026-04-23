@@ -664,3 +664,8 @@ position = Vector2(110.5, 110)
 
 [node name="Slime3" parent="." unique_id=285689608 instance=ExtResource("2_jijqq")]
 position = Vector2(194.5, 81.5)
+
+[node name="CamTopLeft" type="Marker2D" parent="." unique_id=1869719414]
+
+[node name="CamBottomRight" type="Marker2D" parent="." unique_id=1776764121]
+position = Vector2(224, 128)

@@ -27,6 +27,8 @@ extends CharacterBody2D
 @export var ak47_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/ak47.tscn")
 @export var fifty_cal_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/50cal.tscn")
 @export var gold_ak_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/goldak47.tscn")
+@export var revolver_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/revolver.tscn")
+@export var watergun_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/watergun.tscn")
 @export var weapon_offset: Vector2 = Vector2(5, -1)
 @export var aim_deadzone: float = 0.25
 @export var dash_speed: float = 300.0
@@ -40,6 +42,7 @@ var can_move: bool = true
 var can_attack: bool = false
 var can_take_damage: bool = false
 var damage_uses_coins: bool = false
+var is_readied_up: bool = false
 
 
 var is_attacking: bool = false
@@ -66,6 +69,7 @@ var shop_ui_open: bool = false
 var _prefix: String = "p1_"
 
 var _weapon_scenes: Dictionary = {}
+var _weapon_instances: Dictionary = {}
 
 # Dash
 var is_dashing: bool = false
@@ -221,7 +225,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func can_fire_weapon() -> bool:
-	return not shop_ui_open and can_move and visible
+	return not shop_ui_open and not is_readied_up and can_move and visible
+
+
+func set_ready_state(is_ready: bool) -> void:
+	is_readied_up = is_ready
 
 
 func get_last_move_direction() -> Vector2:
@@ -325,6 +333,16 @@ func _show_coin_popup(amount: int) -> void:
 func _equip_starter_weapon() -> void:
 	if not inventory.has("pistol"):
 		inventory.append("pistol")
+	if not inventory.has("revolver"):
+		inventory.append("revolver")
+	if not inventory.has("ak47"):
+		inventory.append("ak47")
+	if not inventory.has("50cal"):
+		inventory.append("50cal")
+	if not inventory.has("gold_ak"):
+		inventory.append("gold_ak")
+	if not inventory.has("watergun"):
+		inventory.append("watergun")
 	current_weapon_index = inventory.find("pistol")
 	equip_weapon_scene(starter_weapon_scene)
 
@@ -339,6 +357,10 @@ func _register_weapon_scenes() -> void:
 		_weapon_scenes["50cal"] = fifty_cal_weapon_scene
 	if gold_ak_weapon_scene != null:
 		_weapon_scenes["gold_ak"] = gold_ak_weapon_scene
+	if revolver_weapon_scene != null:
+		_weapon_scenes["revolver"] = revolver_weapon_scene
+	if watergun_weapon_scene != null:
+		_weapon_scenes["watergun"] = watergun_weapon_scene
 
 
 func add_weapon_to_inventory(weapon_key: String, auto_equip: bool = true) -> bool:
@@ -357,6 +379,30 @@ func add_weapon_to_inventory(weapon_key: String, auto_equip: bool = true) -> boo
 		equip_weapon_scene(_weapon_scenes[weapon_key])
 
 	return true
+
+
+func has_weapon_scene(weapon_scene: PackedScene) -> bool:
+	var weapon_key := get_weapon_key_for_scene(weapon_scene)
+	if weapon_key.is_empty():
+		return false
+	return inventory.has(weapon_key)
+
+
+func add_weapon_scene_to_inventory(weapon_scene: PackedScene, auto_equip: bool = true) -> bool:
+	var weapon_key := get_weapon_key_for_scene(weapon_scene)
+	if weapon_key.is_empty():
+		push_warning("Unable to map weapon scene to key: " + str(weapon_scene))
+		return false
+	return add_weapon_to_inventory(weapon_key, auto_equip)
+
+
+func get_weapon_key_for_scene(weapon_scene: PackedScene) -> String:
+	if weapon_scene == null:
+		return ""
+	for weapon_key in _weapon_scenes.keys():
+		if _weapon_scenes[weapon_key] == weapon_scene:
+			return weapon_key
+	return ""
 
 
 func cycle_weapon(direction: int) -> void:
@@ -379,19 +425,51 @@ func equip_weapon_scene(weapon_scene: PackedScene) -> void:
 	if weapon_scene == null:
 		return
 	if equipped_weapon != null and is_instance_valid(equipped_weapon):
-		equipped_weapon.queue_free()
+		_set_weapon_active(equipped_weapon, false)
 
-	equipped_weapon = weapon_scene.instantiate() as Node2D
+	equipped_weapon = _get_or_create_weapon_instance(weapon_scene)
 	if equipped_weapon == null:
 		return
 
+	_set_weapon_active(equipped_weapon, true)
 	equipped_weapon.position = weapon_offset
-	add_child(equipped_weapon)
 	_update_weapon_pose(last_aim_direction)
 
 	if ammo_ui != null and ammo_ui.has_method("set_weapon"):
 		ammo_ui.call("set_weapon", equipped_weapon)
 	weapon_changed.emit(equipped_weapon)
+
+
+func _get_or_create_weapon_instance(weapon_scene: PackedScene) -> Node2D:
+	var cache_key: String = _get_weapon_cache_key(weapon_scene)
+	if _weapon_instances.has(cache_key):
+		var cached_weapon := _weapon_instances[cache_key] as Node2D
+		if is_instance_valid(cached_weapon):
+			return cached_weapon
+		_weapon_instances.erase(cache_key)
+
+	var weapon_instance := weapon_scene.instantiate() as Node2D
+	if weapon_instance == null:
+		return null
+
+	_weapon_instances[cache_key] = weapon_instance
+	add_child(weapon_instance)
+	return weapon_instance
+
+
+func _get_weapon_cache_key(weapon_scene: PackedScene) -> String:
+	if not weapon_scene.resource_path.is_empty():
+		return weapon_scene.resource_path
+	return str(weapon_scene.get_instance_id())
+
+
+func _set_weapon_active(weapon: Node2D, active: bool) -> void:
+	if weapon == null or not is_instance_valid(weapon):
+		return
+	if weapon.has_method("set_equipped"):
+		weapon.call("set_equipped", active)
+	else:
+		weapon.visible = active
 
 
 func _get_move_input() -> Vector2:

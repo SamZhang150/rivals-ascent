@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b3tiu2vjdd56k"]
 
 [ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_2rdav"]
-[ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/laser_projectile.tscn" id="2_lnll2"]
+[ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/projectiles/laser_projectile.tscn" id="2_lnll2"]
 [ext_resource type="Texture2D" uid="uid://bwslj6miqxpaq" path="res://assets/sprites/weapons/ammo/7.62.png" id="2_oxqiu"]
 [ext_resource type="Texture2D" uid="uid://cfsfy3nk8g0vq" path="res://assets/sprites/weapons/ak47.png" id="3_r0cm8"]
 
@@ -59,6 +59,7 @@ reload_time = 2.0
 current_ammo = 20
 ammo_icon = ExtResource("2_oxqiu")
 projectile_scene = ExtResource("2_lnll2")
+price = 80
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1560634533]
 sprite_frames = SubResource("SpriteFrames_lnll2")
