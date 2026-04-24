@@ -4,6 +4,12 @@
 [ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/projectiles/laser_projectile.tscn" id="2_lnll2"]
 [ext_resource type="Texture2D" uid="uid://bwslj6miqxpaq" path="res://assets/sprites/weapons/ammo/7.62.png" id="2_oxqiu"]
 [ext_resource type="Texture2D" uid="uid://cfsfy3nk8g0vq" path="res://assets/sprites/weapons/ak47.png" id="3_r0cm8"]
+[ext_resource type="AudioStream" uid="uid://4nwttsxnkqfe" path="res://assets/audio/weapons/ak47shoot.wav" id="5_pokll"]
+[ext_resource type="AudioStream" uid="uid://cyfio13iluo1u" path="res://assets/audio/weapons/ak47reload.wav" id="6_j34qq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j34qq"]
+atlas = ExtResource("3_r0cm8")
+region = Rect2(0, 0, 22, 12)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lnll2"]
 atlas = ExtResource("3_r0cm8")
@@ -16,10 +22,6 @@ region = Rect2(44, 0, 22, 12)
 [sub_resource type="AtlasTexture" id="AtlasTexture_pokll"]
 atlas = ExtResource("3_r0cm8")
 region = Rect2(66, 0, 22, 12)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_j34qq"]
-atlas = ExtResource("3_r0cm8")
-region = Rect2(0, 0, 22, 12)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lnll2"]
 animations = [{
@@ -59,10 +61,16 @@ reload_time = 2.0
 current_ammo = 20
 ammo_icon = ExtResource("2_oxqiu")
 projectile_scene = ExtResource("2_lnll2")
+shop_icon = SubResource("AtlasTexture_j34qq")
 price = 80
+description = "Rugged. Relentless. Iconic. A battle-proven assault rifle built for reliability in the harshest conditions on earth."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1560634533]
 sprite_frames = SubResource("SpriteFrames_lnll2")
-animation = &"fire"
-frame = 2
-frame_progress = 1.0
+animation = &"idle"
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=957440016]
+stream = ExtResource("5_pokll")
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=1185870616]
+stream = ExtResource("6_j34qq")

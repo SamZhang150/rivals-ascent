@@ -4,6 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://2f865a7a0354" path="res://assets/sprites/weapons/ammo/45.png" id="2_02dct"]
 [ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/projectiles/laser_projectile.tscn" id="3_cdsai"]
 [ext_resource type="Texture2D" uid="uid://eshoqr88iupv" path="res://assets/sprites/weapons/revolver.png" id="4_02dct"]
+[ext_resource type="AudioStream" uid="uid://pfjrhdh8nokt" path="res://assets/audio/weapons/revolvershoot.wav" id="5_cdsai"]
+[ext_resource type="AudioStream" uid="uid://b01wr2ond4rnx" path="res://assets/audio/weapons/revolverreload.wav" id="6_cdsai"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8nwi4"]
+atlas = ExtResource("4_02dct")
+region = Rect2(0, 0, 18, 10)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6uf2d"]
 atlas = ExtResource("4_02dct")
@@ -16,10 +22,6 @@ region = Rect2(36, 0, 18, 10)
 [sub_resource type="AtlasTexture" id="AtlasTexture_rb2jx"]
 atlas = ExtResource("4_02dct")
 region = Rect2(54, 0, 18, 10)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8nwi4"]
-atlas = ExtResource("4_02dct")
-region = Rect2(0, 0, 18, 10)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
 animations = [{
@@ -59,10 +61,16 @@ reload_time = 0.8
 current_ammo = 10
 ammo_icon = ExtResource("2_02dct")
 projectile_scene = ExtResource("3_cdsai")
+shop_icon = SubResource("AtlasTexture_8nwi4")
 price = 40
+description = "Six rounds. Six problems solved. Old-fashioned? Sure. But so is winning, and this never stops doing that."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
 sprite_frames = SubResource("SpriteFrames_kkxoa")
-animation = &"fire"
-frame = 2
-frame_progress = 1.0
+animation = &"idle"
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=1902218631]
+stream = ExtResource("5_cdsai")
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=19300168]
+stream = ExtResource("6_cdsai")

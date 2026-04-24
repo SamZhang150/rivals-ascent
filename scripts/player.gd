@@ -23,12 +23,8 @@ extends CharacterBody2D
 # ─── CONFIG ──────────────────────────────────────────────
 @export var speed: float = 50.0
 @export var max_health: int = 100
-@export var starter_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/pistol.tscn")
-@export var ak47_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/ak47.tscn")
-@export var fifty_cal_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/50cal.tscn")
-@export var gold_ak_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/goldak47.tscn")
-@export var revolver_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/revolver.tscn")
-@export var watergun_weapon_scene: PackedScene = preload("res://scenes/entities/weapons/watergun.tscn")
+@export_dir var weapon_scene_directory: String = "res://scenes/entities/weapons"
+@export var starter_weapon_key: String = "pistol"
 @export var weapon_offset: Vector2 = Vector2(5, -1)
 @export var aim_deadzone: float = 0.25
 @export var dash_speed: float = 300.0
@@ -70,6 +66,10 @@ var _prefix: String = "p1_"
 
 var _weapon_scenes: Dictionary = {}
 var _weapon_instances: Dictionary = {}
+const _WEAPON_KEY_ALIASES := {
+	"grenadelauncher": "grenade_launcher",
+	"goldak47": "gold_ak"
+}
 
 # Dash
 var is_dashing: bool = false
@@ -77,6 +77,7 @@ var dash_direction: Vector2 = Vector2.ZERO
 var _dash_anim_playing: bool = false
 var _dash_timer: Timer = null
 var _dash_recharge_timer: Timer = null
+var _teleport_fade_tween: Tween = null
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_area: Area2D = $AttackArea
@@ -310,6 +311,8 @@ func add_gold(amount: int) -> void:
 	gold += amount
 	_update_coin_ui()
 	_show_coin_popup(amount)
+	$Coin.play()
+	$EnemyDeath.play()
 
 func _show_coin_popup(amount: int) -> void:
 	if coin_popup_scene == null:
@@ -333,34 +336,53 @@ func _show_coin_popup(amount: int) -> void:
 func _equip_starter_weapon() -> void:
 	if not inventory.has("pistol"):
 		inventory.append("pistol")
+	if not inventory.has("grenade_launcher"):
+		inventory.append("grenade_launcher")
 	if not inventory.has("revolver"):
 		inventory.append("revolver")
-	if not inventory.has("ak47"):
-		inventory.append("ak47")
-	if not inventory.has("50cal"):
-		inventory.append("50cal")
-	if not inventory.has("gold_ak"):
-		inventory.append("gold_ak")
-	if not inventory.has("watergun"):
-		inventory.append("watergun")
-	current_weapon_index = inventory.find("pistol")
-	equip_weapon_scene(starter_weapon_scene)
+	if not inventory.has("shotgun"):
+		inventory.append("shotgun")
+	if not inventory.has("sawedoff"):
+		inventory.append("sawedoff")
+	#if not inventory.has("ak47"):
+		#inventory.append("ak47")
+	#if not inventory.has("gold_ak"):
+		#inventory.append("gold_ak")
+	#if not inventory.has("watergun"):
+		#inventory.append("watergun")
+	current_weapon_index = inventory.find(starter_weapon_key)
+	if current_weapon_index == -1:
+		current_weapon_index = 0
+	var starter_scene := get_weapon_scene_for_key(starter_weapon_key)
+	if starter_scene != null:
+		equip_weapon_scene(starter_scene)
 
 
 func _register_weapon_scenes() -> void:
 	_weapon_scenes.clear()
-	if starter_weapon_scene != null:
-		_weapon_scenes["pistol"] = starter_weapon_scene
-	if ak47_weapon_scene != null:
-		_weapon_scenes["ak47"] = ak47_weapon_scene
-	if fifty_cal_weapon_scene != null:
-		_weapon_scenes["50cal"] = fifty_cal_weapon_scene
-	if gold_ak_weapon_scene != null:
-		_weapon_scenes["gold_ak"] = gold_ak_weapon_scene
-	if revolver_weapon_scene != null:
-		_weapon_scenes["revolver"] = revolver_weapon_scene
-	if watergun_weapon_scene != null:
-		_weapon_scenes["watergun"] = watergun_weapon_scene
+	var dir := DirAccess.open(weapon_scene_directory)
+	if dir == null:
+		push_warning("Unable to open weapon scene directory: " + weapon_scene_directory)
+		return
+
+	dir.list_dir_begin()
+	var file_name := dir.get_next()
+	while file_name != "":
+		if not dir.current_is_dir() and file_name.get_extension().to_lower() == "tscn":
+			var scene_path := weapon_scene_directory.path_join(file_name)
+			var scene := load(scene_path) as PackedScene
+			if scene != null:
+				var base_name := file_name.get_basename().to_lower()
+				var weapon_key := String(_WEAPON_KEY_ALIASES.get(base_name, base_name))
+				_weapon_scenes[weapon_key] = scene
+		file_name = dir.get_next()
+	dir.list_dir_end()
+
+
+func get_weapon_scene_for_key(weapon_key: String) -> PackedScene:
+	if not _weapon_scenes.has(weapon_key):
+		return null
+	return _weapon_scenes[weapon_key] as PackedScene
 
 
 func add_weapon_to_inventory(weapon_key: String, auto_equip: bool = true) -> bool:
@@ -532,6 +554,7 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 			return
 		gold = max(gold - amount, 0)
 		_update_coin_ui()
+		$Damage.play()
 		if not gold <= 0:
 			_show_coin_popup(-amount)
 		#print("lost ", amount, " coins")
@@ -554,8 +577,9 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 		if not is_dead():
 			sprite.modulate = Color.WHITE
 	)
-
+	$Damage.play()
 	if get_health() <= 0:
+		$Death.play()
 		_die()
 
 
@@ -661,6 +685,7 @@ func reset_for_round() -> void:
 	is_invulnerable = false
 	can_move = true
 	visible = true
+	modulate = Color.WHITE
 	sprite.modulate = Color.WHITE
 	is_attacking = false
 	attack_area.monitoring = false
@@ -673,8 +698,35 @@ func reset_for_round() -> void:
 
 func respawn_at(pos: Vector2) -> void:
 	reset_for_round()
-	global_position = pos
+	teleport_to_position(pos)
 	_start_invuln(get_invuln_time())
+
+
+func teleport_to_position(pos: Vector2, fade_duration: float = 0.4) -> void:
+	global_position = pos
+	_play_teleport_fade(fade_duration)
+
+
+func _play_teleport_fade(fade_duration: float = 0.4) -> void:
+	if _teleport_fade_tween != null:
+		_teleport_fade_tween.kill()
+
+	visible = true
+	modulate = Color(1.0, 1.0, 1.0, 0.0)
+	if fade_duration <= 0.0:
+		modulate.a = 1.0
+		return
+
+	var step_alphas := [0.25, 0.5, 0.75, 1.0]
+	var step_duration := fade_duration / step_alphas.size()
+	_teleport_fade_tween = create_tween()
+	for alpha in step_alphas:
+		_teleport_fade_tween.tween_interval(step_duration)
+		_teleport_fade_tween.tween_callback(_set_teleport_fade_alpha.bind(alpha))
+
+
+func _set_teleport_fade_alpha(alpha: float) -> void:
+	modulate.a = alpha
 
 
 func _start_invuln(duration: float) -> void:
@@ -729,6 +781,7 @@ func _try_dash() -> void:
 	_update_weapon_pose(dash_direction)
 
 	_dash_timer.start()
+	$Dash.play()
 	
 	# If all dashes used, start recharge timer
 	if dashes_available <= 0:

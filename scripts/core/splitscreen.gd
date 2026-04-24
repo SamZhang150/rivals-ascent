@@ -164,10 +164,18 @@ func _unhandled_input(event: InputEvent):
 	if phase == Phase.LOBBY or phase == Phase.SHOP:
 		if event.is_action_pressed("p1_ready"):
 			p1_ready = !p1_ready
+			if p1_ready:
+				$Ready.play(1.5)
+			else:
+				$Unready.play()
 			_update_ready_ui()
 			_check_both_ready()
 		if event.is_action_pressed("p2_ready"):
 			p2_ready = !p2_ready
+			if p2_ready:
+				$Ready.play(1.5)
+			else:
+				$Unready.play()
 			_update_ready_ui()
 			_check_both_ready()
 
@@ -284,8 +292,8 @@ func _transition_to(new_phase: Phase):
 			if not shop_instance:
 				shop_instance = _place_room(shop_room_scene, Vector2(ROOM_SPACING * 5, 0))
 			var spawn = shop_instance.get_node("SpawnPoint") as Marker2D
-			p1.global_position = spawn.global_position + Vector2(-40, 0)
-			p2.global_position = spawn.global_position + Vector2(40, 0)
+			p1.teleport_to_position(spawn.global_position + Vector2(-40, 0))
+			p2.teleport_to_position(spawn.global_position + Vector2(40, 0))
 			shop_ui.visible = true
 			ready_up_ui.visible = true
 			_update_ready_ui()
@@ -300,8 +308,8 @@ func _transition_to(new_phase: Phase):
 			
 			pvp_instance = _place_room(pvp_room_scene, Vector2(ROOM_SPACING * 6, 0))
 			var spawn = pvp_instance.get_node("SpawnPoint") as Marker2D
-			p1.global_position = spawn.global_position + Vector2(-80, 0)
-			p2.global_position = spawn.global_position + Vector2(80, 0)
+			p1.teleport_to_position(spawn.global_position + Vector2(-80, 0))
+			p2.teleport_to_position(spawn.global_position + Vector2(80, 0))
 			_enable_players(true)
 			_set_players_combat(true)
 			# Start a countdown timer here if desired
@@ -351,8 +359,8 @@ func _generate_dungeon_rooms():
 			p1_room.connect("room_cleared", _on_room_cleared.bind(1))
 		else:
 			push_warning("Room %s is missing 'room_cleared' signal" % p1_room.name)
-		if p1_room.has_method("set_room_player"):
-			p1_room.set_room_player(p1)
+		if p1_room.has_method("set_room_active"):
+			p1_room.set_room_active(false)
 		p1_dungeon_rooms.append(p1_room)
 
 		# Player 2 gets an independently random room of the same difficulty
@@ -366,20 +374,36 @@ func _generate_dungeon_rooms():
 			p2_room.connect("room_cleared", _on_room_cleared.bind(2))
 		else:
 			push_warning("Room %s is missing 'room_cleared' signal" % p2_room.name)
-		if p2_room.has_method("set_room_player"):
-			p2_room.set_room_player(p2)
+		if p2_room.has_method("set_room_active"):
+			p2_room.set_room_active(false)
 		p2_dungeon_rooms.append(p2_room)
+
+
+func _set_active_dungeon_room(player_id: int, room_index: int) -> void:
+	var rooms = p1_dungeon_rooms if player_id == 1 else p2_dungeon_rooms
+	var player = p1 if player_id == 1 else p2
+	for i in range(rooms.size()):
+		var room = rooms[i]
+		if room == null or not is_instance_valid(room):
+			continue
+		if room.has_method("set_room_active"):
+			room.set_room_active(i == room_index, player)
 
 
 func _teleport_to_dungeon_room(player_id: int, room_index: int):
 	var rooms = p1_dungeon_rooms if player_id == 1 else p2_dungeon_rooms
 	var player = p1 if player_id == 1 else p2
 	if room_index < rooms.size():
+		_set_active_dungeon_room(player_id, room_index)
 		var spawn = rooms[room_index].get_node("SpawnPoint") as Marker2D
 		print("Teleporting P%d to room %d at %s" % [player_id, room_index, spawn.global_position])
-		player.global_position = spawn.global_position
+		player.teleport_to_position(spawn.global_position)
+		if room_index % 4 != 0:
+			$Teleport.play()
+		else:
+			$Enter.play()
 	else:
-		print("ERROR: room_index %d out of range for P%d" % [room_index, player_id])
+		print("ERROR: room_index %d out of range for P%d" % [player_id, room_index])
 
 
 func _on_room_cleared(player_id: int):
@@ -407,6 +431,7 @@ func _player_finished_dungeon(player_id: int):
 		p1_finished_dungeon = true
 	else:
 		p2_finished_dungeon = true
+	_set_active_dungeon_room(player_id, -1)
 
 	# Place shop if not already placed
 	if not shop_instance:
@@ -415,11 +440,13 @@ func _player_finished_dungeon(player_id: int):
 	# Teleport finished player to shop
 	var player = p1 if player_id == 1 else p2
 	var spawn = shop_instance.get_node("SpawnPoint") as Marker2D
-	player.global_position = spawn.global_position
+	player.teleport_to_position(spawn.global_position)
 
 	if p1_finished_dungeon and p2_finished_dungeon:
+		$Teleport.play()
 		_transition_to(Phase.SHOP)
 	else:
+		$Teleport.play()
 		_transition_to(Phase.SHOP_WAITING)
 
 
@@ -507,6 +534,7 @@ func _on_ready_countdown_tick() -> void:
 		return
 
 	countdown_label.text = "%d" % ready_countdown_remaining
+	$Count.play()
 
 
 func _sync_player_ready_states() -> void:

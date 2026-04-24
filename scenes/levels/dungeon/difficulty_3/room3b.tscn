@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="1_k4gwm"]
 [ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="2_jijqq"]
 [ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="3_sisxv"]
+[ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="5_sisxv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7d7vv"]
 texture = ExtResource("1_k4gwm")
@@ -604,7 +605,7 @@ position = Vector2(112, 64)
 scale = Vector2(2, 2)
 
 [node name="ExitDoor" type="StaticBody2D" parent="." unique_id=57011801]
-position = Vector2(-105, -95.5)
+position = Vector2(-95, -95.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1399955758]
 position = Vector2(206, 111)
@@ -616,7 +617,7 @@ sprite_frames = SubResource("SpriteFrames_8kg0l")
 animation = &"closed"
 
 [node name="ExitTrigger" type="Area2D" parent="." unique_id=1947361001]
-position = Vector2(-105, -95.5)
+position = Vector2(-95, -95.5)
 collision_layer = 128
 collision_mask = 2
 
@@ -669,3 +670,6 @@ position = Vector2(194.5, 81.5)
 
 [node name="CamBottomRight" type="Marker2D" parent="." unique_id=1776764121]
 position = Vector2(224, 128)
+
+[node name="Done" type="AudioStreamPlayer" parent="." unique_id=1238495260]
+stream = ExtResource("5_sisxv")

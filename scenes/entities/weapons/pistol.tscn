@@ -4,6 +4,12 @@
 [ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_pojl6"]
 [ext_resource type="Texture2D" uid="uid://ds42j7c48rtpa" path="res://assets/sprites/weapons/ammo/9mm.png" id="2_f0j5w"]
 [ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/projectiles/laser_projectile.tscn" id="2_o4rq5"]
+[ext_resource type="AudioStream" uid="uid://b8qm6pqyhqixi" path="res://assets/audio/weapons/pistolreload.wav" id="5_87wpi"]
+[ext_resource type="AudioStream" uid="uid://dei0skc0l1f8n" path="res://assets/audio/weapons/pistolshoot.wav" id="5_kkxoa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pojl6"]
+atlas = ExtResource("1_jgh6n")
+region = Rect2(0, 0, 12, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3dj15"]
 atlas = ExtResource("1_jgh6n")
@@ -16,10 +22,6 @@ region = Rect2(24, 0, 12, 8)
 [sub_resource type="AtlasTexture" id="AtlasTexture_87wpi"]
 atlas = ExtResource("1_jgh6n")
 region = Rect2(36, 0, 12, 8)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pojl6"]
-atlas = ExtResource("1_jgh6n")
-region = Rect2(0, 0, 12, 8)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
 animations = [{
@@ -60,7 +62,14 @@ reload_time = 1.2
 current_ammo = 10
 ammo_icon = ExtResource("2_f0j5w")
 projectile_scene = ExtResource("2_o4rq5")
+shop_icon = SubResource("AtlasTexture_pojl6")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
 sprite_frames = SubResource("SpriteFrames_kkxoa")
-animation = &"fire"
+animation = &"idle"
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=72481399]
+stream = ExtResource("5_kkxoa")
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=1614518845]
+stream = ExtResource("5_87wpi")

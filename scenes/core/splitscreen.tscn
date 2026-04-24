@@ -17,6 +17,11 @@
 [ext_resource type="Texture2D" uid="uid://xgithtjledua" path="res://assets/sprites/ui/controls2.png" id="14_2ejtj"]
 [ext_resource type="Texture2D" uid="uid://bbu21iucmm2uv" path="res://assets/sprites/ui/controls1key.png" id="14_g2836"]
 [ext_resource type="Texture2D" uid="uid://c34fpn4ww6v6x" path="res://assets/sprites/ui/controls2key.png" id="16_dey7g"]
+[ext_resource type="AudioStream" uid="uid://d2l2iiwrplrxp" path="res://assets/audio/ingame/ready.wav" id="18_8p1l0"]
+[ext_resource type="AudioStream" uid="uid://d3k0i3ehfvmcx" path="res://assets/audio/ingame/unready.wav" id="19_3nom6"]
+[ext_resource type="AudioStream" uid="uid://bfmxvjpci7bd" path="res://assets/audio/ingame/count.wav" id="20_q6ea8"]
+[ext_resource type="AudioStream" uid="uid://dtvurdl5xobf" path="res://assets/audio/ingame/teleport.wav" id="21_yjvdl"]
+[ext_resource type="AudioStream" uid="uid://kp31bu5sp5m5" path="res://assets/audio/ingame/enter.wav" id="22_4jyee"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_05jgh"]
 font = ExtResource("8_3ls45")
@@ -136,6 +141,7 @@ offset_left = 4.0
 offset_right = 44.0
 offset_bottom = 23.0
 scale = Vector2(0.6, 0.6)
+theme_override_fonts/font = ExtResource("8_3ls45")
 
 [node name="P2ReadyLabel" type="Label" parent="UI/ReadyUpUI" unique_id=1600222840]
 layout_mode = 0
@@ -143,6 +149,7 @@ offset_left = 378.0
 offset_right = 418.0
 offset_bottom = 23.0
 scale = Vector2(0.6, 0.6)
+theme_override_fonts/font = ExtResource("8_3ls45")
 horizontal_alignment = 2
 
 [node name="Instructions" type="Label" parent="UI/ReadyUpUI" unique_id=1322254115]
@@ -222,3 +229,18 @@ player_id = 2
 position = Vector2(409, 76)
 sprite_frames = SubResource("SpriteFrames_05jgh")
 animation = &"controlskey"
+
+[node name="Ready" type="AudioStreamPlayer" parent="." unique_id=2046117568]
+stream = ExtResource("18_8p1l0")
+
+[node name="Unready" type="AudioStreamPlayer" parent="." unique_id=1208104740]
+stream = ExtResource("19_3nom6")
+
+[node name="Count" type="AudioStreamPlayer" parent="." unique_id=1915428814]
+stream = ExtResource("20_q6ea8")
+
+[node name="Teleport" type="AudioStreamPlayer" parent="." unique_id=262353533]
+stream = ExtResource("21_yjvdl")
+
+[node name="Enter" type="AudioStreamPlayer" parent="." unique_id=1315761258]
+stream = ExtResource("22_4jyee")

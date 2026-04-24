@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b0t8l1xh88x4w" path="res://assets/sprites/ui/buystation.png" id="2_os6no"]
 [ext_resource type="FontFile" uid="uid://cgitxu1t30c4y" path="res://assets/sprites/ui/PressStart2P-Regular.ttf" id="3_f2epr"]
 [ext_resource type="Texture2D" uid="uid://cxis35niux1ot" path="res://assets/sprites/icons/coin_sprite.png" id="4_a65e2"]
+[ext_resource type="Texture2D" uid="uid://dptnbnwptiel" path="res://assets/sprites/ui/upgrade.png" id="5_q65g1"]
 
 [node name="ShopUI" type="Control" unique_id=1017933386]
 modulate = Color(1, 1, 1, 0.6431373)
@@ -15,6 +16,8 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
 script = ExtResource("1_nwxdi")
+option_button_height = 10.0
+option_button_width_reduction = 18
 
 [node name="Root" type="Control" parent="." unique_id=649265417]
 anchors_preset = 0
@@ -79,15 +82,95 @@ offset_top = 0.00799942
 offset_right = 85.965
 offset_bottom = 100.007996
 scale = Vector2(0.5, 0.5)
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 
 [node name="OptionsContainer" type="VBoxContainer" parent="Root/P1ShopUI/MainPanel/OptionsScroll" unique_id=1317770370]
 layout_mode = 2
 alignment = 1
 
-[node name="Sprite2D" type="Sprite2D" parent="Root/P1ShopUI/MainPanel" unique_id=917881061]
+[node name="GoldCount" type="Sprite2D" parent="Root/P1ShopUI/MainPanel" unique_id=917881061]
 position = Vector2(85.5, -2.5)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("4_a65e2")
+
+[node name="DescLabel" type="Label" parent="Root/P1ShopUI/MainPanel" unique_id=1164025766]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 61.0
+offset_right = 171.0
+offset_bottom = 111.0
+scale = Vector2(0.5, 0.5)
+theme_override_fonts/font = ExtResource("3_f2epr")
+theme_override_font_sizes/font_size = 6
+autowrap_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="Root/P1ShopUI/MainPanel/DescLabel" unique_id=59167402]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.04, 1.11)
+pivot_offset = Vector2(84, 28)
+color = Color(0, 0, 0.13333334, 0.28627452)
+
+[node name="Price" type="Sprite2D" parent="Root/P1ShopUI/MainPanel" unique_id=797421070]
+position = Vector2(85.5, 82)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("4_a65e2")
+
+[node name="PriceLabel" type="Label" parent="Root/P1ShopUI/MainPanel" unique_id=1892595165]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 77.1
+offset_right = 104.0
+offset_bottom = 97.1
+scale = Vector2(0.55, 0.55)
+theme_override_fonts/font = ExtResource("3_f2epr")
+theme_override_font_sizes/font_size = 8
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ItemPreview" type="TextureRect" parent="Root/P1ShopUI/MainPanel" unique_id=180065755]
+layout_mode = 0
+offset_left = 47.5
+offset_top = 7.0
+offset_right = 133.5
+offset_bottom = 67.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_q65g1")
+stretch_mode = 3
+
+[node name="StatsLabel" type="Label" parent="Root/P1ShopUI/MainPanel" unique_id=1079823139]
+layout_mode = 0
+offset_left = 47.5
+offset_top = 40.0
+offset_right = 133.5
+offset_bottom = 80.0
+scale = Vector2(0.4, 0.5)
+theme_override_fonts/font = ExtResource("3_f2epr")
+theme_override_font_sizes/font_size = 7
+text = "dmg:
+clip size:
+fire rate:
+reload time:
+"
+
+[node name="StatsLabel2" type="Label" parent="Root/P1ShopUI/MainPanel" unique_id=627134671]
+layout_mode = 0
+offset_left = 81.0
+offset_top = 40.0
+offset_right = 105.0
+offset_bottom = 80.0
+scale = Vector2(0.4, 0.5)
+theme_override_fonts/font = ExtResource("3_f2epr")
+theme_override_font_sizes/font_size = 7
+horizontal_alignment = 2
 
 [node name="P2ShopUI" type="Control" parent="Root" unique_id=1006910357]
 z_index = 1
@@ -154,7 +237,85 @@ scale = Vector2(0.5, 0.5)
 layout_mode = 2
 alignment = 1
 
-[node name="Sprite2D" type="Sprite2D" parent="Root/P2ShopUI/MainPanel" unique_id=275627317]
+[node name="GoldCount" type="Sprite2D" parent="Root/P2ShopUI/MainPanel" unique_id=275627317]
 position = Vector2(85.5, -2.5)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("4_a65e2")
+
+[node name="DescLabel" type="Label" parent="Root/P2ShopUI/MainPanel" unique_id=249555543]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 61.0
+offset_right = 171.0
+offset_bottom = 111.0
+scale = Vector2(0.5, 0.5)
+theme_override_fonts/font = ExtResource("3_f2epr")
+theme_override_font_sizes/font_size = 6
+autowrap_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="Root/P2ShopUI/MainPanel/DescLabel" unique_id=858188600]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.04, 1.11)
+pivot_offset = Vector2(84, 28)
+color = Color(0, 0, 0.13333334, 0.28627452)
+
+[node name="Price" type="Sprite2D" parent="Root/P2ShopUI/MainPanel" unique_id=1207032157]
+position = Vector2(85.5, 82)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("4_a65e2")
+
+[node name="PriceLabel" type="Label" parent="Root/P2ShopUI/MainPanel" unique_id=1011860538]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 77.1
+offset_right = 104.0
+offset_bottom = 97.1
+scale = Vector2(0.55, 0.55)
+theme_override_fonts/font = ExtResource("3_f2epr")
+theme_override_font_sizes/font_size = 8
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ItemPreview" type="TextureRect" parent="Root/P2ShopUI/MainPanel" unique_id=1157550212]
+layout_mode = 0
+offset_left = 47.5
+offset_top = 7.0
+offset_right = 133.5
+offset_bottom = 67.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_q65g1")
+stretch_mode = 3
+
+[node name="StatsLabel" type="Label" parent="Root/P2ShopUI/MainPanel" unique_id=1816696884]
+layout_mode = 0
+offset_left = 47.5
+offset_top = 40.0
+offset_right = 133.5
+offset_bottom = 80.0
+scale = Vector2(0.4, 0.5)
+theme_override_fonts/font = ExtResource("3_f2epr")
+theme_override_font_sizes/font_size = 7
+text = "dmg:
+clip size:
+fire rate:
+reload time:
+"
+
+[node name="StatsLabel2" type="Label" parent="Root/P2ShopUI/MainPanel" unique_id=367116099]
+layout_mode = 0
+offset_left = 81.0
+offset_top = 40.0
+offset_right = 105.0
+offset_bottom = 80.0
+scale = Vector2(0.4, 0.5)
+theme_override_fonts/font = ExtResource("3_f2epr")
+theme_override_font_sizes/font_size = 7
+horizontal_alignment = 2

@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://462nq2egl6ly"]
+
+[ext_resource type="Script" uid="uid://jfpsl8wgvfi7" path="res://scripts/weapons/shotgun.gd" id="1_qwckd"]
+[ext_resource type="Texture2D" uid="uid://v5gsroth6abq" path="res://assets/sprites/weapons/ammo/shell.png" id="2_2b38s"]
+[ext_resource type="Texture2D" uid="uid://5hs2rhda65qh" path="res://assets/sprites/weapons/shotgun.png" id="2_qwckd"]
+[ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/projectiles/laser_projectile.tscn" id="3_hyjqx"]
+[ext_resource type="AudioStream" uid="uid://co6ylulc5gacp" path="res://assets/audio/weapons/shotgunshoot.wav" id="5_2b38s"]
+[ext_resource type="AudioStream" uid="uid://dwm8hwyribhui" path="res://assets/audio/weapons/shotgunreload.wav" id="6_nc227"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hyjqx"]
+atlas = ExtResource("2_qwckd")
+region = Rect2(0, 0, 34, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u48fx"]
+atlas = ExtResource("2_qwckd")
+region = Rect2(34, 0, 34, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2b38s"]
+atlas = ExtResource("2_qwckd")
+region = Rect2(68, 0, 34, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nc227"]
+atlas = ExtResource("2_qwckd")
+region = Rect2(102, 0, 34, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
+animations = [{
+"frames": [{
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_u48fx")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_2b38s")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_nc227")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hyjqx")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="Shotgun" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_qwckd")
+fire_rate = 2.0
+damage = 12
+bullet_length = 4.0
+pellet_count = 5
+reload_time = 3.0
+ammo_icon = ExtResource("2_2b38s")
+projectile_scene = ExtResource("3_hyjqx")
+shop_icon = SubResource("AtlasTexture_hyjqx")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
+sprite_frames = SubResource("SpriteFrames_kkxoa")
+animation = &"idle"
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=1902218631]
+stream = ExtResource("5_2b38s")
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=19300168]
+stream = ExtResource("6_nc227")

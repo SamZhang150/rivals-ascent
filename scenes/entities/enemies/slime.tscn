@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://corlw76dq4yhj" path="res://scripts/enemies/slime.gd" id="1_ljkv1"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_jw1jb"]
+[ext_resource type="AudioStream" uid="uid://bgr7q5s3hphma" path="res://assets/audio/ingame/enemyHurt.wav" id="3_glkij"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iy50v"]
 atlas = ExtResource("2_jw1jb")
@@ -75,9 +76,8 @@ shape = SubResource("RectangleShape2D_jw1jb")
 [node name="HealthBar" type="Node2D" parent="." unique_id=1821913402]
 
 [node name="BarBG" type="ColorRect" parent="HealthBar" unique_id=395978934]
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="BarFill" type="ColorRect" parent="HealthBar" unique_id=469884138]
-offset_right = 40.0
-offset_bottom = 40.0
+
+[node name="Damage" type="AudioStreamPlayer" parent="." unique_id=1406974204]
+stream = ExtResource("3_glkij")

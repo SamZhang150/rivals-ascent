@@ -4,6 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://dcvp73bjau2bb" path="res://assets/sprites/weapons/ammo/water.png" id="2_ehjk5"]
 [ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/projectiles/laser_projectile.tscn" id="3_wuidb"]
 [ext_resource type="Texture2D" uid="uid://csvaejwvj0alm" path="res://assets/sprites/weapons/watergun.png" id="4_vs0ud"]
+[ext_resource type="AudioStream" uid="uid://dcf7rdghca3xr" path="res://assets/audio/weapons/watergunshoot.wav" id="5_wuidb"]
+[ext_resource type="AudioStream" uid="uid://csmciqwvjnhni" path="res://assets/audio/weapons/watergunreload.wav" id="6_8ejq4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehjk5"]
+atlas = ExtResource("4_vs0ud")
+region = Rect2(0, 0, 16, 12)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wuidb"]
 atlas = ExtResource("4_vs0ud")
@@ -16,10 +22,6 @@ region = Rect2(32, 0, 16, 12)
 [sub_resource type="AtlasTexture" id="AtlasTexture_pmddc"]
 atlas = ExtResource("4_vs0ud")
 region = Rect2(48, 0, 16, 12)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ehjk5"]
-atlas = ExtResource("4_vs0ud")
-region = Rect2(0, 0, 16, 12)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
 animations = [{
@@ -60,8 +62,17 @@ reload_time = 3.0
 current_ammo = 50
 ammo_icon = ExtResource("2_ehjk5")
 projectile_scene = ExtResource("3_wuidb")
+shop_icon = SubResource("AtlasTexture_ehjk5")
 price = 30
+description = "Feared by absolutely no one. Devastating to morale, dry clothes, and any sense of battlefield dignity."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
 sprite_frames = SubResource("SpriteFrames_kkxoa")
 animation = &"idle"
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=1971900263]
+stream = ExtResource("5_wuidb")
+volume_db = -9.123
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=733447979]
+stream = ExtResource("6_8ejq4")

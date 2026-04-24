@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://drgrjya6fqayc"]
+
+[ext_resource type="Script" uid="uid://bse6q3u22q437" path="res://scripts/weapons/launcher.gd" id="1_ycq0o"]
+[ext_resource type="Texture2D" uid="uid://m3yvovax1e5t" path="res://assets/sprites/weapons/ammo/grenade.png" id="2_v6a1g"]
+[ext_resource type="Texture2D" uid="uid://bo6ohr7jwtut6" path="res://assets/sprites/weapons/grenadelauncher.png" id="3_2g58i"]
+[ext_resource type="AudioStream" uid="uid://cs8tkqkm0skge" path="res://assets/audio/weapons/grenadelaunchershoot.wav" id="4_ycq0o"]
+[ext_resource type="AudioStream" uid="uid://b48y1a2pxddjs" path="res://assets/audio/weapons/grenadelauncherreload.wav" id="5_v6a1g"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xsx26"]
+atlas = ExtResource("3_2g58i")
+region = Rect2(72, 0, 24, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5lwsk"]
+atlas = ExtResource("3_2g58i")
+region = Rect2(24, 0, 24, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wncnj"]
+atlas = ExtResource("3_2g58i")
+region = Rect2(48, 0, 24, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
+animations = [{
+"frames": [{
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_5lwsk")
+}, {
+"duration": 0.6,
+"texture": SubResource("AtlasTexture_wncnj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xsx26")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xsx26")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="GrenadeLauncher" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_ycq0o")
+fire_rate = 0.8
+damage = 45
+bullet_speed = 120.0
+arc_strength = 20.0
+bounces = 4
+detonation_timer = 2.4
+explosion_radius = 40.0
+max_ammo = 4
+reload_time = 4.0
+current_ammo = 4
+ammo_icon = ExtResource("2_v6a1g")
+projectile_sprite = ExtResource("2_v6a1g")
+shop_icon = SubResource("AtlasTexture_xsx26")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
+sprite_frames = SubResource("SpriteFrames_kkxoa")
+animation = &"idle"
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=1015298773]
+stream = ExtResource("4_ycq0o")
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=1899472994]
+stream = ExtResource("5_v6a1g")

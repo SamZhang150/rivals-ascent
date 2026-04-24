@@ -77,7 +77,7 @@ func take_damage(amount: int, from_position: Vector2, damager: Node = null) -> v
 	health_bar.visible = health < max_health
 
 	knockback = (global_position - from_position).normalized() * knockback_strength
-
+	$Damage.play()
 	if health <= 0:
 		if last_damager != null and last_damager.has_method("add_gold"):
 			last_damager.add_gold(coin_reward)

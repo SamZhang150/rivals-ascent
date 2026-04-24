@@ -17,7 +17,9 @@ signal reload_finished()
 @export var current_ammo: int = 8
 @export var ammo_icon: Texture2D
 @export var projectile_scene: PackedScene
-@export var price: int = 0
+@export var shop_icon: Texture2D
+@export var price: int = 50
+@export_multiline var description: String = "This is a gun."
 
 var _fire_cooldown: float = 0.0
 var _reload_cooldown: float = 0.0
@@ -99,8 +101,10 @@ func try_fire() -> void:
 	world.add_child(projectile)
 
 	_play_fire_animation_from_start()
+	$Shoot.play()
 	if current_ammo <= 0:
 		_start_reload()
+		$Reload.play()
 
 
 func _play_fire_animation_from_start() -> void:

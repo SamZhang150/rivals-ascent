@@ -4,11 +4,14 @@
 [ext_resource type="PackedScene" uid="uid://dyxkbejxvykkn" path="res://scenes/entities/weapons/revolver.tscn" id="1_v8nrh"]
 [ext_resource type="PackedScene" uid="uid://c7cpfrihfo4vk" path="res://scenes/entities/weapons/50cal.tscn" id="2_6w11v"]
 [ext_resource type="PackedScene" uid="uid://ch23bekp7x3u0" path="res://scenes/entities/weapons/watergun.tscn" id="2_u0aoc"]
+[ext_resource type="PackedScene" uid="uid://dpfs6hokkq2rs" path="res://scenes/entities/weapons/sawedoff.tscn" id="3_02wf5"]
 [ext_resource type="PackedScene" uid="uid://b3tiu2vjdd56k" path="res://scenes/entities/weapons/ak47.tscn" id="3_u0aoc"]
 [ext_resource type="PackedScene" uid="uid://bd48fr7dajlel" path="res://scenes/entities/weapons/goldak47.tscn" id="4_glpsx"]
+[ext_resource type="PackedScene" uid="uid://drgrjya6fqayc" path="res://scenes/entities/weapons/grenadelauncher.tscn" id="6_u0aoc"]
+[ext_resource type="PackedScene" uid="uid://462nq2egl6ly" path="res://scenes/entities/weapons/shotgun.tscn" id="7_glpsx"]
 
 [resource]
 script = ExtResource("1_qenqu")
-power_1 = Array[PackedScene]([ExtResource("1_v8nrh"), ExtResource("1_v8nrh"), ExtResource("2_u0aoc")])
-power_2 = Array[PackedScene]([ExtResource("2_6w11v"), ExtResource("3_u0aoc"), ExtResource("4_glpsx")])
+power_1 = Array[PackedScene]([ExtResource("1_v8nrh"), ExtResource("2_u0aoc"), ExtResource("3_02wf5")])
+power_2 = Array[PackedScene]([ExtResource("2_6w11v"), ExtResource("3_u0aoc"), ExtResource("4_glpsx"), ExtResource("6_u0aoc"), ExtResource("7_glpsx")])
 metadata/_custom_type_script = "uid://0v6tj1ef1bb4"

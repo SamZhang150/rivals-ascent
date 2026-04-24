@@ -3,6 +3,11 @@
 [ext_resource type="Script" uid="uid://cxe7kvyjcwd6a" path="res://scripts/player.gd" id="1_ucweq"]
 [ext_resource type="Texture2D" uid="uid://bdb5a2dw0lkhf" path="res://assets/sprites/player/playerdash.png" id="2_1ie0h"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_08t41"]
+[ext_resource type="AudioStream" uid="uid://bmrsp084chjr3" path="res://assets/audio/ingame/playerHurt.wav" id="4_5u6hq"]
+[ext_resource type="AudioStream" uid="uid://bogmdd1q0srje" path="res://assets/audio/ingame/dash.wav" id="5_d4qa6"]
+[ext_resource type="AudioStream" uid="uid://b0amvslpvltem" path="res://assets/audio/ingame/death.wav" id="6_d4qa6"]
+[ext_resource type="AudioStream" uid="uid://cqt452orpndlu" path="res://assets/audio/ingame/pickupCoin.wav" id="7_ss7kx"]
+[ext_resource type="AudioStream" uid="uid://dw71jbd1horat" path="res://assets/audio/ingame/enemyDie.wav" id="8_dnykm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b6tgf"]
 atlas = ExtResource("2_1ie0h")
@@ -184,7 +189,7 @@ collision_layer = 2
 script = ExtResource("1_ucweq")
 speed = 100.0
 dash_duration = 0.16
-dash_cooldown = 1.2
+dash_cooldown = 1.8
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1251588531]
 texture_filter = 1
@@ -213,3 +218,19 @@ shape = SubResource("RectangleShape2D_42nxq")
 [node name="AttackCooldownTimer" type="Timer" parent="." unique_id=941111139]
 wait_time = 0.4
 one_shot = true
+
+[node name="Damage" type="AudioStreamPlayer" parent="." unique_id=1511217040]
+stream = ExtResource("4_5u6hq")
+
+[node name="Dash" type="AudioStreamPlayer" parent="." unique_id=1571378074]
+stream = ExtResource("5_d4qa6")
+
+[node name="Death" type="AudioStreamPlayer" parent="." unique_id=931183128]
+stream = ExtResource("6_d4qa6")
+
+[node name="Coin" type="AudioStreamPlayer" parent="." unique_id=330282297]
+stream = ExtResource("7_ss7kx")
+volume_db = -2.737
+
+[node name="EnemyDeath" type="AudioStreamPlayer" parent="." unique_id=2050204898]
+stream = ExtResource("8_dnykm")

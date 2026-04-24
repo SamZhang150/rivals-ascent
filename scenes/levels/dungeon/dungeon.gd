@@ -37,8 +37,12 @@ var room_player: CharacterBody2D = null
 func _ready():
 	$ExitDoor.visible = true
 	$ExitDoor/AnimatedSprite2D.visible = true
-	$ExitDoor/AnimatedSprite2D.play()
 	$ExitDoor/AnimatedSprite2D.z_index = 100
+	if $ExitDoor/AnimatedSprite2D.sprite_frames != null and $ExitDoor/AnimatedSprite2D.sprite_frames.has_animation("closed"):
+		$ExitDoor/AnimatedSprite2D.play("closed")
+	else:
+		$ExitDoor/AnimatedSprite2D.play()
+	$ExitDoor/AnimatedSprite2D.modulate = Color(1.0, 1.0, 1.0, 0.35)
 	
 	enemies_alive = 0
 	# Count enemies and connect their death signals
@@ -50,8 +54,8 @@ func _ready():
 	
 	print(name, " enemies_alive = ", enemies_alive)
 
-	# hide exit until room is cleared
-	exit_door.visible = false
+	# Keep mirror visible but inactive until room is cleared.
+	exit_door.visible = true
 	exit_door.process_mode = Node.PROCESS_MODE_DISABLED
 	if exit_door.has_node("CollisionShape2D"):
 		exit_door.get_node("CollisionShape2D").disabled = true
@@ -66,14 +70,18 @@ func _ready():
 		_open_exit()
 		
 func set_room_player(player: CharacterBody2D) -> void:
-	room_player = player
+	set_room_active(true, player)
+
+
+func set_room_active(active: bool, player: CharacterBody2D = null) -> void:
+	room_player = player if active else null
 	for node in find_children("*", "", true, false):
 		if node.is_in_group("enemies") and node.has_method("set_player"):
-			node.set_player(player)
+			node.set_player(room_player)
 			
 	#for enemy in get_tree().get_nodes_in_group("enemies"):
 		#if is_ancestor_of(enemy) and enemy.has_method("set_player"):
-			#enemy.set_player(player)
+			#enemy.set_player(room_player)
 		
 			
 func _on_enemy_died():
@@ -89,8 +97,16 @@ func _open_exit():
 		
 	is_cleared = true
 	
+	$Done.play()
+	
 	exit_door.visible = true
 	exit_door.process_mode = Node.PROCESS_MODE_INHERIT
+	if exit_door.has_node("AnimatedSprite2D"):
+		var mirror_sprite := exit_door.get_node("AnimatedSprite2D") as AnimatedSprite2D
+		if mirror_sprite != null:
+			mirror_sprite.modulate = Color(1.0, 1.0, 1.0, 1.0)
+			if mirror_sprite.sprite_frames != null and mirror_sprite.sprite_frames.has_animation("open"):
+				mirror_sprite.play("open")
 	
 	if exit_door.has_node("CollisionShape2D"):
 		exit_door.get_node("CollisionShape2D").set_deferred("disabled", true)
