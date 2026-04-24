@@ -38,6 +38,7 @@ offset_right = 106.0
 offset_bottom = 113.0
 
 [node name="TextureRect" type="TextureRect" parent="Root/P1ShopUI/MainPanel" unique_id=1049550732]
+modulate = Color(1, 1, 1, 0.78431374)
 layout_mode = 0
 offset_left = -7.0
 offset_top = -23.0
@@ -188,6 +189,7 @@ offset_right = 106.0
 offset_bottom = 113.0
 
 [node name="TextureRect" type="TextureRect" parent="Root/P2ShopUI/MainPanel" unique_id=1611028206]
+modulate = Color(1, 1, 1, 0.78431374)
 layout_mode = 0
 offset_left = -7.0
 offset_top = -23.0

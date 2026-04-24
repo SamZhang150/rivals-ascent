@@ -51,9 +51,9 @@ animations = [{
 [node name="Ak47" type="Node2D" unique_id=127409894]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_2rdav")
-fire_rate = 8.0
+fire_rate = 7.0
 is_auto = true
-damage = 15
+damage = 18
 bullet_length = 6.0
 bullet_speed = 300.0
 max_ammo = 20
@@ -63,7 +63,7 @@ ammo_icon = ExtResource("2_oxqiu")
 projectile_scene = ExtResource("2_lnll2")
 shop_icon = SubResource("AtlasTexture_j34qq")
 price = 80
-description = "Rugged. Relentless. Iconic. A battle-proven assault rifle built for reliability in the harshest conditions on earth."
+description = "Rugged. Relentless. Iconic. A battle-proven rifle built for reliability in the harshest conditions on earth."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1560634533]
 sprite_frames = SubResource("SpriteFrames_lnll2")

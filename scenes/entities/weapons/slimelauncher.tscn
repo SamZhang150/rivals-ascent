@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://bnghuays1cfpf"]
+
+[ext_resource type="Script" uid="uid://bse6q3u22q437" path="res://scripts/weapons/launcher.gd" id="1_emtli"]
+[ext_resource type="Texture2D" uid="uid://7sid4eei5fkb" path="res://assets/sprites/weapons/ammo/slimenade.png" id="2_emtli"]
+[ext_resource type="PackedScene" uid="uid://wytgwvf1aeow" path="res://scenes/entities/weapons/projectiles/slime_projectile.tscn" id="3_reosh"]
+[ext_resource type="AudioStream" uid="uid://c5ks0l4aata7i" path="res://assets/audio/weapons/slimelaunchershoot.wav" id="4_emtli"]
+[ext_resource type="Texture2D" uid="uid://b8wgycs32hfi5" path="res://assets/sprites/weapons/slimelauncher.png" id="4_reosh"]
+[ext_resource type="AudioStream" uid="uid://lssipvtwo6xo" path="res://assets/audio/weapons/slimelauncherreload.wav" id="5_reosh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m6bg1"]
+atlas = ExtResource("4_reosh")
+region = Rect2(0, 0, 24, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pnca8"]
+atlas = ExtResource("4_reosh")
+region = Rect2(24, 0, 24, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8scl3"]
+atlas = ExtResource("4_reosh")
+region = Rect2(48, 0, 24, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k2ycm"]
+atlas = ExtResource("4_reosh")
+region = Rect2(72, 0, 24, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pnca8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8scl3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k2ycm")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m6bg1")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="SlimeLauncher" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_emtli")
+fire_rate = 0.8
+damage = 12
+bullet_speed = 180.0
+max_charge_time = 1.0
+min_charge_speed_scale = 0.35
+max_charge_squish_pixels = 8.0
+arc_strength = 24.0
+bounces = 4
+detonation_timer = 2.4
+explosion_radius = 50.0
+ring_colors = Array[Color]([Color(0.21084362, 0.87856346, 0.38954988, 1), Color(0, 0.5859963, 0.09541594, 1), Color(0.021092929, 0.34825385, 9.62615e-08, 1)])
+max_ammo = 4
+reload_time = 4.0
+current_ammo = 4
+ammo_icon = ExtResource("2_emtli")
+projectile_scene = ExtResource("3_reosh")
+projectile_sprite = ExtResource("2_emtli")
+shop_icon = SubResource("AtlasTexture_m6bg1")
+price = 80
+description = "WARNING. EXTREMELY STICKY. Charge it up to fire farther."
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
+sprite_frames = SubResource("SpriteFrames_kkxoa")
+animation = &"idle"
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=1015298773]
+stream = ExtResource("4_emtli")
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=1899472994]
+stream = ExtResource("5_reosh")

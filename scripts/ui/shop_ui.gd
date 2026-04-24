@@ -266,8 +266,9 @@ func _add_upgrade_button(player_id: int, container: VBoxContainer, upgrade_name:
 	button.add_theme_font_override("font", pixel_font)
 	button.add_theme_font_size_override("font_size", 10)
 
-	if player == null or player.gold < cost:
-		button.disabled = true
+	var is_unaffordable: bool = player == null or player.gold < cost
+	button.set_meta("unaffordable", is_unaffordable)
+	button.disabled = false
 
 	button.pressed.connect(func() -> void:
 		_attempt_upgrade(player_id, upgrade_name, cost)
@@ -292,14 +293,11 @@ func _add_buy_button(player_id: int, container: VBoxContainer, weapon_scene: Pac
 	button.add_theme_font_override("font", pixel_font)
 	button.add_theme_font_size_override("font_size", 8)
 
-	var disable := false
-	if player == null or player.gold < cost:
-		disable = true
+	var is_owned: bool = player != null and player.has_method("has_weapon_scene") and player.has_weapon_scene(weapon_scene)
+	var is_unaffordable: bool = player == null or player.gold < cost
 
-	if player != null and player.has_method("has_weapon_scene") and player.has_weapon_scene(weapon_scene):
-		disable = true
-
-	button.disabled = disable
+	button.disabled = is_owned
+	button.set_meta("unaffordable", is_unaffordable and not is_owned)
 
 	button.pressed.connect(func() -> void:
 		_attempt_purchase(player_id, weapon_scene)
@@ -401,7 +399,11 @@ func _refresh_selection(player_id: int) -> void:
 		var button := buttons[i]
 		if button == null or not is_instance_valid(button):
 			continue
-		button.modulate = Color(1.0, 0.95, 0.65, 1.0) if i == selected_index else Color(1.0, 1.0, 1.0, 1.0)
+		var base_tint := _get_shop_button_tint(button)
+		if i == selected_index:
+			button.modulate = base_tint * Color(1.0, 0.95, 0.65, 1.0)
+		else:
+			button.modulate = base_tint
 
 	var selected_button := buttons[selected_index]
 	if selected_button != null and is_instance_valid(selected_button):
@@ -410,6 +412,14 @@ func _refresh_selection(player_id: int) -> void:
 			options_scroll.ensure_control_visible(selected_button)
 
 	_update_selected_weapon_preview(player_id)
+
+
+func _get_shop_button_tint(button: Button) -> Color:
+	if button == null:
+		return Color(1.0, 1.0, 1.0, 1.0)
+	if button.has_meta("unaffordable") and bool(button.get_meta("unaffordable")):
+		return Color(1.0, 0.4, 0.4, 1.0)
+	return Color(1.0, 1.0, 1.0, 1.0)
 
 
 func _attempt_upgrade(player_id: int, upgrade_name: String, cost: int) -> void:
@@ -508,8 +518,9 @@ func _add_dash_upgrade_buttons(player_id: int, container: VBoxContainer) -> void
 		button.add_theme_font_size_override("font_size", 10)
 		button.add_theme_font_override("font", pixel_font)
 
-		if player.gold < cost:
-			button.disabled = true
+		var is_unaffordable: bool = player.gold < cost
+		button.set_meta("unaffordable", is_unaffordable)
+		button.disabled = false
 
 		button.pressed.connect(func() -> void:
 			_attempt_dash_upgrade(player_id, cost)

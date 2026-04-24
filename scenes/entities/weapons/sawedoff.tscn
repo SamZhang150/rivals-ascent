@@ -51,19 +51,20 @@ animations = [{
 [node name="SawedOff" type="Node2D" unique_id=1518235098]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_w88ew")
-fire_rate = 2.0
-damage = 8
+fire_rate = 3.0
+damage = 6
 bullet_length = 4.0
 bullet_speed = 200.0
 pellet_count = 3
 random_spread = 8.0
 projectile_base_color = Color(0.9916337, 0.38711303, 0.09532327, 1)
 max_ammo = 2
-reload_time = 2.5
+reload_time = 2.0
 current_ammo = 2
 ammo_icon = ExtResource("2_huh5v")
 projectile_scene = ExtResource("3_chcel")
 shop_icon = SubResource("AtlasTexture_beow2")
+description = "Someone couldn't get this to fit in their pocket. Gets the point across at conversational distance."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
 sprite_frames = SubResource("SpriteFrames_kkxoa")

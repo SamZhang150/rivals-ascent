@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 signal died
 
-@export var speed := randf_range(25, 35)
+@export var speed := randf_range(45, 55)
 @export var max_health := 80
 @export var touch_damage := 4
 @export var knockback_strength := 110.0
@@ -23,12 +23,20 @@ var dead := false
 var last_damager: Node = null
 var knockback := Vector2.ZERO
 var player: CharacterBody2D = null
+var speed_modifier: float = 1.0
+var _slow_timer: Timer = null
 
 func _ready() -> void:
 	add_to_group("enemies")
 	hitbox.add_to_group("enemy_hitbox")
 	hurtbox.area_entered.connect(_on_hurtbox_area_entered)
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
+
+	_slow_timer = Timer.new()
+	_slow_timer.one_shot = true
+	_slow_timer.wait_time = 2.0
+	_slow_timer.timeout.connect(_on_slow_finished)
+	add_child(_slow_timer)
 
 	health = max_health
 	health_bar.position = Vector2(-14, -12)
@@ -51,7 +59,7 @@ func _physics_process(delta: float) -> void:
 		knockback = knockback.move_toward(Vector2.ZERO, 500.0 * delta)
 	elif player != null and is_instance_valid(player):
 		var dir := global_position.direction_to(player.global_position)
-		velocity = dir * speed
+		velocity = dir * speed * speed_modifier
 		sprite.play("run")
 		if dir.x != 0:
 			sprite.flip_h = dir.x >= 0
@@ -82,6 +90,32 @@ func take_damage(amount: int, from_position: Vector2, damager: Node = null) -> v
 		if last_damager != null and last_damager.has_method("add_gold"):
 			last_damager.add_gold(coin_reward)
 		die()
+
+
+func get_slowed(_amount: float) -> void:
+	if dead:
+		return
+
+	speed_modifier = 0.6
+	_set_slow_visual(true)
+	if _slow_timer != null:
+		_slow_timer.start(2.0)
+
+
+func _on_slow_finished() -> void:
+	speed_modifier = 1.0
+	if not dead:
+		_set_slow_visual(false)
+
+
+func _set_slow_visual(is_slowed: bool) -> void:
+	if sprite == null:
+		return
+	var alpha: float = sprite.modulate.a
+	if is_slowed:
+		sprite.modulate = Color(0.8, 1.0, 0.8, alpha)
+	else:
+		sprite.modulate = Color(1.0, 1.0, 1.0, alpha)
 
 func _on_hurtbox_area_entered(body: Node) -> void:
 	#if body == player and body.has_method("take_damage"):

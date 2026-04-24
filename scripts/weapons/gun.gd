@@ -20,19 +20,26 @@ signal reload_finished()
 @export var shop_icon: Texture2D
 @export var price: int = 50
 @export_multiline var description: String = "This is a gun."
+@export var projectile_sprite: Texture2D
+@export var projectile_frames: SpriteFrames
+@export var projectile_animation: String = "default"
 
 var _fire_cooldown: float = 0.0
 var _reload_cooldown: float = 0.0
 var _is_reloading: bool = false
 var _is_equipped: bool = true
+@export var shoot_max_polyphony: int = 6
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var shoot_sfx: AudioStreamPlayer = $Shoot
 
 
 func _ready() -> void:
 	current_ammo = clamp(current_ammo, 0, max_ammo)
 	sprite.animation_finished.connect(_on_gun_animation_finished)
 	sprite.play("idle")
+	if shoot_sfx != null:
+		shoot_sfx.max_polyphony = maxi(1, shoot_max_polyphony)
 	ammo_changed.emit(current_ammo, max_ammo)
 
 
@@ -95,13 +102,19 @@ func try_fire() -> void:
 	projectile.rotation = shoot_dir.angle()
 	projectile.call("setup", damage, bullet_radius, bullet_length, bullet_speed, shoot_dir, owner_player, projectile_base_color)
 
+	if projectile_sprite != null and projectile.has_method("set_projectile_sprite"):
+		projectile.call("set_projectile_sprite", projectile_sprite)
+	if projectile_frames != null and projectile.has_method("set_projectile_frames"):
+		projectile.call("set_projectile_frames", projectile_frames, projectile_animation)
+
 	var world := get_tree().current_scene
 	if world == null:
 		world = get_tree().root
 	world.add_child(projectile)
 
 	_play_fire_animation_from_start()
-	$Shoot.play()
+	if shoot_sfx != null:
+		shoot_sfx.play()
 	if current_ammo <= 0:
 		_start_reload()
 		$Reload.play()

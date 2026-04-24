@@ -277,8 +277,18 @@ func _transition_to(new_phase: Phase):
 			# One player is in shop, other still in dungeon
 			# Stay splitscreen
 			_set_screen_mode(ScreenMode.SPLIT)
-			p1.set_phase_state(false, false, false)
-			p2.set_phase_state(false, false, false)
+			# Only the player who reached shop should be safe from dungeon damage.
+			if p1_finished_dungeon:
+				p1.set_phase_state(false, false, false)
+			else:
+				p1.set_phase_state(false, true, true)
+
+			if p2_finished_dungeon:
+				p2.set_phase_state(false, false, false)
+			else:
+				p2.set_phase_state(false, true, true)
+			if shop_ui and shop_ui.has_method("refresh_weapon_offers"):
+				shop_ui.refresh_weapon_offers(current_round)
 			shop_ui.visible = true
 
 		Phase.SHOP:
@@ -292,8 +302,12 @@ func _transition_to(new_phase: Phase):
 			if not shop_instance:
 				shop_instance = _place_room(shop_room_scene, Vector2(ROOM_SPACING * 5, 0))
 			var spawn = shop_instance.get_node("SpawnPoint") as Marker2D
-			p1.teleport_to_position(spawn.global_position + Vector2(-40, 0))
-			p2.teleport_to_position(spawn.global_position + Vector2(40, 0))
+			# In SHOP_WAITING, players are already teleported to the shop as they finish dungeon rooms.
+			# Avoid relocating the player who is already shopping when the other player arrives.
+			if not p1_finished_dungeon:
+				p1.teleport_to_position(spawn.global_position + Vector2(-40, 0))
+			if not p2_finished_dungeon:
+				p2.teleport_to_position(spawn.global_position + Vector2(40, 0))
 			shop_ui.visible = true
 			ready_up_ui.visible = true
 			_update_ready_ui()

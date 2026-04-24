@@ -11,6 +11,10 @@ signal reload_finished()
 @export var bullet_radius: float = 2.0
 @export var bullet_length: float = 10.0
 @export var bullet_speed: float = 260.0
+@export var max_charge_time: float = 0.7
+@export var min_charge_speed_scale: float = 0.45
+@export var max_charge_squish_pixels: float = 6.0
+@export var charge_shake_pixels: float = 1.6
 @export var arc_strength: float = 170.0
 @export var bounces: int = 2
 @export var detonation_timer: float = 1.25
@@ -30,14 +34,26 @@ var _fire_cooldown: float = 0.0
 var _reload_cooldown: float = 0.0
 var _is_reloading: bool = false
 var _is_equipped: bool = true
+var _is_charging: bool = false
+var _charge_elapsed: float = 0.0
+@export var shoot_max_polyphony: int = 4
+var _base_sprite_scale: Vector2 = Vector2.ONE
+var _base_sprite_position: Vector2 = Vector2.ZERO
+var _rng := RandomNumberGenerator.new()
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var shoot_sfx: AudioStreamPlayer = $Shoot
 
 
 func _ready() -> void:
 	current_ammo = clamp(current_ammo, 0, max_ammo)
 	sprite.animation_finished.connect(_on_gun_animation_finished)
 	sprite.play("idle")
+	if shoot_sfx != null:
+		shoot_sfx.max_polyphony = maxi(1, shoot_max_polyphony)
+	_base_sprite_scale = sprite.scale
+	_base_sprite_position = sprite.position
+	_rng.randomize()
 	ammo_changed.emit(current_ammo, max_ammo)
 
 
@@ -45,6 +61,7 @@ func _process(delta: float) -> void:
 	_fire_cooldown = max(_fire_cooldown - delta, 0.0)
 
 	if _is_reloading:
+		_cancel_charge(false)
 		_reload_cooldown -= delta
 		var progress: float = 1.0 - (_reload_cooldown / maxf(reload_time, 0.05))
 		reload_progress.emit(clampf(progress, 0.0, 1.0))
@@ -53,9 +70,11 @@ func _process(delta: float) -> void:
 		return
 
 	if not _is_equipped:
+		_cancel_charge(false)
 		return
 
 	if not _can_owner_shoot():
+		_cancel_charge(false)
 		return
 
 	var owner_player := get_parent()
@@ -64,32 +83,44 @@ func _process(delta: float) -> void:
 
 	var action := owner_player.call("get_attack_action_name") as String
 	if action.is_empty():
+		_cancel_charge(false)
 		return
 
-	var wants_to_fire := Input.is_action_pressed(action) if is_auto else Input.is_action_just_pressed(action)
-	if wants_to_fire:
-		try_fire()
+	if Input.is_action_just_pressed(action):
+		_try_start_charge()
+
+	if _is_charging:
+		if Input.is_action_pressed(action):
+			_charge_elapsed = minf(_charge_elapsed + delta, maxf(max_charge_time, 0.05))
+			_update_charge_visuals()
+		elif Input.is_action_just_released(action):
+			_release_charged_shot()
+		else:
+			_cancel_charge(false)
 
 
-func try_fire() -> void:
+func try_fire(charge_ratio: float = 1.0) -> bool:
 	if _fire_cooldown > 0.0 or _is_reloading:
-		return
+		return false
 
 	if current_ammo <= 0:
 		_start_reload()
-		return
+		return false
 
 	var owner_player := get_parent()
 	if owner_player == null:
-		return
+		return false
 
 	var projectile := projectile_scene.instantiate()
 	if projectile == null:
-		return
+		return false
 
 	var shoot_dir := owner_player.call("get_weapon_aim_direction") as Vector2
 	if shoot_dir == Vector2.ZERO:
 		shoot_dir = Vector2.RIGHT
+	var safe_charge := clampf(charge_ratio, 0.0, 1.0)
+	var speed_scale := lerpf(clampf(min_charge_speed_scale, 0.05, 1.0), 1.0, safe_charge)
+	var fired_speed := bullet_speed * speed_scale
 
 	current_ammo -= 1
 	ammo_changed.emit(current_ammo, max_ammo)
@@ -102,7 +133,7 @@ func try_fire() -> void:
 		"setup",
 		damage,
 		bullet_radius,
-		bullet_speed,
+		fired_speed,
 		shoot_dir,
 		owner_player,
 		bounces,
@@ -119,10 +150,83 @@ func try_fire() -> void:
 	world.add_child(projectile)
 
 	_play_fire_animation_from_start()
-	$Shoot.play()
+	if shoot_sfx != null:
+		shoot_sfx.play()
+	_reset_charge_visuals()
 	if current_ammo <= 0:
 		_start_reload()
 		$Reload.play()
+
+	return true
+
+
+func _try_start_charge() -> void:
+	if _fire_cooldown > 0.0 or _is_reloading:
+		return
+	if current_ammo <= 0:
+		_start_reload()
+		return
+	_is_charging = true
+	_charge_elapsed = 0.0
+	_update_charge_visuals()
+
+
+func _release_charged_shot() -> void:
+	if not _is_charging:
+		return
+	var charge_ratio := clampf(_charge_elapsed / maxf(max_charge_time, 0.05), 0.0, 1.0)
+	_is_charging = false
+	_charge_elapsed = 0.0
+	try_fire(charge_ratio)
+
+
+func _cancel_charge(reset_visuals: bool = true) -> void:
+	if not _is_charging:
+		if reset_visuals:
+			_reset_charge_visuals()
+		return
+	_is_charging = false
+	_charge_elapsed = 0.0
+	if reset_visuals:
+		_reset_charge_visuals()
+
+
+func _update_charge_visuals() -> void:
+	if sprite == null:
+		return
+	var ratio := clampf(_charge_elapsed / maxf(max_charge_time, 0.05), 0.0, 1.0)
+	var width := _get_current_sprite_width()
+	var squish_px := clampf(max_charge_squish_pixels, 0.0, width * 0.5) * ratio
+	var x_scale := 1.0 - (squish_px / maxf(width, 1.0))
+	sprite.scale = Vector2(_base_sprite_scale.x * maxf(x_scale, 0.1), _base_sprite_scale.y)
+
+	var shake_strength := charge_shake_pixels * ratio
+	sprite.position = _base_sprite_position + Vector2(
+		_rng.randf_range(-shake_strength, shake_strength),
+		_rng.randf_range(-shake_strength, shake_strength)
+	)
+
+
+func _reset_charge_visuals() -> void:
+	if sprite == null:
+		return
+	sprite.scale = _base_sprite_scale
+	sprite.position = _base_sprite_position
+
+
+func _get_current_sprite_width() -> float:
+	if sprite == null or sprite.sprite_frames == null:
+		return 24.0
+	if not sprite.sprite_frames.has_animation(sprite.animation):
+		return 24.0
+	var frame_count := sprite.sprite_frames.get_frame_count(sprite.animation)
+	if frame_count <= 0:
+		return 24.0
+	var frame_idx := clampi(sprite.frame, 0, frame_count - 1)
+	var tex := sprite.sprite_frames.get_frame_texture(sprite.animation, frame_idx)
+	if tex == null:
+		return 24.0
+	return maxf(tex.get_width(), 1.0)
 
 
 func _play_fire_animation_from_start() -> void:
@@ -139,6 +243,7 @@ func _play_fire_animation_from_start() -> void:
 func _start_reload() -> void:
 	if _is_reloading or current_ammo >= max_ammo:
 		return
+	_cancel_charge(false)
 	_is_reloading = true
 	_reload_cooldown = max(reload_time, 0.05)
 	reload_started.emit(_reload_cooldown)
@@ -172,4 +277,7 @@ func _on_gun_animation_finished() -> void:
 
 func set_equipped(active: bool) -> void:
 	_is_equipped = active
+	if not active:
+		_cancel_charge(false)
+	_reset_charge_visuals()
 	visible = active

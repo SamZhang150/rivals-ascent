@@ -78,6 +78,10 @@ var _dash_anim_playing: bool = false
 var _dash_timer: Timer = null
 var _dash_recharge_timer: Timer = null
 var _teleport_fade_tween: Tween = null
+var _slow_timer: Timer = null
+var _slow_active: bool = false
+var _damage_flash_active: bool = false
+var speed_modifier = 1
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_area: Area2D = $AttackArea
@@ -128,6 +132,12 @@ func _ready() -> void:
 	_dash_recharge_timer.wait_time = dash_cooldown
 	_dash_recharge_timer.timeout.connect(_on_dash_recharge_finished)
 	add_child(_dash_recharge_timer)
+
+	_slow_timer = Timer.new()
+	_slow_timer.one_shot = true
+	_slow_timer.wait_time = 2.0
+	_slow_timer.timeout.connect(_on_slow_finished)
+	add_child(_slow_timer)
 	
 	# Connect hitbox signals to track enemies in contact
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
@@ -175,7 +185,7 @@ func _physics_process(_delta: float) -> void:
 		last_move_direction = input_dir
 		if aim_dir == Vector2.ZERO:
 			last_aim_direction = input_dir.normalized()
-		velocity = input_dir * get_move_speed()
+		velocity = input_dir * get_move_speed() * speed_modifier
 		if not _dash_anim_playing:
 			sprite.play(_prefix + "run")
 	else:
@@ -336,20 +346,34 @@ func _show_coin_popup(amount: int) -> void:
 func _equip_starter_weapon() -> void:
 	if not inventory.has("pistol"):
 		inventory.append("pistol")
-	if not inventory.has("grenade_launcher"):
-		inventory.append("grenade_launcher")
-	if not inventory.has("revolver"):
-		inventory.append("revolver")
-	if not inventory.has("shotgun"):
-		inventory.append("shotgun")
-	if not inventory.has("sawedoff"):
-		inventory.append("sawedoff")
-	#if not inventory.has("ak47"):
-		#inventory.append("ak47")
-	#if not inventory.has("gold_ak"):
-		#inventory.append("gold_ak")
-	#if not inventory.has("watergun"):
-		#inventory.append("watergun")
+	# if not inventory.has("6shooter"):
+	# 	inventory.append("6shooter")
+	# if not inventory.has("gungun"):
+	# 	inventory.append("gungun")
+	# if not inventory.has("papershuriken"):
+	# 	inventory.append("papershuriken")
+	# if not inventory.has("shuriken"):
+	# 	inventory.append("shuriken")
+	# if not inventory.has("slimelauncher"):
+	# 	inventory.append("slimelauncher")
+	# if not inventory.has("50cal"):
+	# 	inventory.append("50cal")
+	# if not inventory.has("grenade_launcher"):
+	# 	inventory.append("grenade_launcher")
+	# if not inventory.has("revolver"):
+	# 	inventory.append("revolver")
+	# if not inventory.has("shotgun"):
+	# 	inventory.append("shotgun")
+	# if not inventory.has("sawedoff"):
+	# 	inventory.append("sawedoff")
+	# if not inventory.has("ak47"):
+	# 	inventory.append("ak47")
+	# if not inventory.has("gold_ak"):
+	# 	inventory.append("gold_ak")
+	# if not inventory.has("watergun"):
+	# 	inventory.append("watergun")
+	# if not inventory.has("guitar"):
+	# 	inventory.append("guitar")
 	current_weapon_index = inventory.find(starter_weapon_key)
 	if current_weapon_index == -1:
 		current_weapon_index = 0
@@ -572,15 +596,30 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 	_start_invuln(get_invuln_time())
 	damage_knockback = (global_position - from_position).normalized() * get_knockback_strength()
 
-	sprite.modulate = Color.RED
+	_damage_flash_active = true
+	_refresh_sprite_tint()
 	get_tree().create_timer(0.15).timeout.connect(func() -> void:
 		if not is_dead():
-			sprite.modulate = Color.WHITE
+			_damage_flash_active = false
+			_refresh_sprite_tint()
 	)
 	$Damage.play()
 	if get_health() <= 0:
 		$Death.play()
 		_die()
+
+func get_slowed(_amount: float) -> void:
+	if is_dead() or is_dashing:
+		return
+
+	if not can_take_damage:
+		return
+
+	_slow_active = true
+	speed_modifier = _amount
+	_set_slow_visual(true)
+	if _slow_timer != null:
+		_slow_timer.start(1.5)
 
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
@@ -687,6 +726,7 @@ func reset_for_round() -> void:
 	visible = true
 	modulate = Color.WHITE
 	sprite.modulate = Color.WHITE
+	speed_modifier = 1.0
 	is_attacking = false
 	attack_area.monitoring = false
 	_set_dash_collision_ignored(false)
@@ -801,6 +841,30 @@ func _on_sprite_animation_finished() -> void:
 func _on_dash_recharge_finished() -> void:
 	var stats = Global.player_stats[player_id]
 	stats["dashes_available"] = int(stats.get("dashes_max", 0))
+
+
+func _on_slow_finished() -> void:
+	_slow_active = false
+	speed_modifier = 1.0
+	if not is_dead():
+		_set_slow_visual(false)
+
+
+func _set_slow_visual(is_slowed: bool) -> void:
+	_slow_active = is_slowed
+	_refresh_sprite_tint()
+
+
+func _refresh_sprite_tint() -> void:
+	if sprite == null:
+		return
+	var alpha: float = sprite.modulate.a
+	if _damage_flash_active:
+		sprite.modulate = Color(1.0, 0.3, 0.3, alpha)
+	elif _slow_active:
+		sprite.modulate = Color(0.6, 1.0, 0.6, alpha)
+	else:
+		sprite.modulate = Color(1.0, 1.0, 1.0, alpha)
 
 # ─── SHOP INTERACTION ────────────────────────────────────
 

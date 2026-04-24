@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://h3h7bp45tfyq"]
+
+[ext_resource type="Script" uid="uid://jfpsl8wgvfi7" path="res://scripts/weapons/shotgun.gd" id="1_vopay"]
+[ext_resource type="Texture2D" uid="uid://vyheq17ci46o" path="res://assets/sprites/weapons/ammo/45x3.png" id="2_3cd4x"]
+[ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/projectiles/laser_projectile.tscn" id="3_28crq"]
+[ext_resource type="Texture2D" uid="uid://bsew5oxuqkbyh" path="res://assets/sprites/weapons/6shooter.png" id="5_3cd4x"]
+[ext_resource type="AudioStream" uid="uid://bdrtkvigesrv7" path="res://assets/audio/weapons/6shootershoot.wav" id="6_3cd4x"]
+[ext_resource type="AudioStream" uid="uid://2fgskr4wmtix" path="res://assets/audio/weapons/6shooterreload.wav" id="7_28crq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vsca8"]
+atlas = ExtResource("5_3cd4x")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_28crq"]
+atlas = ExtResource("5_3cd4x")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ho56x"]
+atlas = ExtResource("5_3cd4x")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
+animations = [{
+"frames": [{
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_28crq")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_ho56x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vsca8")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vsca8")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="6Shooter" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_vopay")
+fire_rate = 1.8
+damage = 18
+bullet_length = 4.0
+bullet_speed = 300.0
+pellet_count = 3
+random_spread = 3.0
+spread = 30.0
+projectile_base_color = Color(1, 0.36862746, 0, 1)
+max_ammo = 12
+reload_time = 1.8
+current_ammo = 12
+ammo_icon = ExtResource("2_3cd4x")
+projectile_scene = ExtResource("3_28crq")
+shop_icon = SubResource("AtlasTexture_vsca8")
+price = 70
+description = "Not sure how this gun was made. Double the cylinders... 6-times the ammo?"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
+sprite_frames = SubResource("SpriteFrames_kkxoa")
+animation = &"idle"
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=1902218631]
+stream = ExtResource("6_3cd4x")
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=19300168]
+stream = ExtResource("7_28crq")

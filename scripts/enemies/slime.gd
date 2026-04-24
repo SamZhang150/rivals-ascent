@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 signal died
 
-@export var speed := randf_range(15, 25)
+@export var speed := randf_range(20, 30)
 @export var max_health := 70
 @export var touch_damage := 2
 @export var knockback_strength := 110.0
@@ -93,6 +93,9 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 		var player = area.get_parent()
 		#if player.has_method("take_damage"):
 			#player.take_damage(touch_damage, global_position)
+
+func get_slowed(_amount: float) -> void:
+	return
 
 func die() -> void:
 	if dead:

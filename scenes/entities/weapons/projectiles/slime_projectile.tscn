@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://wytgwvf1aeow"]
+
+[ext_resource type="Script" uid="uid://6v3jwr0wufir" path="res://scripts/weapons/slime_projectile.gd" id="1_b8pp6"]
+[ext_resource type="AudioStream" uid="uid://cqf3nb1ptv72p" path="res://assets/audio/weapons/slimeexplosion.wav" id="2_b8pp6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_launcher"]
+radius = 3.0
+
+[node name="SlimeProjectile" type="CharacterBody2D" unique_id=1686456432]
+collision_layer = 0
+script = ExtResource("1_b8pp6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=975854155]
+shape = SubResource("CircleShape2D_launcher")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=558532012]
+
+[node name="Explode" type="AudioStreamPlayer" parent="." unique_id=928642525]
+stream = ExtResource("2_b8pp6")

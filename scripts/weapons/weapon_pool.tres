@@ -7,11 +7,17 @@
 [ext_resource type="PackedScene" uid="uid://dpfs6hokkq2rs" path="res://scenes/entities/weapons/sawedoff.tscn" id="3_02wf5"]
 [ext_resource type="PackedScene" uid="uid://b3tiu2vjdd56k" path="res://scenes/entities/weapons/ak47.tscn" id="3_u0aoc"]
 [ext_resource type="PackedScene" uid="uid://bd48fr7dajlel" path="res://scenes/entities/weapons/goldak47.tscn" id="4_glpsx"]
+[ext_resource type="PackedScene" uid="uid://dfu8yvbwbjoos" path="res://scenes/entities/weapons/papershuriken.tscn" id="4_jlorm"]
 [ext_resource type="PackedScene" uid="uid://drgrjya6fqayc" path="res://scenes/entities/weapons/grenadelauncher.tscn" id="6_u0aoc"]
 [ext_resource type="PackedScene" uid="uid://462nq2egl6ly" path="res://scenes/entities/weapons/shotgun.tscn" id="7_glpsx"]
+[ext_resource type="PackedScene" uid="uid://bnghuays1cfpf" path="res://scenes/entities/weapons/slimelauncher.tscn" id="9_uwiqs"]
+[ext_resource type="PackedScene" uid="uid://h3h7bp45tfyq" path="res://scenes/entities/weapons/6shooter.tscn" id="10_28guu"]
+[ext_resource type="PackedScene" uid="uid://b3e1flhbhwub3" path="res://scenes/entities/weapons/guitar.tscn" id="11_iuebs"]
+[ext_resource type="PackedScene" uid="uid://mvrsw87ygwn1" path="res://scenes/entities/weapons/gungun.tscn" id="12_iuebs"]
 
 [resource]
 script = ExtResource("1_qenqu")
-power_1 = Array[PackedScene]([ExtResource("1_v8nrh"), ExtResource("2_u0aoc"), ExtResource("3_02wf5")])
-power_2 = Array[PackedScene]([ExtResource("2_6w11v"), ExtResource("3_u0aoc"), ExtResource("4_glpsx"), ExtResource("6_u0aoc"), ExtResource("7_glpsx")])
+power_1 = Array[PackedScene]([ExtResource("1_v8nrh"), ExtResource("2_u0aoc"), ExtResource("3_02wf5"), ExtResource("4_jlorm")])
+power_2 = Array[PackedScene]([ExtResource("3_u0aoc"), ExtResource("6_u0aoc"), ExtResource("7_glpsx"), ExtResource("9_uwiqs"), ExtResource("10_28guu"), ExtResource("12_iuebs"), ExtResource("11_iuebs")])
+power_3 = Array[PackedScene]([ExtResource("2_6w11v"), ExtResource("4_glpsx")])
 metadata/_custom_type_script = "uid://0v6tj1ef1bb4"

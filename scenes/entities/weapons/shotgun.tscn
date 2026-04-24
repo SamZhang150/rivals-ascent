@@ -59,6 +59,8 @@ reload_time = 3.0
 ammo_icon = ExtResource("2_2b38s")
 projectile_scene = ExtResource("3_hyjqx")
 shop_icon = SubResource("AtlasTexture_hyjqx")
+price = 90
+description = "For when you want to hit everything in the room at once. Collateral damage is a feature, not a bug."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
 sprite_frames = SubResource("SpriteFrames_kkxoa")
