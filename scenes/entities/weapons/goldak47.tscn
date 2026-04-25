@@ -59,7 +59,7 @@ current_ammo = 20
 ammo_icon = ExtResource("2_vml03")
 projectile_scene = ExtResource("2_a11vi")
 shop_icon = SubResource("AtlasTexture_5lhnl")
-price = 110
+price = 135
 description = "A lavish variant of the legendary rifle. Same brutal reliability, now draped in prestige and intimidation."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1560634533]

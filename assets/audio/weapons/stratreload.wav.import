@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://3k0quq5618kl"
-path="res://.godot/imported/guitarreload.wav-6b0274caedc60b81d0392d4079a42450.sample"
+path="res://.godot/imported/stratreload.wav-7d6368ff96739b5c29419ff27442adfb.sample"
 
 [deps]
 
-source_file="res://assets/audio/weapons/guitarreload.wav"
-dest_files=["res://.godot/imported/guitarreload.wav-6b0274caedc60b81d0392d4079a42450.sample"]
+source_file="res://assets/audio/weapons/stratreload.wav"
+dest_files=["res://.godot/imported/stratreload.wav-7d6368ff96739b5c29419ff27442adfb.sample"]
 
 [params]
 

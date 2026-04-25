@@ -621,6 +621,12 @@ func _get_power_range_for_duels(duels_occurred: int) -> Vector2i:
 		return Vector2i(1, 2)
 	if duels_occurred == 2:
 		return Vector2i(2, 3)
+	if duels_occurred == 3:
+		return Vector2i(2, 3)
+	if duels_occurred == 4:
+		return Vector2i(2, 3)
+	if duels_occurred == 4:
+		return Vector2i(3, 3)
 	return Vector2i(2, 4)
 
 

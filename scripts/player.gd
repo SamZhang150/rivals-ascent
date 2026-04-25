@@ -346,34 +346,40 @@ func _show_coin_popup(amount: int) -> void:
 func _equip_starter_weapon() -> void:
 	if not inventory.has("pistol"):
 		inventory.append("pistol")
-	# if not inventory.has("6shooter"):
-	# 	inventory.append("6shooter")
-	# if not inventory.has("gungun"):
-	# 	inventory.append("gungun")
-	# if not inventory.has("papershuriken"):
-	# 	inventory.append("papershuriken")
-	# if not inventory.has("shuriken"):
-	# 	inventory.append("shuriken")
-	# if not inventory.has("slimelauncher"):
-	# 	inventory.append("slimelauncher")
-	# if not inventory.has("50cal"):
-	# 	inventory.append("50cal")
-	# if not inventory.has("grenade_launcher"):
-	# 	inventory.append("grenade_launcher")
-	# if not inventory.has("revolver"):
-	# 	inventory.append("revolver")
-	# if not inventory.has("shotgun"):
-	# 	inventory.append("shotgun")
-	# if not inventory.has("sawedoff"):
-	# 	inventory.append("sawedoff")
-	# if not inventory.has("ak47"):
-	# 	inventory.append("ak47")
-	# if not inventory.has("gold_ak"):
-	# 	inventory.append("gold_ak")
-	# if not inventory.has("watergun"):
-	# 	inventory.append("watergun")
-	# if not inventory.has("guitar"):
-	# 	inventory.append("guitar")
+	if not inventory.has("baseball"):
+		inventory.append("baseball")
+	if not inventory.has("6shooter"):
+		inventory.append("6shooter")
+	if not inventory.has("gungun"):
+		inventory.append("gungun")
+	if not inventory.has("papershuriken"):
+		inventory.append("papershuriken")
+	if not inventory.has("shuriken"):
+		inventory.append("shuriken")
+	if not inventory.has("slimelauncher"):
+		inventory.append("slimelauncher")
+	if not inventory.has("50cal"):
+		inventory.append("50cal")
+	if not inventory.has("grenade_launcher"):
+		inventory.append("grenade_launcher")
+	if not inventory.has("revolver"):
+		inventory.append("revolver")
+	if not inventory.has("shotgun"):
+		inventory.append("shotgun")
+	if not inventory.has("sawedoff"):
+		inventory.append("sawedoff")
+	if not inventory.has("ak47"):
+		inventory.append("ak47")
+	if not inventory.has("gold_ak"):
+		inventory.append("gold_ak")
+	if not inventory.has("watergun"):
+		inventory.append("watergun")
+	if not inventory.has("stratocaster"):
+		inventory.append("stratocaster")
+	if not inventory.has("jazzmaster"):
+		inventory.append("jazzmaster")
+	if not inventory.has("telecaster"):
+		inventory.append("telecaster")
 	current_weapon_index = inventory.find(starter_weapon_key)
 	if current_weapon_index == -1:
 		current_weapon_index = 0

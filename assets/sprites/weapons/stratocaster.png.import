@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b34wmwghj6jwv"
-path="res://.godot/imported/guitar.png-d7d8c87a668e6afe94da99dbcf968994.ctex"
+uid="uid://g5ephroladns"
+path="res://.godot/imported/stratocaster.png-62b5c132dca71d8692b2ad1b1bb5fd77.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/weapons/guitar.png"
-dest_files=["res://.godot/imported/guitar.png-d7d8c87a668e6afe94da99dbcf968994.ctex"]
+source_file="res://assets/sprites/weapons/stratocaster.png"
+dest_files=["res://.godot/imported/stratocaster.png-62b5c132dca71d8692b2ad1b1bb5fd77.ctex"]
 
 [params]
 

@@ -51,15 +51,17 @@ animations = [{
 [node name="Shotgun" type="Node2D" unique_id=1518235098]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_qwckd")
-fire_rate = 2.0
+fire_rate = 1.6
 damage = 12
 bullet_length = 4.0
 pellet_count = 5
+max_ammo = 6
 reload_time = 3.0
+current_ammo = 6
 ammo_icon = ExtResource("2_2b38s")
 projectile_scene = ExtResource("3_hyjqx")
 shop_icon = SubResource("AtlasTexture_hyjqx")
-price = 90
+price = 80
 description = "For when you want to hit everything in the room at once. Collateral damage is a feature, not a bug."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]

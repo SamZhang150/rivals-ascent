@@ -62,7 +62,7 @@ current_ammo = 20
 ammo_icon = ExtResource("2_oxqiu")
 projectile_scene = ExtResource("2_lnll2")
 shop_icon = SubResource("AtlasTexture_j34qq")
-price = 80
+price = 90
 description = "Rugged. Relentless. Iconic. A battle-proven rifle built for reliability in the harshest conditions on earth."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1560634533]

@@ -47,14 +47,14 @@ animations = [{
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_ycq0o")
 fire_rate = 0.8
-damage = 45
+damage = 40
 bullet_speed = 180.0
 max_charge_time = 1.0
 min_charge_speed_scale = 0.35
 max_charge_squish_pixels = 8.0
 arc_strength = 24.0
 bounces = 4
-detonation_timer = 2.4
+detonation_timer = 1.5
 explosion_radius = 40.0
 max_ammo = 4
 reload_time = 4.0
@@ -62,7 +62,7 @@ current_ammo = 4
 ammo_icon = ExtResource("2_v6a1g")
 projectile_sprite = ExtResource("2_v6a1g")
 shop_icon = SubResource("AtlasTexture_xsx26")
-price = 100
+price = 70
 description = "Not quite a noob killer,  requires some finesse to use. Charge it up to fire farther."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]

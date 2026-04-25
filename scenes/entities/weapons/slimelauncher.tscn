@@ -59,7 +59,7 @@ min_charge_speed_scale = 0.35
 max_charge_squish_pixels = 8.0
 arc_strength = 24.0
 bounces = 4
-detonation_timer = 2.4
+detonation_timer = 1.6
 explosion_radius = 50.0
 ring_colors = Array[Color]([Color(0.21084362, 0.87856346, 0.38954988, 1), Color(0, 0.5859963, 0.09541594, 1), Color(0.021092929, 0.34825385, 9.62615e-08, 1)])
 max_ammo = 4
@@ -69,7 +69,7 @@ ammo_icon = ExtResource("2_emtli")
 projectile_scene = ExtResource("3_reosh")
 projectile_sprite = ExtResource("2_emtli")
 shop_icon = SubResource("AtlasTexture_m6bg1")
-price = 80
+price = 45
 description = "WARNING. EXTREMELY STICKY. Charge it up to fire farther."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]

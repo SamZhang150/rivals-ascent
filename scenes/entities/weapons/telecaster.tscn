@@ -1,0 +1,215 @@
+[gd_scene format=3 uid="uid://dl7y4cyj2gmao"]
+
+[ext_resource type="Script" uid="uid://jfpsl8wgvfi7" path="res://scripts/weapons/shotgun.gd" id="1_da3cc"]
+[ext_resource type="PackedScene" uid="uid://bjq7xyb5tp255" path="res://scenes/entities/weapons/projectiles/sprite_projectile.tscn" id="3_da3cc"]
+[ext_resource type="Texture2D" uid="uid://d3kbvle5mqkm3" path="res://assets/sprites/weapons/telecaster.png" id="5_6i2jh"]
+[ext_resource type="AudioStream" uid="uid://knwqy2kfoepx" path="res://assets/audio/weapons/telecastershoot.wav" id="5_da3cc"]
+[ext_resource type="Texture2D" uid="uid://cvbql6b6ppsen" path="res://assets/sprites/weapons/ammo/music.png" id="5_l1vhg"]
+[ext_resource type="AudioStream" uid="uid://cti4lqv56mgdf" path="res://assets/audio/weapons/telecasterreload.wav" id="6_6i2jh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jggdc"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(108, 0, 18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l1vhg"]
+atlas = ExtResource("5_6i2jh")
+region = Rect2(0, 0, 24, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vy6ml"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(126, 0, 18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_imflw"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(144, 0, 18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8imye"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(162, 0, 18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1apo"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(180, 0, 18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_noiq3"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(198, 0, 18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xahol"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(0, 0, 18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tagim"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(18, 0, 18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q1eyt"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(36, 0, 18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jq6xt"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(54, 0, 18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r48hl"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(72, 0, 18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_la82v"]
+atlas = ExtResource("5_l1vhg")
+region = Rect2(90, 0, 18, 22)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_i8g8s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jggdc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vy6ml")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_imflw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8imye")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1apo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_noiq3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xahol")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tagim")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q1eyt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jq6xt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r48hl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_la82v")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lb2nh"]
+atlas = ExtResource("5_6i2jh")
+region = Rect2(24, 0, 24, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gk22b"]
+atlas = ExtResource("5_6i2jh")
+region = Rect2(48, 0, 24, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6q4pv"]
+atlas = ExtResource("5_6i2jh")
+region = Rect2(72, 0, 24, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qd6o1"]
+atlas = ExtResource("5_6i2jh")
+region = Rect2(96, 0, 24, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2w3hr"]
+atlas = ExtResource("5_6i2jh")
+region = Rect2(120, 0, 24, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ssq6o"]
+atlas = ExtResource("5_6i2jh")
+region = Rect2(144, 0, 24, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_saaik"]
+atlas = ExtResource("5_6i2jh")
+region = Rect2(168, 0, 24, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x5nbe"]
+atlas = ExtResource("5_6i2jh")
+region = Rect2(192, 0, 24, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rhb7l"]
+atlas = ExtResource("5_6i2jh")
+region = Rect2(216, 0, 24, 33)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
+animations = [{
+"frames": [{
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_l1vhg")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_lb2nh")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_gk22b")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_6q4pv")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_qd6o1")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_2w3hr")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_ssq6o")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_saaik")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_x5nbe")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_rhb7l")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="Telecaster" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_da3cc")
+fire_rate = 2.0
+damage = 16
+bullet_radius = 5.0
+bullet_length = 5.0
+bullet_speed = 225.0
+pellet_count = 3
+spread = 16.0
+max_ammo = 4
+reload_time = 1.8
+current_ammo = 4
+ammo_icon = SubResource("AtlasTexture_jggdc")
+projectile_scene = ExtResource("3_da3cc")
+shop_icon = SubResource("AtlasTexture_l1vhg")
+price = 110
+description = "Previously owned by a rolling stone, frequently borrowed by Sisyphus. Shoots chords."
+projectile_frames = SubResource("SpriteFrames_i8g8s")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
+sprite_frames = SubResource("SpriteFrames_kkxoa")
+animation = &"fire"
+frame = 9
+frame_progress = 1.0
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=1902218631]
+stream = ExtResource("5_da3cc")
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=19300168]
+stream = ExtResource("6_6i2jh")

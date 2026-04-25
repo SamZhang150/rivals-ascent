@@ -57,7 +57,6 @@ current_ammo = 3
 ammo_icon = SubResource("AtlasTexture_nbcks")
 projectile_scene = ExtResource("3_s0511")
 shop_icon = SubResource("AtlasTexture_nbcks")
-price = 60
 description = "Paper shuriken's older brother. Four points of contact, zero points of comfort."
 projectile_sprite = SubResource("AtlasTexture_nbcks")
 

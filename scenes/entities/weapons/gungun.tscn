@@ -51,7 +51,7 @@ animations = [{
 [node name="GunGun" type="Node2D" unique_id=1518235098]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_tooap")
-fire_rate = 6.0
+fire_rate = 7.0
 is_auto = true
 damage = 12
 bullet_length = 2.0
@@ -63,6 +63,7 @@ current_ammo = 20
 ammo_icon = SubResource("AtlasTexture_pojl6")
 projectile_scene = ExtResource("3_tooap")
 shop_icon = SubResource("AtlasTexture_x2a1f")
+price = 60
 description = "This is also a gun. It shoots more guns. Don't question it."
 projectile_sprite = SubResource("AtlasTexture_pojl6")
 

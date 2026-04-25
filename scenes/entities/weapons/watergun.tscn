@@ -53,7 +53,7 @@ scale = Vector2(0.5, 0.5)
 script = ExtResource("1_ehjk5")
 fire_rate = 25.0
 is_auto = true
-damage = 3
+damage = 4
 bullet_length = 3.0
 bullet_speed = 160.0
 projectile_base_color = Color(0.16491106, 0.26065895, 1, 1)
@@ -63,7 +63,7 @@ current_ammo = 40
 ammo_icon = ExtResource("2_ehjk5")
 projectile_scene = ExtResource("3_wuidb")
 shop_icon = SubResource("AtlasTexture_ehjk5")
-price = 30
+price = 35
 description = "Feared by absolutely no one. Devastating to morale, dry clothes, and any sense of battlefield dignity."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]

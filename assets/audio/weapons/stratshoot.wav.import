@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://ddduv7msaqjc2"
-path="res://.godot/imported/guitarshoot.wav-ff0e856520d9f9a789cf6e34aa0c2bbc.sample"
+path="res://.godot/imported/stratshoot.wav-f8bc795122acf0bbd5a8e36514d8bbb8.sample"
 
 [deps]
 
-source_file="res://assets/audio/weapons/guitarshoot.wav"
-dest_files=["res://.godot/imported/guitarshoot.wav-ff0e856520d9f9a789cf6e34aa0c2bbc.sample"]
+source_file="res://assets/audio/weapons/stratshoot.wav"
+dest_files=["res://.godot/imported/stratshoot.wav-f8bc795122acf0bbd5a8e36514d8bbb8.sample"]
 
 [params]
 
