@@ -62,10 +62,11 @@ reload_time = 2.0
 current_ammo = 20
 ammo_icon = SubResource("AtlasTexture_pojl6")
 projectile_scene = ExtResource("3_tooap")
+projectile_sprite = SubResource("AtlasTexture_pojl6")
+projectile_rotation_speed = 800.0
 shop_icon = SubResource("AtlasTexture_x2a1f")
 price = 60
 description = "This is also a gun. It shoots more guns. Don't question it."
-projectile_sprite = SubResource("AtlasTexture_pojl6")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
 sprite_frames = SubResource("SpriteFrames_kkxoa")

@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://djkawo7022ioj" path="res://assets/sprites/weapons/baseball.png" id="4_e50xo"]
 [ext_resource type="AudioStream" uid="uid://cibfg8aom6u6u" path="res://assets/audio/weapons/baseballshoot.wav" id="4_fj8uo"]
 [ext_resource type="AudioStream" uid="uid://dmbdc4q30xljx" path="res://assets/audio/weapons/baseballreload.wav" id="5_8ujve"]
+[ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/fonts/pixel_font.ttf" id="6_fj8uo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e50xo"]
 atlas = ExtResource("4_e50xo")
@@ -60,10 +61,11 @@ reload_time = 1.5
 current_ammo = 1
 ammo_icon = SubResource("AtlasTexture_e50xo")
 projectile_scene = ExtResource("3_fj8uo")
+projectile_sprite = SubResource("AtlasTexture_e50xo")
+projectile_rotation_speed = 1000.0
 shop_icon = SubResource("AtlasTexture_e50xo")
 price = 30
 description = "An ordinary baseball. Turns out you have quite the pitching arm."
-projectile_sprite = SubResource("AtlasTexture_e50xo")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
 sprite_frames = SubResource("SpriteFrames_kkxoa")
@@ -75,3 +77,14 @@ volume_db = -9.234
 
 [node name="Reload" type="AudioStreamPlayer" parent="." unique_id=1614518845]
 stream = ExtResource("5_8ujve")
+
+[node name="Label" type="Label" parent="." unique_id=368351651]
+modulate = Color(1, 1, 1, 0.5882353)
+offset_left = -12.0
+offset_top = -4.0
+offset_right = 28.0
+offset_bottom = 19.0
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_fj8uo")
+theme_override_font_sizes/font_size = 10
+text = "<"

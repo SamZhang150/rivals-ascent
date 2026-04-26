@@ -48,9 +48,9 @@ var p1_default_preview_texture: Texture2D = null
 var p2_default_preview_texture: Texture2D = null
 
 var upgrade_data: Dictionary = {
-	"+20 Max HP": {
-		"description": "Increase maximum health by 20.",
-		"cost": 25
+	"+25 Max HP": {
+		"description": "Increase maximum health by 25.",
+		"cost": 20
 	},
 	"+10 Speed": {
 		"description": "Increases movement speed by 10.",
@@ -207,7 +207,7 @@ func populate_ui_for_player(player_id: int, preserve_selection: bool = false) ->
 	match mode.to_lower():
 		"upgrade":
 			title_label.text = "Upgrades"
-			_add_upgrade_button(player_id, options_container, "+20 Max HP", upgrade_data["+20 Max HP"]["cost"])
+			_add_upgrade_button(player_id, options_container, "+25 Max HP", upgrade_data["+25 Max HP"]["cost"])
 			_add_upgrade_button(player_id, options_container, "+10 Speed", upgrade_data["+10 Speed"]["cost"])
 			_add_dash_upgrade_buttons(player_id, options_container)
 		"buy":
@@ -440,7 +440,7 @@ func _attempt_upgrade(player_id: int, upgrade_name: String, cost: int) -> void:
 	var stats: Dictionary = Global.player_stats[player_id]
 
 	match upgrade_name:
-		"+20 Max HP":
+		"+25 Max HP":
 			stats["max_health"] = int(stats.get("max_health", 100)) + 20
 			stats["health"] = int(stats.get("health", 100)) + 20
 			if player.has_method("_update_health_ui"):

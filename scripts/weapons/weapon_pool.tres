@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://c7cpfrihfo4vk" path="res://scenes/entities/weapons/50cal.tscn" id="2_6w11v"]
 [ext_resource type="PackedScene" uid="uid://ch23bekp7x3u0" path="res://scenes/entities/weapons/watergun.tscn" id="2_u0aoc"]
 [ext_resource type="PackedScene" uid="uid://dpfs6hokkq2rs" path="res://scenes/entities/weapons/sawedoff.tscn" id="3_02wf5"]
-[ext_resource type="PackedScene" uid="uid://ttmmonjpmf52" path="res://scenes/entities/weapons/pistol.tscn" id="3_oiff6"]
 [ext_resource type="PackedScene" uid="uid://b3tiu2vjdd56k" path="res://scenes/entities/weapons/ak47.tscn" id="3_u0aoc"]
 [ext_resource type="PackedScene" uid="uid://bd48fr7dajlel" path="res://scenes/entities/weapons/goldak47.tscn" id="4_glpsx"]
 [ext_resource type="PackedScene" uid="uid://dfu8yvbwbjoos" path="res://scenes/entities/weapons/papershuriken.tscn" id="4_jlorm"]
@@ -22,7 +21,7 @@
 
 [resource]
 script = ExtResource("1_qenqu")
-power_1 = Array[PackedScene]([ExtResource("1_wssqx"), ExtResource("4_jlorm"), ExtResource("3_oiff6"), ExtResource("1_v8nrh"), ExtResource("3_02wf5"), ExtResource("2_u0aoc")])
+power_1 = Array[PackedScene]([ExtResource("1_wssqx"), ExtResource("4_jlorm"), ExtResource("1_v8nrh"), ExtResource("3_02wf5"), ExtResource("2_u0aoc")])
 power_2 = Array[PackedScene]([ExtResource("10_28guu"), ExtResource("3_u0aoc"), ExtResource("6_u0aoc"), ExtResource("12_iuebs"), ExtResource("7_glpsx"), ExtResource("12_3hxrx"), ExtResource("9_uwiqs")])
 power_3 = Array[PackedScene]([ExtResource("2_6w11v"), ExtResource("4_glpsx"), ExtResource("12_g57r5"), ExtResource("11_4cmam"), ExtResource("13_2swu6")])
 metadata/_custom_type_script = "uid://0v6tj1ef1bb4"

@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://ddduv7msaqjc2" path="res://assets/audio/weapons/stratshoot.wav" id="5_u3qfd"]
 [ext_resource type="Texture2D" uid="uid://g5ephroladns" path="res://assets/sprites/weapons/stratocaster.png" id="5_yf572"]
 [ext_resource type="AudioStream" uid="uid://3k0quq5618kl" path="res://assets/audio/weapons/stratreload.wav" id="6_qg6bn"]
+[ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/fonts/pixel_font.ttf" id="8_5r3ka"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6143t"]
 atlas = ExtResource("2_yf572")
@@ -190,18 +191,20 @@ animations = [{
 [node name="Stratocaster" type="Node2D" unique_id=1518235098]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_noosi")
-fire_rate = 10.0
+fire_rate = 8.0
 is_auto = true
-damage = 14
+damage = 18
 bullet_radius = 5.0
 bullet_length = 5.0
-bullet_speed = 200.0
+bullet_speed = 175.0
 projectile_base_color = Color(0.9835356, 0.22927213, 0.19803795, 1)
+max_ammo = 10
 reload_time = 2.2
+current_ammo = 10
 ammo_icon = SubResource("AtlasTexture_6143t")
 projectile_scene = ExtResource("3_5r3ka")
 shop_icon = SubResource("AtlasTexture_tc006")
-price = 110
+price = 115
 description = "Previously owned by a left-handed guitarist. Shoots riffs like an assault rifle."
 projectile_frames = SubResource("SpriteFrames_tc006")
 projectile_animation = "ammo"
@@ -215,3 +218,14 @@ stream = ExtResource("5_u3qfd")
 
 [node name="Reload" type="AudioStreamPlayer" parent="." unique_id=1614518845]
 stream = ExtResource("6_qg6bn")
+
+[node name="Label" type="Label" parent="." unique_id=571036108]
+modulate = Color(1, 1, 1, 0.5882353)
+offset_left = -14.0
+offset_top = -4.0
+offset_right = 26.0
+offset_bottom = 19.0
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("8_5r3ka")
+theme_override_font_sizes/font_size = 10
+text = "<"

@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://bum25g6ceeawq"]
+
+[ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_8b81r"]
+[ext_resource type="Texture2D" uid="uid://b5q3kj233033n" path="res://assets/sprites/weapons/ammo/bolt.png" id="2_g2hj4"]
+[ext_resource type="PackedScene" uid="uid://bjq7xyb5tp255" path="res://scenes/entities/weapons/projectiles/sprite_projectile.tscn" id="3_u3wpc"]
+[ext_resource type="Texture2D" uid="uid://bcs3yf178p4m8" path="res://assets/sprites/weapons/doublecrossbow.png" id="4_c2w0v"]
+[ext_resource type="AudioStream" uid="uid://uv4t6mwhfyc1" path="res://assets/audio/weapons/crossbowshoot.wav" id="5_8b81r"]
+[ext_resource type="AudioStream" uid="uid://4ghulbu3cdfr" path="res://assets/audio/weapons/crossbowreload.wav" id="6_g2hj4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mablx"]
+atlas = ExtResource("4_c2w0v")
+region = Rect2(0, 0, 30, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u085k"]
+atlas = ExtResource("4_c2w0v")
+region = Rect2(30, 0, 30, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_txsce"]
+atlas = ExtResource("4_c2w0v")
+region = Rect2(60, 0, 30, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
+animations = [{
+"frames": [{
+"duration": 0.6,
+"texture": SubResource("AtlasTexture_u085k")
+}, {
+"duration": 22.0,
+"texture": SubResource("AtlasTexture_txsce")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mablx")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="2XBow" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_8b81r")
+fire_rate = 30.0
+is_auto = true
+damage = 24
+bullet_length = 6.0
+bullet_speed = 440.0
+projectile_base_color = Color(0, 0.35128495, 0.5859164, 1)
+max_ammo = 2
+reload_time = 4.0
+current_ammo = 2
+ammo_icon = ExtResource("2_g2hj4")
+projectile_scene = ExtResource("3_u3wpc")
+shop_icon = SubResource("AtlasTexture_mablx")
+price = 110
+description = "A special crossbow fitted with double the bolt mounts. Slow to reload, but surprisingly powerful."
+projectile_sprite = ExtResource("2_g2hj4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
+sprite_frames = SubResource("SpriteFrames_kkxoa")
+animation = &"fire"
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=1015298773]
+stream = ExtResource("5_8b81r")
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=1899472994]
+stream = ExtResource("6_g2hj4")

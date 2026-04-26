@@ -22,10 +22,10 @@ region = Rect2(44, 0, 22, 12)
 [sub_resource type="SpriteFrames" id="SpriteFrames_lnll2"]
 animations = [{
 "frames": [{
-"duration": 0.5,
+"duration": 0.3,
 "texture": SubResource("AtlasTexture_a11vi")
 }, {
-"duration": 0.5,
+"duration": 0.6,
 "texture": SubResource("AtlasTexture_vml03")
 }, {
 "duration": 1.0,
@@ -64,7 +64,7 @@ description = "A lavish variant of the legendary rifle. Same brutal reliability,
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1560634533]
 sprite_frames = SubResource("SpriteFrames_lnll2")
-animation = &"idle"
+animation = &"fire"
 
 [node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=1349332112]
 stream = ExtResource("5_5lhnl")

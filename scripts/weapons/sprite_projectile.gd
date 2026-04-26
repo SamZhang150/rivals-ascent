@@ -5,7 +5,7 @@ extends Area2D
 @export var bullet_length: float = 10.0
 @export var bullet_speed: float = 220.0
 @export var life_time: float = 2.0
-@export var spin_speed_degrees: float = 540.0
+@export var spin_speed_degrees: float = 0.0
 
 var direction: Vector2 = Vector2.RIGHT
 var projectile_owner: Node = null
@@ -67,7 +67,8 @@ func _apply_texture(texture: Texture2D) -> void:
 	if sprite_node == null or texture == null:
 		return
 	var frames := SpriteFrames.new()
-	frames.add_animation("default")
+	if not frames.has_animation("default"):
+		frames.add_animation("default")
 	frames.set_animation_speed("default", 0.0)
 	frames.add_frame("default", texture, 1.0)
 	_apply_frames(frames, "default")

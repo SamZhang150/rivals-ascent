@@ -26,7 +26,7 @@ region = Rect2(48, 0, 16, 12)
 [sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
 animations = [{
 "frames": [{
-"duration": 0.6,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_wuidb")
 }, {
 "duration": 0.6,
@@ -68,7 +68,7 @@ description = "Feared by absolutely no one. Devastating to morale, dry clothes, 
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
 sprite_frames = SubResource("SpriteFrames_kkxoa")
-animation = &"idle"
+animation = &"fire"
 
 [node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=1971900263]
 stream = ExtResource("5_wuidb")
