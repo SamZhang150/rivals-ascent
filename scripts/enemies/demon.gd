@@ -4,7 +4,7 @@ signal died
 
 @export var move_speed: float = 40.0
 @export var chase_speed: float = 60.0
-@export var max_health := 160
+@export var max_health := 1060
 @export var touch_damage := 8
 @export var knockback_strength := 110.0
 @export var arrive_distance: float = 6.0

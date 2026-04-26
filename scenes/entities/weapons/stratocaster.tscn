@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_noosi"]
 [ext_resource type="Texture2D" uid="uid://cvbql6b6ppsen" path="res://assets/sprites/weapons/ammo/music.png" id="2_yf572"]
 [ext_resource type="PackedScene" uid="uid://bjq7xyb5tp255" path="res://scenes/entities/weapons/projectiles/sprite_projectile.tscn" id="3_5r3ka"]
-[ext_resource type="Texture2D" uid="uid://b34wmwghj6jwv" path="res://assets/sprites/weapons/jazzmaster.png" id="4_oyen5"]
 [ext_resource type="AudioStream" uid="uid://ddduv7msaqjc2" path="res://assets/audio/weapons/stratshoot.wav" id="5_u3qfd"]
 [ext_resource type="Texture2D" uid="uid://g5ephroladns" path="res://assets/sprites/weapons/stratocaster.png" id="5_yf572"]
 [ext_resource type="AudioStream" uid="uid://3k0quq5618kl" path="res://assets/audio/weapons/stratreload.wav" id="6_qg6bn"]
@@ -12,10 +11,6 @@
 [sub_resource type="AtlasTexture" id="AtlasTexture_6143t"]
 atlas = ExtResource("2_yf572")
 region = Rect2(0, 0, 18, 22)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tc006"]
-atlas = ExtResource("4_oyen5")
-region = Rect2(0, 0, 24, 33)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rvsnt"]
 atlas = ExtResource("2_yf572")
@@ -105,6 +100,10 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_yf572"]
+atlas = ExtResource("5_yf572")
+region = Rect2(0, 0, 24, 33)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_5r3ka"]
 atlas = ExtResource("5_yf572")
 region = Rect2(24, 0, 24, 33)
@@ -140,10 +139,6 @@ region = Rect2(192, 0, 24, 33)
 [sub_resource type="AtlasTexture" id="AtlasTexture_gdk1e"]
 atlas = ExtResource("5_yf572")
 region = Rect2(216, 0, 24, 33)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_yf572"]
-atlas = ExtResource("5_yf572")
-region = Rect2(0, 0, 24, 33)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
 animations = [{
@@ -203,11 +198,11 @@ reload_time = 2.2
 current_ammo = 10
 ammo_icon = SubResource("AtlasTexture_6143t")
 projectile_scene = ExtResource("3_5r3ka")
-shop_icon = SubResource("AtlasTexture_tc006")
-price = 115
-description = "Previously owned by a left-handed guitarist. Shoots riffs like an assault rifle."
 projectile_frames = SubResource("SpriteFrames_tc006")
 projectile_animation = "ammo"
+shop_icon = SubResource("AtlasTexture_yf572")
+price = 115
+description = "Previously owned by a left-handed guitarist. Shoots riffs like an assault rifle."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
 sprite_frames = SubResource("SpriteFrames_kkxoa")
