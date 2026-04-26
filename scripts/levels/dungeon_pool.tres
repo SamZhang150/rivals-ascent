@@ -13,6 +13,6 @@
 [resource]
 script = ExtResource("1_qwihy")
 difficulty_1 = Array[PackedScene]([ExtResource("1_8p2u8"), ExtResource("2_gxi8c"), ExtResource("3_5bxwk"), ExtResource("4_mo6qi")])
-difficulty_2 = Array[PackedScene]([ExtResource("5_gtr35"), ExtResource("6_hbnye"), ExtResource("5_gtr35"), ExtResource("6_hbnye")])
+difficulty_2 = Array[PackedScene]([ExtResource("5_gtr35"), ExtResource("6_hbnye")])
 difficulty_3 = Array[PackedScene]([ExtResource("7_xdmr7"), ExtResource("8_giwlm"), ExtResource("7_xdmr7"), ExtResource("8_giwlm")])
 metadata/_custom_type_script = "uid://ciqvnns4ihm2w"

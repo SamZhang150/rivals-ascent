@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="1_sr5oa"]
 [ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="3_xxu7e"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="4_uioin"]
-[ext_resource type="PackedScene" path="res://scenes/entities/enemies/demon.tscn" id="5_1ky1g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uioin"]
 texture = ExtResource("1_sr5oa")
@@ -669,6 +668,3 @@ position = Vector2(224, 128)
 
 [node name="Done" type="AudioStreamPlayer" parent="." unique_id=1944892974]
 stream = ExtResource("4_uioin")
-
-[node name="Demon" parent="." unique_id=2130443368 instance=ExtResource("5_1ky1g")]
-position = Vector2(74, 93)

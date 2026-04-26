@@ -4,16 +4,16 @@ signal died
 
 @export var move_speed: float = 40.0
 @export var chase_speed: float = 60.0
-@export var max_health := 80
+@export var max_health := 160
 @export var touch_damage := 8
 @export var knockback_strength := 110.0
 @export var arrive_distance: float = 6.0
-@export var coin_reward: int = 7
+@export var coin_reward: int = 16
 
-@export var orbit_distance: float = 42.0
+@export var orbit_distance: float = 70.0
 @export var orbit_speed: float = 60.0
-@export var lunge_speed: float = 80.0
-@export var lunge_time: float = 0.22
+@export var lunge_speed: float = 125.0
+@export var lunge_time: float = 0.32
 @export var self_knockback_strength: float = 150.0
 @export var min_orbit_time: float = 0.35
 @export var max_orbit_time: float = 1.25
@@ -43,6 +43,8 @@ var knockback := Vector2.ZERO
 var player: CharacterBody2D = null
 var speed_modifier: float = 1.0
 var _slow_timer: Timer = null
+var _stun_timer: Timer = null
+var _stun_active: bool = false
 var _state_timer: Timer = null
 var _has_hit_during_lunge := false
 var _lunge_direction := Vector2.ZERO
@@ -91,12 +93,18 @@ func _ready() -> void:
 	_slow_timer.timeout.connect(_on_slow_finished)
 	add_child(_slow_timer)
 
+	_stun_timer = Timer.new()
+	_stun_timer.one_shot = true
+	_stun_timer.wait_time = 0.1
+	_stun_timer.timeout.connect(_on_stun_finished)
+	add_child(_stun_timer)
+
 	_state_timer = Timer.new()
 	_state_timer.one_shot = true
 	_state_timer.timeout.connect(_on_state_timer_timeout)
 	add_child(_state_timer)
 
-	health_bar.position = Vector2(-14, -12)
+	health_bar.position = Vector2(-28, -24)
 	bar_bg.size = Vector2(BAR_WIDTH, BAR_HEIGHT)
 	bar_fill.size = Vector2(BAR_WIDTH, BAR_HEIGHT)
 	health_bar.visible = health < max_health
@@ -109,6 +117,11 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if dead:
+		return
+
+	if _stun_active:
+		velocity = Vector2.ZERO
+		move_and_slide()
 		return
 
 	if knockback.length() > 1.0:
@@ -330,15 +343,110 @@ func _on_slow_finished() -> void:
 
 
 func _set_slow_visual(is_slowed: bool) -> void:
-	if sprite == null:
+	if dead:
+		return
+	speed_modifier = 0.6 if is_slowed else 1.0
+	_refresh_sprite_tint()
+
+
+func apply_chain_stun(incoming_damage: int, stun_time: float, chain_amount: int = 0, chain_damage: float = 0.0, chain_dist: float = 0.0, damager: Node = null) -> void:
+	if dead:
 		return
 
-	var alpha: float = sprite.modulate.a
+	take_damage(incoming_damage, global_position, damager)
+	_apply_stun(stun_time)
 
-	if is_slowed:
+	if chain_amount <= 0 or chain_damage <= 0.0 or chain_dist <= 0.0:
+		return
+
+	_chain_to_nearby_enemies(stun_time, chain_amount, chain_damage, chain_dist, damager)
+
+
+func _apply_stun(stun_time: float) -> void:
+	if stun_time <= 0.0 or dead:
+		return
+
+	_stun_active = true
+	state = DemonState.RECOVER
+	velocity = Vector2.ZERO
+	knockback = Vector2.ZERO
+	if _state_timer != null:
+		_state_timer.stop()
+
+	_refresh_sprite_tint()
+	if _stun_timer != null:
+		_stun_timer.start(stun_time)
+
+
+func _on_stun_finished() -> void:
+	_stun_active = false
+	if dead:
+		return
+
+	if player != null and is_instance_valid(player):
+		state = DemonState.CHASE
+	else:
+		state = DemonState.PATROL
+
+	_refresh_sprite_tint()
+
+
+func _refresh_sprite_tint() -> void:
+	if sprite == null:
+		return
+	var alpha: float = sprite.modulate.a
+	if _stun_active:
+		sprite.modulate = Color(1.0, 1.0, 0.25, alpha)
+	elif speed_modifier < 0.999:
 		sprite.modulate = Color(0.8, 1.0, 0.8, alpha)
 	else:
 		sprite.modulate = Color(1.0, 1.0, 1.0, alpha)
+
+
+func _chain_to_nearby_enemies(stun_time: float, chain_amount: int, chain_damage: float, chain_dist: float, damager: Node = null) -> void:
+	var candidates: Array = []
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy == null or enemy == self or not is_instance_valid(enemy):
+			continue
+		if not enemy.has_method("apply_chain_stun"):
+			continue
+		if enemy.get("dead") == true:
+			continue
+		var distance := global_position.distance_to(enemy.global_position)
+		if distance <= chain_dist:
+			candidates.append({"enemy": enemy, "distance": distance})
+
+	candidates.sort_custom(func(a, b): return a["distance"] < b["distance"])
+	var hits := mini(chain_amount, candidates.size())
+	for i in hits:
+		var chained_enemy: Node = candidates[i]["enemy"]
+		if chained_enemy != null and is_instance_valid(chained_enemy):
+			_spawn_chain_vfx(global_position, chained_enemy.global_position)
+			chained_enemy.apply_chain_stun(int(round(chain_damage)), stun_time, 0, chain_damage, chain_dist, damager)
+
+
+func _spawn_chain_vfx(from_pos: Vector2, to_pos: Vector2) -> void:
+	var world := get_tree().current_scene
+	if world == null:
+		return
+
+	var bolt := Line2D.new()
+	bolt.z_index = 100
+	bolt.width = 2.0
+	bolt.default_color = Color(1.0, 1.0, 0.25, 0.95)
+	bolt.begin_cap_mode = Line2D.LINE_CAP_ROUND
+	bolt.end_cap_mode = Line2D.LINE_CAP_ROUND
+	bolt.joint_mode = Line2D.LINE_JOINT_ROUND
+	bolt.position = Vector2.ZERO
+	bolt.points = PackedVector2Array([from_pos, to_pos])
+	world.add_child(bolt)
+
+	var fade := bolt.create_tween()
+	fade.tween_property(bolt, "modulate:a", 0.0, 0.20)
+	fade.finished.connect(func() -> void:
+		if is_instance_valid(bolt):
+			bolt.queue_free()
+	)
 
 
 func die() -> void:
@@ -347,6 +455,10 @@ func die() -> void:
 
 	dead = true
 	died.emit()
+	_stun_active = false
+	if _stun_timer != null:
+		_stun_timer.stop()
+	_refresh_sprite_tint()
 
 	player = null
 	velocity = Vector2.ZERO
@@ -406,8 +518,8 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 
 	var attacker := area.get_parent()
 
-	if attacker != null and attacker.has_method("get_attack_damage"):
-		take_damage(attacker.get_attack_damage(), attacker.global_position, attacker)
+	# Demon is immune to player melee/contact areas and should only take projectile/explosion damage.
+	if attacker != null and attacker.is_in_group("player"):
 		return
 
 	if "damage" in area:
