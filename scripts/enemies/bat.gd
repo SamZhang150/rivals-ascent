@@ -3,7 +3,7 @@ extends CharacterBody2D
 signal died
 
 @export var speed := randf_range(55, 65)
-@export var max_health := 90
+@export var max_health := 120
 @export var touch_damage := 4
 @export var knockback_strength := 110.0
 @export var coin_reward: int = 8
