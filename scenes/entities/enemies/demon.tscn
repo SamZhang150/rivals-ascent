@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://bwtjvtcbymeod"]
+
+[ext_resource type="Script" uid="uid://b7m80v7snyjnd" path="res://scripts/enemies/demon.gd" id="1_wqaxn"]
+[ext_resource type="Texture2D" uid="uid://d36o2wewaouet" path="res://assets/sprites/enemies/demon/chort_run_anim_f0.png" id="2_xuxt5"]
+[ext_resource type="Texture2D" uid="uid://ben0k62i1h1ur" path="res://assets/sprites/enemies/demon/chort_run_anim_f1.png" id="3_2fdnj"]
+[ext_resource type="Texture2D" uid="uid://cviolpt3jvsbo" path="res://assets/sprites/enemies/demon/chort_run_anim_f2.png" id="4_l8mq0"]
+[ext_resource type="Texture2D" uid="uid://cxvv6gbklmdxf" path="res://assets/sprites/enemies/demon/chort_run_anim_f3.png" id="5_5wi04"]
+[ext_resource type="Texture2D" uid="uid://cpd32ymuatrdh" path="res://assets/sprites/enemies/demon/chort_idle_anim_f0.png" id="6_nd5mx"]
+[ext_resource type="Texture2D" uid="uid://b1me0yfhp63sj" path="res://assets/sprites/enemies/demon/chort_idle_anim_f1.png" id="7_8fiyj"]
+[ext_resource type="Texture2D" uid="uid://b5niolue66jtj" path="res://assets/sprites/enemies/demon/chort_idle_anim_f2.png" id="8_rl10x"]
+[ext_resource type="Texture2D" uid="uid://dd018douvjpvm" path="res://assets/sprites/enemies/demon/chort_idle_anim_f3.png" id="9_h1sk7"]
+[ext_resource type="AudioStream" uid="uid://bgr7q5s3hphma" path="res://assets/audio/ingame/enemyHurt.wav" id="10_2fdnj"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lb3ep"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xuxt5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_2fdnj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_l8mq0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_5wi04")
+}],
+"loop": true,
+"name": &"chase",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_nd5mx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_8fiyj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_rl10x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_h1sk7")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f6asb"]
+size = Vector2(16, 24)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_k1p8w"]
+radius = 134.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k1p8w"]
+size = Vector2(16, 24)
+
+[node name="Demon" type="CharacterBody2D" unique_id=2130443368]
+scale = Vector2(0.5, 0.5)
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_wqaxn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=964746519]
+sprite_frames = SubResource("SpriteFrames_lb3ep")
+animation = &"chase"
+autoplay = "idle"
+frame = 1
+frame_progress = 0.74568164
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1764669159]
+shape = SubResource("RectangleShape2D_f6asb")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1764973477]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=601919036]
+position = Vector2(0, 2)
+shape = SubResource("CircleShape2D_k1p8w")
+
+[node name="HitboxArea" type="Area2D" parent="." unique_id=1337454275]
+collision_layer = 64
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea" unique_id=415540934]
+shape = SubResource("RectangleShape2D_k1p8w")
+
+[node name="HurtboxArea" type="Area2D" parent="." unique_id=1201239018]
+collision_layer = 16
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxArea" unique_id=873367387]
+shape = SubResource("RectangleShape2D_k1p8w")
+
+[node name="PatrolPointA" type="Marker2D" parent="." unique_id=1876018643]
+position = Vector2(-180, 0)
+
+[node name="PatrolPointB" type="Marker2D" parent="." unique_id=581612194]
+position = Vector2(170, 0)
+
+[node name="HealthBar" type="Node2D" parent="." unique_id=938966334]
+
+[node name="BarBG" type="ColorRect" parent="HealthBar" unique_id=806227289]
+metadata/_edit_use_anchors_ = true
+
+[node name="BarFill" type="ColorRect" parent="HealthBar" unique_id=933873018]
+metadata/_edit_use_anchors_ = true
+
+[node name="Damage" type="AudioStreamPlayer2D" parent="." unique_id=262034875]
+stream = ExtResource("10_2fdnj")
