@@ -58,7 +58,7 @@ var _contact_damage_timer: Timer = null
 @export var contact_damage_interval: float = 0.5  # How often to take damage while in contact
 
 # Shop / progression state
-var gold: int = 20
+var gold: int = 30
 var inventory: Array[String] = []
 var nearby_station: Area2D = null
 var shop_ui_open: bool = false
@@ -329,8 +329,29 @@ func _set_dead(value: bool) -> void:
 func set_phase_state(show_health: bool, damage_enabled: bool, use_coins: bool = false) -> void:
 	can_take_damage = damage_enabled
 	damage_uses_coins = use_coins
+	if not damage_enabled:
+		_clear_temporary_damage_status()
 	if health_ui != null:
 		health_ui.visible = show_health
+
+
+func _clear_temporary_damage_status() -> void:
+	_damage_flash_active = false
+	_slow_active = false
+	speed_modifier = 1.0
+
+	if _slow_timer != null:
+		_slow_timer.stop()
+
+	if _stun_active:
+		_stun_active = false
+		can_move = _stun_saved_can_move
+		can_attack = _stun_saved_can_attack
+
+	if _stun_timer != null:
+		_stun_timer.stop()
+
+	_refresh_sprite_tint()
 
 func _update_health_ui() -> void:
 	if health_ui != null and health_ui.has_method("set_health"):
@@ -414,8 +435,8 @@ func _equip_starter_weapon() -> void:
 	# 	inventory.append("telecaster")
 	# if not inventory.has("2xbow"):
 	# 	inventory.append("2xbow")
-	# if not inventory.has("sparkbolt"):
-	# 	inventory.append("sparkbolt")
+	if not inventory.has("sparkbolt"):
+		inventory.append("sparkbolt")
 	# if not inventory.has("zeusbolt"):
 	# 	inventory.append("zeusbolt")
 	# if not inventory.has("taserlaser"):
@@ -670,6 +691,8 @@ func get_slowed(_amount: float) -> void:
 
 func apply_chain_stun(incoming_damage: int, stun_time: float, _chain_amount: int = 0, _chain_damage: float = 0.0, _chain_dist: float = 0.0, _damager: Node = null) -> void:
 	if is_dead():
+		return
+	if not can_take_damage:
 		return
 	take_damage(incoming_damage, global_position)
 	_apply_stun(stun_time * 0.75)

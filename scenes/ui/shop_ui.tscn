@@ -5,6 +5,8 @@
 [ext_resource type="FontFile" uid="uid://cgitxu1t30c4y" path="res://assets/sprites/ui/PressStart2P-Regular.ttf" id="3_f2epr"]
 [ext_resource type="Texture2D" uid="uid://cxis35niux1ot" path="res://assets/sprites/icons/coin_sprite.png" id="4_a65e2"]
 [ext_resource type="Texture2D" uid="uid://dptnbnwptiel" path="res://assets/sprites/ui/upgrade.png" id="5_q65g1"]
+[ext_resource type="AudioStream" uid="uid://dno3e0itpxlee" path="res://assets/audio/ingame/buy.wav" id="6_se4pl"]
+[ext_resource type="AudioStream" uid="uid://cl3ctsf3do641" path="res://assets/audio/ingame/cantbuy.wav" id="7_riyc1"]
 
 [node name="ShopUI" type="Control" unique_id=1017933386]
 modulate = Color(1, 1, 1, 0.6431373)
@@ -321,3 +323,9 @@ scale = Vector2(0.4, 0.5)
 theme_override_fonts/font = ExtResource("3_f2epr")
 theme_override_font_sizes/font_size = 7
 horizontal_alignment = 2
+
+[node name="BuySound" type="AudioStreamPlayer" parent="." unique_id=2109049207]
+stream = ExtResource("6_se4pl")
+
+[node name="FailSound" type="AudioStreamPlayer" parent="." unique_id=1930414919]
+stream = ExtResource("7_riyc1")

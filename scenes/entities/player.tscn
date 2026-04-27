@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://b0amvslpvltem" path="res://assets/audio/ingame/death.wav" id="6_d4qa6"]
 [ext_resource type="AudioStream" uid="uid://cqt452orpndlu" path="res://assets/audio/ingame/pickupCoin.wav" id="7_ss7kx"]
 [ext_resource type="AudioStream" uid="uid://dw71jbd1horat" path="res://assets/audio/ingame/enemyDie.wav" id="8_dnykm"]
+[ext_resource type="PackedScene" uid="uid://ntrd1hpmal0u" path="res://scenes/ui/arrow.tscn" id="9_mwj8e"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b6tgf"]
 atlas = ExtResource("2_1ie0h")
@@ -234,3 +235,5 @@ volume_db = -2.737
 
 [node name="EnemyDeath" type="AudioStreamPlayer" parent="." unique_id=2050204898]
 stream = ExtResource("8_dnykm")
+
+[node name="Arrow" parent="." instance=ExtResource("9_mwj8e")]

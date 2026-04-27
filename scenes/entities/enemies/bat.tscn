@@ -36,7 +36,7 @@ animations = [{
 
 [node name="Bat" unique_id=1718233248 instance=ExtResource("1_f0pah")]
 script = ExtResource("2_7qqgy")
-max_health = 80
+max_health = 160
 touch_damage = 4
 coin_reward = 7
 

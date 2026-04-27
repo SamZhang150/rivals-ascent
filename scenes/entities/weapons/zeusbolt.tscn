@@ -77,6 +77,7 @@ animations = [{
 [node name="Zeus\'Bolt" type="Node2D" unique_id=1518235098]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_vb1i5")
+fire_rate = 1.0
 is_auto = true
 damage = 40
 bullet_radius = 3.0
@@ -94,7 +95,7 @@ electro_chain_damage = 20.0
 electro_chain_amount = 1
 electro_chain_dist = 100.0
 shop_icon = SubResource("AtlasTexture_01073")
-price = 30
+price = 100
 description = "Proof that stealing from gods has its perks. Deals 20 stun damage to +1 nearby enemy."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]

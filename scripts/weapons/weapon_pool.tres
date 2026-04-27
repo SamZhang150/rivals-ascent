@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="WeaponPool" format=3 uid="uid://clhx3w2tq6lpe"]
 
-[ext_resource type="Script" path="res://scripts/weapons/weapon_pool.gd" id="1_qenqu"]
+[ext_resource type="Script" uid="uid://0v6tj1ef1bb4" path="res://scripts/weapons/weapon_pool.gd" id="1_qenqu"]
 [ext_resource type="PackedScene" uid="uid://dyxkbejxvykkn" path="res://scenes/entities/weapons/revolver.tscn" id="1_v8nrh"]
 [ext_resource type="PackedScene" uid="uid://dtqy7wsy11nlq" path="res://scenes/entities/weapons/baseball.tscn" id="1_wssqx"]
 [ext_resource type="PackedScene" uid="uid://c7cpfrihfo4vk" path="res://scenes/entities/weapons/50cal.tscn" id="2_6w11v"]

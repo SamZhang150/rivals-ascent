@@ -701,7 +701,7 @@ position = Vector2(30.5, 39)
 position = Vector2(194, 39)
 
 [node name="SoulSucker" parent="." unique_id=1718233248 instance=ExtResource("5_fwnwn")]
-position = Vector2(242, 145)
+position = Vector2(-12, 29)
 
-[node name="SoulSucker" parent="SoulSucker" unique_id=1517378034 instance=ExtResource("5_fwnwn")]
-position = Vector2(-3.5, -115)
+[node name="SoulSucker2" parent="." unique_id=1517378034 instance=ExtResource("5_fwnwn")]
+position = Vector2(231, 29)

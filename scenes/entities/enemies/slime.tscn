@@ -46,6 +46,7 @@ size = Vector2(10, 7)
 [node name="Slime" type="CharacterBody2D" unique_id=1718233248]
 collision_layer = 4
 script = ExtResource("1_ljkv1")
+max_health = 80
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1200022150]
 texture_filter = 1

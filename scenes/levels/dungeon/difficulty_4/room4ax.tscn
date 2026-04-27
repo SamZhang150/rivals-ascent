@@ -639,13 +639,7 @@ position = Vector2(206, 111)
 shape = SubResource("RectangleShape2D_7wlt0")
 
 [node name="Slime" parent="." unique_id=1718233248 instance=ExtResource("3_khywp")]
-position = Vector2(44, 32)
-
-[node name="Slime" parent="Slime" unique_id=955844737 instance=ExtResource("3_khywp")]
-position = Vector2(136, 2.5)
-
-[node name="Slime" parent="Slime/Slime" unique_id=1723624314 instance=ExtResource("3_khywp")]
-position = Vector2(2.5, 75)
+position = Vector2(177, 117.5)
 
 [node name="Walls" type="StaticBody2D" parent="." unique_id=51699263]
 collision_mask = 6
@@ -700,19 +694,19 @@ position = Vector2(254, 158.5)
 stream = ExtResource("4_14lv7")
 
 [node name="Demon" parent="." unique_id=2130443368 instance=ExtResource("5_h3sib")]
-position = Vector2(200.5, 71.5)
+position = Vector2(144, 147)
 
 [node name="Demon2" parent="." unique_id=2135380548 instance=ExtResource("5_h3sib")]
-position = Vector2(21.5, 71.5)
+position = Vector2(83, 147.5)
 
 [node name="SoulSucker" parent="." unique_id=689996601 instance=ExtResource("6_wb3j1")]
-position = Vector2(152, 147)
+position = Vector2(202.5, 72)
 
-[node name="SoulSucker" parent="SoulSucker" unique_id=833100297 instance=ExtResource("6_wb3j1")]
-position = Vector2(-68.5, -43)
+[node name="SoulSucker2" parent="." unique_id=833100297 instance=ExtResource("6_wb3j1")]
+position = Vector2(26, 69.5)
 
-[node name="Bat" parent="SoulSucker/SoulSucker" unique_id=1109931831 instance=ExtResource("7_khywp")]
-position = Vector2(54, -0.5)
+[node name="Bat" parent="." unique_id=1109931831 instance=ExtResource("7_khywp")]
+position = Vector2(144.5, 116.5)
 
-[node name="Bat2" parent="SoulSucker/SoulSucker" unique_id=1198996979 instance=ExtResource("7_khywp")]
-position = Vector2(0, 47)
+[node name="Bat2" parent="." unique_id=1198996979 instance=ExtResource("7_khywp")]
+position = Vector2(81, 117.5)

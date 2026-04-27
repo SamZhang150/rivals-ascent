@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://blvjmqiox7fy" path="res://scenes/levels/dungeon/dungeon.gd" id="1_nxcha"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_daxoq"]
-[ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="3_i2hgt"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="4_e6mrn"]
 [ext_resource type="PackedScene" uid="uid://bnsox81pshmwb" path="res://scenes/entities/enemies/demon.tscn" id="5_4ndyy"]
 [ext_resource type="PackedScene" uid="uid://c18p56xbs1b10" path="res://scenes/entities/enemies/soulsucker.tscn" id="6_daxoq"]
+[ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="6_i2hgt"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7d7vv"]
 texture = ExtResource("2_daxoq")
@@ -673,12 +673,6 @@ shape = SubResource("RectangleShape2D_ksi7v")
 position = Vector2(28, 122.5)
 shape = SubResource("RectangleShape2D_ksi7v")
 
-[node name="Bat3" parent="Walls" unique_id=1423856355 instance=ExtResource("3_i2hgt")]
-position = Vector2(45.5, 27.5)
-
-[node name="Bat4" parent="Walls" unique_id=2139321681 instance=ExtResource("3_i2hgt")]
-position = Vector2(179, 29)
-
 [node name="CamTopLeft" type="Marker2D" parent="." unique_id=240008024]
 position = Vector2(-31, 1)
 
@@ -697,11 +691,21 @@ position = Vector2(196.5, 91)
 [node name="Demon3" parent="." unique_id=768673470 instance=ExtResource("5_4ndyy")]
 position = Vector2(115, 140)
 
-[node name="SoulSucker" parent="Demon3" unique_id=1718233248 instance=ExtResource("6_daxoq")]
-position = Vector2(260, -224)
-
-[node name="SoulSucker" parent="Demon3/SoulSucker" unique_id=932804143 instance=ExtResource("6_daxoq")]
-position = Vector2(242, 145)
-
 [node name="SoulSucker" parent="." unique_id=1175288089 instance=ExtResource("6_daxoq")]
 position = Vector2(-18, 29)
+
+[node name="SoulSucker2" parent="." unique_id=1718233248 instance=ExtResource("6_daxoq")]
+position = Vector2(231, 30.5)
+
+[node name="SoulSucker3" parent="." unique_id=932804143 instance=ExtResource("6_daxoq")]
+position = Vector2(366, 100.5)
+scale = Vector2(0.5, 0.5)
+
+[node name="Slime" parent="." unique_id=1405925967 instance=ExtResource("6_i2hgt")]
+position = Vector2(93.5, 121)
+
+[node name="Slime2" parent="." unique_id=927888050 instance=ExtResource("6_i2hgt")]
+position = Vector2(115, 120.5)
+
+[node name="Slime3" parent="." unique_id=1430264465 instance=ExtResource("6_i2hgt")]
+position = Vector2(138, 120)

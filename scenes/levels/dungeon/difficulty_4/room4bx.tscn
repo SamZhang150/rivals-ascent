@@ -736,3 +736,6 @@ position = Vector2(126, 147)
 
 [node name="SoulSucker" parent="." unique_id=924258471 instance=ExtResource("7_i5tym")]
 position = Vector2(115.5, 146.5)
+
+[node name="Slime5" parent="." unique_id=273331759 instance=ExtResource("6_5l5i1")]
+position = Vector2(114, 130.5)

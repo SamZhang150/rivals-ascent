@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://b7fgp2hgf4f5g"]
 
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="1_en3xm"]
+[ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/fonts/pixel_font.ttf" id="2_7vqca"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_en3xm"]
 texture = ExtResource("1_en3xm")
@@ -582,3 +583,12 @@ shape = SubResource("RectangleShape2D_e3lt3")
 
 [node name="CamBottomRight" type="Marker2D" parent="." unique_id=1979161008]
 position = Vector2(224, 128)
+
+[node name="Label" type="Label" parent="." unique_id=1558224447]
+modulate = Color(1, 1, 1, 0.5882353)
+offset_left = 83.0
+offset_top = 5.0
+offset_right = 139.0
+offset_bottom = 28.0
+theme_override_fonts/font = ExtResource("2_7vqca")
+text = "LOBBY"

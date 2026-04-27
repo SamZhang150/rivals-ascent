@@ -3,7 +3,7 @@ extends CharacterBody2D
 signal died
 
 @export var speed := randf_range(55, 65)
-@export var max_health := 120
+@export var max_health := 320
 @export var touch_damage := 12
 @export var knockback_strength := 110.0
 @export var coin_reward: int = 12
@@ -52,7 +52,7 @@ func _ready() -> void:
 	add_child(_stun_timer)
 
 	health = max_health
-	health_bar.position = Vector2(-14, -12)
+	health_bar.position = Vector2(-20, -14)
 	bar_bg.size = Vector2(BAR_WIDTH, BAR_HEIGHT)
 	bar_fill.size = Vector2(BAR_WIDTH, BAR_HEIGHT)
 	health_bar.visible = health < max_health
@@ -104,7 +104,7 @@ func _physics_process(delta: float) -> void:
 			sprite.play("run")
 			
 		if dir.x != 0:
-			sprite.flip_h = dir.x <= 0
+			sprite.flip_h = dir.x > 0
 	else:
 		velocity = Vector2.ZERO
 		sprite.play("idle")

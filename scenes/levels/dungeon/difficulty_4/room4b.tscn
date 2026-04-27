@@ -699,12 +699,6 @@ shape = SubResource("RectangleShape2D_nxs8t")
 position = Vector2(-8, 118.5)
 shape = SubResource("RectangleShape2D_nxs8t")
 
-[node name="Bat" parent="." unique_id=956173345 instance=ExtResource("4_4shue")]
-position = Vector2(186, 70)
-
-[node name="Bat2" parent="." unique_id=1989380203 instance=ExtResource("4_4shue")]
-position = Vector2(39, 70.5)
-
 [node name="CamTopLeft" type="Marker2D" parent="." unique_id=240008024]
 position = Vector2(-31.5, 0.5)
 
@@ -715,10 +709,22 @@ position = Vector2(254.5, 158.5)
 stream = ExtResource("5_qnrur")
 
 [node name="Demon" parent="." unique_id=2130443368 instance=ExtResource("6_clmvm")]
-position = Vector2(110.5, 146.5)
+position = Vector2(23.5, 67)
 
 [node name="Demon2" parent="." unique_id=1105777119 instance=ExtResource("6_clmvm")]
 position = Vector2(23.5, 121)
 
 [node name="Demon3" parent="." unique_id=1819771701 instance=ExtResource("6_clmvm")]
 position = Vector2(198, 120.5)
+
+[node name="Demon4" parent="." unique_id=899318423 instance=ExtResource("6_clmvm")]
+position = Vector2(198.5, 66.5)
+
+[node name="Bat" parent="." unique_id=1718233248 instance=ExtResource("4_4shue")]
+position = Vector2(61.5, 27.5)
+
+[node name="Bat2" parent="." unique_id=101642231 instance=ExtResource("4_4shue")]
+position = Vector2(162, 29)
+
+[node name="Bat3" parent="." unique_id=1119335113 instance=ExtResource("4_4shue")]
+position = Vector2(112.5, 147.5)

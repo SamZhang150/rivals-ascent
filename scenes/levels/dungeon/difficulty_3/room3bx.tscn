@@ -699,9 +699,6 @@ stream = ExtResource("5_mtqgi")
 [node name="Demon" parent="." unique_id=2130443368 instance=ExtResource("6_dehio")]
 position = Vector2(110.5, 146.5)
 
-[node name="Bat3" parent="." unique_id=1718233248 instance=ExtResource("4_xq73e")]
-position = Vector2(111, 120)
-
 [node name="SoulSucker" parent="." unique_id=371851213 instance=ExtResource("6_btu4l")]
 position = Vector2(36, 117.5)
 

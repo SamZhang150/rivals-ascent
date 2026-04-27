@@ -687,9 +687,14 @@ position = Vector2(200.5, 71.5)
 
 [node name="SoulSucker2" parent="." unique_id=1718233248 instance=ExtResource("5_80nmx")]
 position = Vector2(64.5, 134.5)
+max_health = 240
 
 [node name="SoulSucker3" parent="." unique_id=1170893130 instance=ExtResource("5_80nmx")]
 position = Vector2(50, 31.5)
+max_health = 240
 
 [node name="Bat" parent="." unique_id=369110251 instance=ExtResource("4_ggjtf")]
-position = Vector2(25.5, 72)
+position = Vector2(21.5, 61.5)
+
+[node name="Bat2" parent="." unique_id=1236206725 instance=ExtResource("4_ggjtf")]
+position = Vector2(22, 85.5)

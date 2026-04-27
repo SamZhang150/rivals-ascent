@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://blvjmqiox7fy" path="res://scenes/levels/dungeon/dungeon.gd" id="1_blecv"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_o824s"]
+[ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="3_0tqm7"]
 [ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="4_p4nnw"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="5_lfri5"]
 [ext_resource type="PackedScene" uid="uid://bnsox81pshmwb" path="res://scenes/entities/enemies/demon.tscn" id="6_xcr11"]
@@ -665,7 +666,7 @@ position = Vector2(112, 159.5)
 shape = SubResource("RectangleShape2D_utab4")
 
 [node name="Bat" parent="." unique_id=956173345 instance=ExtResource("4_p4nnw")]
-position = Vector2(111, 149.5)
+position = Vector2(33, 60)
 
 [node name="CamTopLeft" type="Marker2D" parent="." unique_id=240008024]
 position = Vector2(-31, 1)
@@ -681,3 +682,15 @@ position = Vector2(51.5, 135.5)
 
 [node name="Demon2" parent="." unique_id=1483372364 instance=ExtResource("6_xcr11")]
 position = Vector2(175, 135)
+
+[node name="Bat2" parent="." unique_id=1718233248 instance=ExtResource("4_p4nnw")]
+position = Vector2(196, 60.5)
+
+[node name="Slime" parent="." unique_id=1976201501 instance=ExtResource("3_0tqm7")]
+position = Vector2(47, 36)
+
+[node name="Slime2" parent="." unique_id=247660352 instance=ExtResource("3_0tqm7")]
+position = Vector2(182.5, 36.5)
+
+[node name="Slime3" parent="." unique_id=536876344 instance=ExtResource("3_0tqm7")]
+position = Vector2(113, 135.5)

@@ -2,9 +2,8 @@
 
 [ext_resource type="Script" uid="uid://blvjmqiox7fy" path="res://scenes/levels/dungeon/dungeon.gd" id="1_wiiog"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_o5jcp"]
-[ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="4_pd455"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="5_25lik"]
-[ext_resource type="PackedScene" uid="uid://c18p56xbs1b10" path="res://scenes/entities/enemies/soulsucker.tscn" id="5_wiiog"]
+[ext_resource type="PackedScene" path="res://scenes/entities/enemies/soulsucker.tscn" id="5_wiiog"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7d7vv"]
 texture = ExtResource("2_o5jcp")
@@ -667,12 +666,6 @@ shape = SubResource("RectangleShape2D_p6tfh")
 position = Vector2(40, 62.5)
 shape = SubResource("RectangleShape2D_d76va")
 
-[node name="Bat" parent="." unique_id=956173345 instance=ExtResource("4_pd455")]
-position = Vector2(75.5, 118)
-
-[node name="Bat2" parent="." unique_id=1989380203 instance=ExtResource("4_pd455")]
-position = Vector2(190.5, 86)
-
 [node name="CamTopLeft" type="Marker2D" parent="." unique_id=1163702702]
 
 [node name="CamBottomRight" type="Marker2D" parent="." unique_id=1498224958]
@@ -683,3 +676,6 @@ stream = ExtResource("5_25lik")
 
 [node name="SoulSucker" parent="." unique_id=1718233248 instance=ExtResource("5_wiiog")]
 position = Vector2(70.5, 37.5)
+
+[node name="SoulSucker2" parent="." unique_id=437641179 instance=ExtResource("5_wiiog")]
+position = Vector2(169, 90)

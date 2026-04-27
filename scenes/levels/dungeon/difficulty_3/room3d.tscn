@@ -695,7 +695,10 @@ position = Vector2(75.5, 143)
 position = Vector2(153, 142)
 
 [node name="SoulSucker" parent="." unique_id=967933570 instance=ExtResource("6_lbc1m")]
-position = Vector2(30.5, 36)
+position = Vector2(117, 142)
 
-[node name="SoulSucker" parent="SoulSucker" unique_id=1174362514 instance=ExtResource("6_lbc1m")]
-position = Vector2(168.5, 109.5)
+[node name="Slime3" parent="." unique_id=1173587065 instance=ExtResource("5_sh57l")]
+position = Vector2(72, 30.5)
+
+[node name="Slime4" parent="." unique_id=395277640 instance=ExtResource("5_sh57l")]
+position = Vector2(149.5, 29.5)

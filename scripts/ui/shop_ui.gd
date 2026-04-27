@@ -50,7 +50,7 @@ var p2_default_preview_texture: Texture2D = null
 var upgrade_data: Dictionary = {
 	"+25 Max HP": {
 		"description": "Increase maximum health by 25.",
-		"cost": 20
+		"cost": 30
 	},
 	"+10 Speed": {
 		"description": "Increases movement speed by 10.",
@@ -428,6 +428,7 @@ func _attempt_upgrade(player_id: int, upgrade_name: String, cost: int) -> void:
 		return
 
 	if player.gold < cost:
+		$FailSound.play()
 		return
 
 	player.gold -= cost
@@ -453,6 +454,7 @@ func _attempt_upgrade(player_id: int, upgrade_name: String, cost: int) -> void:
 			push_warning("Unknown upgrade: " + upgrade_name)
 
 	populate_ui_for_player(player_id, true)
+	$BuySound.play()
 
 
 func _attempt_purchase(player_id: int, weapon_scene: PackedScene) -> void:
@@ -466,9 +468,11 @@ func _attempt_purchase(player_id: int, weapon_scene: PackedScene) -> void:
 	var cost := _get_weapon_price(weapon_scene)
 
 	if player.has_method("has_weapon_scene") and player.has_weapon_scene(weapon_scene):
+		$FailSound.play()
 		return
 
 	if player.gold < cost:
+		$FailSound.play()
 		return
 
 	player.gold -= cost
@@ -493,6 +497,7 @@ func _attempt_purchase(player_id: int, weapon_scene: PackedScene) -> void:
 		return
 
 	populate_ui_for_player(player_id, true)
+	$BuySound.play()
 
 
 func _add_dash_upgrade_buttons(player_id: int, container: VBoxContainer) -> void:
@@ -536,6 +541,7 @@ func _attempt_dash_upgrade(player_id: int, cost: int) -> void:
 		return
 
 	if player.gold < cost:
+		$FailSound.play()
 		return
 
 	if not Global.player_stats.has(player_id):
@@ -556,6 +562,7 @@ func _attempt_dash_upgrade(player_id: int, cost: int) -> void:
 	stats["dashes_available"] = dashes_max
 
 	populate_ui_for_player(player_id, true)
+	$BuySound.play()
 
 
 func _build_displayed_weapon_list(player: CharacterBody2D) -> Array[PackedScene]:

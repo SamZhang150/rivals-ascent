@@ -709,3 +709,9 @@ position = Vector2(83, 133.5)
 
 [node name="Bat2" parent="." unique_id=1212599033 instance=ExtResource("4_tk6jj")]
 position = Vector2(141.5, 132)
+
+[node name="Bat3" parent="." unique_id=1338668324 instance=ExtResource("4_tk6jj")]
+position = Vector2(43, 146)
+
+[node name="Bat4" parent="." unique_id=1857321621 instance=ExtResource("4_tk6jj")]
+position = Vector2(183, 149)

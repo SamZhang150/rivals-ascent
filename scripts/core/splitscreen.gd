@@ -77,9 +77,9 @@ var p1_dungeon_rooms: Array[Node2D] = []
 var p2_dungeon_rooms: Array[Node2D] = []
 
 var difficulty_curves: Array = [
-	[1, 1, 2, 2],
-	[2, 2, 3, 3],
-	[2, 2, 3, 3],
+	[1, 1, 1, 2],
+	[1, 2, 2, 3],
+	[2, 3, 3, 4],
 	[3, 3, 4, 4],
 	[4, 4, 4, 4],
 ]
@@ -258,7 +258,8 @@ func _transition_to(new_phase: Phase):
 			_set_players_combat(false)
 			ready_up_ui.visible = true
 			_update_ready_ui()
-			
+			$DuelMusic.stop()
+			$LobbyMusic.play()
 
 		Phase.DUNGEON:
 			_clear_rooms()
@@ -277,6 +278,8 @@ func _transition_to(new_phase: Phase):
 			_teleport_to_dungeon_room(1, 0)
 			_teleport_to_dungeon_room(2, 0)
 			_enable_players(true)
+			$LobbyMusic.stop()
+			$DungeonMusic.play()
 
 		Phase.SHOP_WAITING:
 			# One player is in shop, other still in dungeon
@@ -314,6 +317,8 @@ func _transition_to(new_phase: Phase):
 			shop_ui.visible = true
 			ready_up_ui.visible = true
 			_update_ready_ui()
+			$DungeonMusic.stop()
+			$ShopMusic.play()
 
 		Phase.PVP:
 			duel_resolved = false
@@ -330,6 +335,8 @@ func _transition_to(new_phase: Phase):
 			_enable_players(true)
 			_set_players_combat(true)
 			# Start a countdown timer here if desired
+			$ShopMusic.stop()
+			$DuelMusic.play()
 
 		Phase.ROUND_END:
 			_enable_players(false)
@@ -349,10 +356,12 @@ func _transition_to(new_phase: Phase):
 				get_tree().create_timer(3.0).timeout.connect(
 					func(): _transition_to(Phase.LOBBY)
 				)
+			$DuelMusic.stop()
 
 		Phase.GAME_OVER:
 			_enable_players(false)
 			round_over_ui.visible = true
+			$DuelMusic.stop()
 
 
 func _ensure_shop_offers_for_round() -> void:

@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" uid="uid://blvjmqiox7fy" path="res://scenes/levels/dungeon/dungeon.gd" id="1_l8p14"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_tdkux"]
-[ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="3_khy0o"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="4_xlen2"]
 [ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="5_tdkux"]
-[ext_resource type="PackedScene" uid="uid://c18p56xbs1b10" path="res://scenes/entities/enemies/soulsucker.tscn" id="6_khy0o"]
+[ext_resource type="PackedScene" path="res://scenes/entities/enemies/soulsucker.tscn" id="6_khy0o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7d7vv"]
 texture = ExtResource("2_tdkux")
@@ -660,9 +659,6 @@ shape = SubResource("RectangleShape2D_p6tfh")
 position = Vector2(152, 102.5)
 shape = SubResource("RectangleShape2D_q2n0f")
 
-[node name="Bat2" parent="." unique_id=1989380203 instance=ExtResource("3_khy0o")]
-position = Vector2(168, 31)
-
 [node name="CamTopLeft" type="Marker2D" parent="." unique_id=1163702702]
 
 [node name="CamBottomRight" type="Marker2D" parent="." unique_id=1498224958]
@@ -670,9 +666,6 @@ position = Vector2(224, 128)
 
 [node name="Done" type="AudioStreamPlayer" parent="." unique_id=912627802]
 stream = ExtResource("4_xlen2")
-
-[node name="Bat3" parent="." unique_id=1718233248 instance=ExtResource("3_khy0o")]
-position = Vector2(198, 41)
 
 [node name="Slime" parent="." unique_id=34288355 instance=ExtResource("5_tdkux")]
 position = Vector2(31.5, 97.5)
@@ -684,4 +677,7 @@ position = Vector2(48.5, 115)
 position = Vector2(198, 104)
 
 [node name="SoulSucker2" parent="." unique_id=1216416913 instance=ExtResource("6_khy0o")]
-position = Vector2(55.5, 35.5)
+position = Vector2(193, 39)
+
+[node name="Slime3" parent="." unique_id=1718233248 instance=ExtResource("5_tdkux")]
+position = Vector2(55.5, 90)
