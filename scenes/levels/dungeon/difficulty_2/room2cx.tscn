@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_o5jcp"]
 [ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="4_pd455"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="5_25lik"]
+[ext_resource type="PackedScene" uid="uid://c18p56xbs1b10" path="res://scenes/entities/enemies/soulsucker.tscn" id="5_wiiog"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7d7vv"]
 texture = ExtResource("2_o5jcp")
@@ -680,5 +681,5 @@ position = Vector2(224, 128)
 [node name="Done" type="AudioStreamPlayer" parent="." unique_id=912627802]
 stream = ExtResource("5_25lik")
 
-[node name="Bat3" parent="." unique_id=1718233248 instance=ExtResource("4_pd455")]
-position = Vector2(67, 28.5)
+[node name="SoulSucker" parent="." unique_id=1718233248 instance=ExtResource("5_wiiog")]
+position = Vector2(70.5, 37.5)

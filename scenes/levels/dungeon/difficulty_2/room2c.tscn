@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="3_xyu5f"]
 [ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="4_cxylp"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="5_83swa"]
+[ext_resource type="PackedScene" uid="uid://c18p56xbs1b10" path="res://scenes/entities/enemies/soulsucker.tscn" id="6_jwmsc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7d7vv"]
 texture = ExtResource("2_jwmsc")
@@ -667,17 +668,11 @@ shape = SubResource("RectangleShape2D_p6tfh")
 position = Vector2(40, 62.5)
 shape = SubResource("RectangleShape2D_d76va")
 
-[node name="Slime" parent="." unique_id=1718233248 instance=ExtResource("3_xyu5f")]
-position = Vector2(48, 36)
-
 [node name="Slime2" parent="." unique_id=825871008 instance=ExtResource("3_xyu5f")]
 position = Vector2(188, 34.5)
 
 [node name="Bat" parent="." unique_id=956173345 instance=ExtResource("4_cxylp")]
 position = Vector2(51, 118.5)
-
-[node name="Bat2" parent="." unique_id=1989380203 instance=ExtResource("4_cxylp")]
-position = Vector2(189.5, 108.5)
 
 [node name="CamTopLeft" type="Marker2D" parent="." unique_id=1163702702]
 
@@ -686,3 +681,9 @@ position = Vector2(224, 128)
 
 [node name="Done" type="AudioStreamPlayer" parent="." unique_id=912627802]
 stream = ExtResource("5_83swa")
+
+[node name="SoulSucker" parent="." unique_id=1718233248 instance=ExtResource("6_jwmsc")]
+position = Vector2(67, 38)
+
+[node name="SoulSucker2" parent="." unique_id=962824090 instance=ExtResource("6_jwmsc")]
+position = Vector2(193.5, 109)

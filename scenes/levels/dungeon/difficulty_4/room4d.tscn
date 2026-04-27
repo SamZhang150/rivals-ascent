@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="3_gxfk7"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="3_iltom"]
 [ext_resource type="PackedScene" uid="uid://bnsox81pshmwb" path="res://scenes/entities/enemies/demon.tscn" id="4_ohp6h"]
+[ext_resource type="PackedScene" uid="uid://c18p56xbs1b10" path="res://scenes/entities/enemies/soulsucker.tscn" id="6_m3yar"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7d7vv"]
 texture = ExtResource("2_caf1s")
@@ -698,3 +699,15 @@ position = Vector2(28.5, 91)
 
 [node name="Demon2" parent="." unique_id=1483372364 instance=ExtResource("4_ohp6h")]
 position = Vector2(196.5, 91)
+
+[node name="SoulSucker" parent="." unique_id=1200769919 instance=ExtResource("6_m3yar")]
+position = Vector2(242, 145)
+
+[node name="SoulSucker2" parent="." unique_id=1037789566 instance=ExtResource("6_m3yar")]
+position = Vector2(-16, 146.5)
+
+[node name="SoulSucker3" parent="." unique_id=1195905863 instance=ExtResource("6_m3yar")]
+position = Vector2(245, 24.5)
+
+[node name="SoulSucker4" parent="." unique_id=716974980 instance=ExtResource("6_m3yar")]
+position = Vector2(-19.5, 26)

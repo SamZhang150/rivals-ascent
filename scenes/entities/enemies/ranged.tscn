@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://cv7xat5vpg3a1"]
+
+[ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="1_k7wdp"]
+[ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_5f0o3"]
+[ext_resource type="Script" uid="uid://eqcu8ttax71m" path="res://scripts/enemies/ranged.gd" id="2_u1wl2"]
+[ext_resource type="PackedScene" uid="uid://cdm8ydvwjpg10" path="res://scenes/entities/enemies/projectiles/enemy_projectile.tscn" id="3_mfbbp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u1wl2"]
+atlas = ExtResource("2_5f0o3")
+region = Rect2(104, 0, 8, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mfbbp"]
+atlas = ExtResource("2_5f0o3")
+region = Rect2(112, 0, 8, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t8udi"]
+atlas = ExtResource("2_5f0o3")
+region = Rect2(120, 0, 8, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7s6us"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u1wl2")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mfbbp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t8udi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u1wl2")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5f0o3"]
+size = Vector2(10, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u1wl2"]
+size = Vector2(8, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mfbbp"]
+size = Vector2(10, 16)
+
+[node name="Ranged" unique_id=1718233248 instance=ExtResource("1_k7wdp")]
+script = ExtResource("2_u1wl2")
+touch_damage = 12
+coin_reward = 16
+preferred_radius = 180.0
+too_close_radius = 120.0
+too_far_radius = 240.0
+strafe_speed_multiplier = 3.0
+projectile_scene = ExtResource("3_mfbbp")
+projectile_damage = 8
+shoot_range = 350.0
+shoot_min_distance = 100.0
+shoot_cooldown = 3.0
+projectile_spawn_offset = Vector2(0, 0)
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1200022150]
+sprite_frames = SubResource("SpriteFrames_7s6us")
+animation = &"run"
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=1238288431]
+position = Vector2(0, 0)
+shape = SubResource("RectangleShape2D_5f0o3")
+
+[node name="CollisionShape2D" parent="HitboxArea" parent_id_path=PackedInt32Array(765376750) index="0" unique_id=341592251]
+position = Vector2(0, 0)
+shape = SubResource("RectangleShape2D_u1wl2")
+
+[node name="CollisionShape2D" parent="HurtboxArea" parent_id_path=PackedInt32Array(1151634370) index="0" unique_id=1103982250]
+position = Vector2(0, 0)
+shape = SubResource("RectangleShape2D_mfbbp")

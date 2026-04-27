@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_78eem"]
 [ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="3_qqufc"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="4_ank8k"]
+[ext_resource type="PackedScene" uid="uid://cv7xat5vpg3a1" path="res://scenes/entities/enemies/ranged.tscn" id="5_78eem"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gdew1"]
 texture = ExtResource("2_78eem")
@@ -657,3 +658,6 @@ position = Vector2(224, 128)
 
 [node name="Done" type="AudioStreamPlayer" parent="." unique_id=1485266342]
 stream = ExtResource("4_ank8k")
+
+[node name="Ranged" parent="." unique_id=1582329888 instance=ExtResource("5_78eem")]
+position = Vector2(176, 45.5)

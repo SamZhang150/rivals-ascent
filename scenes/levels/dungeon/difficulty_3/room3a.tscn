@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://blvjmqiox7fy" path="res://scenes/levels/dungeon/dungeon.gd" id="1_qc1t3"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_g87gd"]
-[ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="3_hfvr1"]
 [ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="4_ggjtf"]
+[ext_resource type="PackedScene" uid="uid://c18p56xbs1b10" path="res://scenes/entities/enemies/soulsucker.tscn" id="5_80nmx"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="5_wukrc"]
 [ext_resource type="PackedScene" uid="uid://bnsox81pshmwb" path="res://scenes/entities/enemies/demon.tscn" id="6_80nmx"]
 
@@ -637,15 +637,6 @@ collision_mask = 2
 position = Vector2(206, 111)
 shape = SubResource("RectangleShape2D_7wlt0")
 
-[node name="Slime" parent="." unique_id=1718233248 instance=ExtResource("3_hfvr1")]
-position = Vector2(44, 32)
-
-[node name="Slime" parent="Slime" unique_id=955844737 instance=ExtResource("3_hfvr1")]
-position = Vector2(136, 2.5)
-
-[node name="Slime" parent="Slime/Slime" unique_id=1723624314 instance=ExtResource("3_hfvr1")]
-position = Vector2(2.5, 75)
-
 [node name="Walls" type="StaticBody2D" parent="." unique_id=51699263]
 collision_mask = 6
 
@@ -682,12 +673,6 @@ shape = SubResource("RectangleShape2D_ksi7v")
 position = Vector2(200, 38.5)
 shape = SubResource("RectangleShape2D_ksi7v")
 
-[node name="Slime2" parent="." unique_id=825871008 instance=ExtResource("3_hfvr1")]
-position = Vector2(43.5, 118.5)
-
-[node name="Bat" parent="." unique_id=956173345 instance=ExtResource("4_ggjtf")]
-position = Vector2(24.5, 73.5)
-
 [node name="CamTopLeft" type="Marker2D" parent="." unique_id=240008024]
 position = Vector2(-31, 0)
 
@@ -699,3 +684,12 @@ stream = ExtResource("5_wukrc")
 
 [node name="Demon" parent="." unique_id=2130443368 instance=ExtResource("6_80nmx")]
 position = Vector2(200.5, 71.5)
+
+[node name="SoulSucker2" parent="." unique_id=1718233248 instance=ExtResource("5_80nmx")]
+position = Vector2(64.5, 134.5)
+
+[node name="SoulSucker3" parent="." unique_id=1170893130 instance=ExtResource("5_80nmx")]
+position = Vector2(50, 31.5)
+
+[node name="Bat" parent="." unique_id=369110251 instance=ExtResource("4_ggjtf")]
+position = Vector2(25.5, 72)

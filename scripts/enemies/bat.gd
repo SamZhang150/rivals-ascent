@@ -8,6 +8,7 @@ signal died
 @export var knockback_strength := 110.0
 @export var coin_reward: int = 8
 
+
 @onready var sprite = $AnimatedSprite2D
 @onready var hurtbox = $HurtboxArea
 @onready var hitbox = $HitboxArea

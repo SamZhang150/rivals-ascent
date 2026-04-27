@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="3_khy0o"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="4_xlen2"]
 [ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="5_tdkux"]
+[ext_resource type="PackedScene" uid="uid://c18p56xbs1b10" path="res://scenes/entities/enemies/soulsucker.tscn" id="6_khy0o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7d7vv"]
 texture = ExtResource("2_tdkux")
@@ -678,3 +679,9 @@ position = Vector2(31.5, 97.5)
 
 [node name="Slime2" parent="." unique_id=642821779 instance=ExtResource("5_tdkux")]
 position = Vector2(48.5, 115)
+
+[node name="SoulSucker" parent="." unique_id=1519222761 instance=ExtResource("6_khy0o")]
+position = Vector2(198, 104)
+
+[node name="SoulSucker2" parent="." unique_id=1216416913 instance=ExtResource("6_khy0o")]
+position = Vector2(55.5, 35.5)
