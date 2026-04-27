@@ -5,6 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="4_bvmof"]
 [ext_resource type="PackedScene" uid="uid://eog7e6xoa48" path="res://scenes/entities/enemies/slime.tscn" id="5_sh57l"]
 [ext_resource type="PackedScene" uid="uid://bnsox81pshmwb" path="res://scenes/entities/enemies/demon.tscn" id="5_wb3h6"]
+[ext_resource type="PackedScene" uid="uid://c18p56xbs1b10" path="res://scenes/entities/enemies/soulsucker.tscn" id="6_lbc1m"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7d7vv"]
 texture = ExtResource("2_lbc1m")
@@ -692,3 +693,9 @@ position = Vector2(75.5, 143)
 
 [node name="Slime2" parent="." unique_id=1912337586 instance=ExtResource("5_sh57l")]
 position = Vector2(153, 142)
+
+[node name="SoulSucker" parent="." unique_id=967933570 instance=ExtResource("6_lbc1m")]
+position = Vector2(30.5, 36)
+
+[node name="SoulSucker" parent="SoulSucker" unique_id=1174362514 instance=ExtResource("6_lbc1m")]
+position = Vector2(168.5, 109.5)

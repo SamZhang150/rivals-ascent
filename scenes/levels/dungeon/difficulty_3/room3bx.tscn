@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_p0ix2"]
 [ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="4_xq73e"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="5_mtqgi"]
+[ext_resource type="PackedScene" uid="uid://c18p56xbs1b10" path="res://scenes/entities/enemies/soulsucker.tscn" id="6_btu4l"]
 [ext_resource type="PackedScene" uid="uid://bnsox81pshmwb" path="res://scenes/entities/enemies/demon.tscn" id="6_dehio"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7d7vv"]
@@ -700,3 +701,9 @@ position = Vector2(110.5, 146.5)
 
 [node name="Bat3" parent="." unique_id=1718233248 instance=ExtResource("4_xq73e")]
 position = Vector2(111, 120)
+
+[node name="SoulSucker" parent="." unique_id=371851213 instance=ExtResource("6_btu4l")]
+position = Vector2(36, 117.5)
+
+[node name="SoulSucker" parent="SoulSucker" unique_id=1309404965 instance=ExtResource("6_btu4l")]
+position = Vector2(156, -0.5)
