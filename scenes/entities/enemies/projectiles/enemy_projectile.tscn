@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://cdm8ydvwjpg10"]
+
+[ext_resource type="Script" uid="uid://be1nuamqee1t8" path="res://scripts/enemies/projectiles/enemy_projectile.gd" id="1_3ge0c"]
+[ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_bb4t1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1rrrt"]
+atlas = ExtResource("2_bb4t1")
+region = Rect2(112, 16, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_weadf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1rrrt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3ge0c"]
+size = Vector2(5.4054065, 5.405407)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3utrx"]
+size = Vector2(5, 5)
+
+[node name="EnemyProjectile" type="Area2D" unique_id=1825921925]
+scale = Vector2(1.85, 1.85)
+script = ExtResource("1_3ge0c")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1041970991]
+sprite_frames = SubResource("SpriteFrames_weadf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=662337634]
+position = Vector2(0.5405403, -0.5405403)
+scale = Vector2(0.9999997, 0.9999997)
+shape = SubResource("RectangleShape2D_3ge0c")
+
+[node name="HitboxArea" type="Area2D" parent="." unique_id=2031896274]
+collision_layer = 64
+collision_mask = 33
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea" unique_id=1778606703]
+position = Vector2(0.49999997, -0.49999997)
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("RectangleShape2D_3utrx")

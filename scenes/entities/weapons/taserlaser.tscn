@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://be0jmy4wdf5ws"]
+
+[ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_nsm26"]
+[ext_resource type="Texture2D" uid="uid://qvjvcay8ebim" path="res://assets/sprites/weapons/ammo/taserlasericon.png" id="2_83usf"]
+[ext_resource type="PackedScene" uid="uid://der4dsy6uu210" path="res://scenes/entities/weapons/projectiles/electro_projectile.tscn" id="3_nsm26"]
+[ext_resource type="Texture2D" uid="uid://m86pyaufdviv" path="res://assets/sprites/weapons/ammo/taserlaser.png" id="4_83usf"]
+[ext_resource type="AudioStream" uid="uid://c8sveygyf1kn4" path="res://assets/audio/weapons/taserlasershoot.wav" id="6_83usf"]
+[ext_resource type="Texture2D" uid="uid://hbs0hj6w2rin" path="res://assets/sprites/weapons/taserlaser.png" id="6_qox27"]
+[ext_resource type="AudioStream" uid="uid://bwrfvihkhnuoq" path="res://assets/audio/weapons/taserlaserreload.wav" id="7_qox27"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qox27"]
+atlas = ExtResource("4_83usf")
+region = Rect2(0, 0, 9, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gwf55"]
+atlas = ExtResource("4_83usf")
+region = Rect2(9, 0, 9, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yvw83"]
+animations = [{
+"frames": [{
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_qox27")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_gwf55")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sy06o"]
+atlas = ExtResource("6_qox27")
+region = Rect2(0, 0, 12, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yvw83"]
+atlas = ExtResource("6_qox27")
+region = Rect2(12, 0, 12, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_utqut"]
+atlas = ExtResource("6_qox27")
+region = Rect2(24, 0, 12, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hfdh5"]
+atlas = ExtResource("6_qox27")
+region = Rect2(36, 0, 12, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
+animations = [{
+"frames": [{
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_yvw83")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_utqut")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_hfdh5")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_sy06o")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_hfdh5")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_sy06o")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_hfdh5")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_sy06o")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_hfdh5")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_sy06o")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sy06o")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="TaserLaser" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_nsm26")
+fire_rate = 2.8
+is_auto = true
+damage = 10
+bullet_length = 3.0
+bullet_speed = 280.0
+projectile_base_color = Color(1, 0.89411765, 0, 1)
+reload_time = 1.2
+ammo_icon = ExtResource("2_83usf")
+projectile_scene = ExtResource("3_nsm26")
+projectile_frames = SubResource("SpriteFrames_yvw83")
+electro_stun_time = 0.15
+electro_chain_damage = 6.0
+electro_chain_amount = 3
+electro_chain_dist = 75.0
+shop_icon = SubResource("AtlasTexture_sy06o")
+price = 45
+description = "Semi-lethal option for futuristic law enforcement. Deals 6 stun damage to +3 nearby enemies."
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
+sprite_frames = SubResource("SpriteFrames_kkxoa")
+animation = &"idle"
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=72481399]
+stream = ExtResource("6_83usf")
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=1614518845]
+stream = ExtResource("7_qox27")

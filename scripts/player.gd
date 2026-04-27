@@ -49,6 +49,8 @@ var current_weapon_index: int = 0
 
 var is_invulnerable: bool = false
 var damage_knockback: Vector2 = Vector2.ZERO
+var magnet_pull: Vector2 = Vector2.ZERO
+
 
 # Contact damage tracking
 var _enemies_in_contact: Array[Node] = []
@@ -56,7 +58,7 @@ var _contact_damage_timer: Timer = null
 @export var contact_damage_interval: float = 0.5  # How often to take damage while in contact
 
 # Shop / progression state
-var gold: int = 20
+var gold: int = 30
 var inventory: Array[String] = []
 var nearby_station: Area2D = null
 var shop_ui_open: bool = false
@@ -81,6 +83,10 @@ var _teleport_fade_tween: Tween = null
 var _slow_timer: Timer = null
 var _slow_active: bool = false
 var _damage_flash_active: bool = false
+var _stun_timer: Timer = null
+var _stun_active: bool = false
+var _stun_saved_can_move: bool = true
+var _stun_saved_can_attack: bool = false
 var speed_modifier = 1
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -138,6 +144,12 @@ func _ready() -> void:
 	_slow_timer.wait_time = 2.0
 	_slow_timer.timeout.connect(_on_slow_finished)
 	add_child(_slow_timer)
+
+	_stun_timer = Timer.new()
+	_stun_timer.one_shot = true
+	_stun_timer.wait_time = 0.1
+	_stun_timer.timeout.connect(_on_stun_finished)
+	add_child(_stun_timer)
 	
 	# Connect hitbox signals to track enemies in contact
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
@@ -160,6 +172,11 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	if shop_ui_open:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
+	if _stun_active:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
@@ -206,6 +223,9 @@ func _physics_process(_delta: float) -> void:
 	velocity += damage_knockback
 	damage_knockback = damage_knockback.move_toward(Vector2.ZERO, get_knockback_decay() * _delta)
 
+	velocity += magnet_pull
+	magnet_pull = Vector2.ZERO
+	
 	move_and_slide()
 
 
@@ -213,6 +233,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if shop_ui_open:
 		if event.is_action_pressed(_prefix + "back"):
 			close_shop_ui()
+		return
+
+	if _stun_active:
 		return
 
 	if nearby_station != null and event.is_action_pressed(_prefix + "interact"):
@@ -306,8 +329,29 @@ func _set_dead(value: bool) -> void:
 func set_phase_state(show_health: bool, damage_enabled: bool, use_coins: bool = false) -> void:
 	can_take_damage = damage_enabled
 	damage_uses_coins = use_coins
+	if not damage_enabled:
+		_clear_temporary_damage_status()
 	if health_ui != null:
 		health_ui.visible = show_health
+
+
+func _clear_temporary_damage_status() -> void:
+	_damage_flash_active = false
+	_slow_active = false
+	speed_modifier = 1.0
+
+	if _slow_timer != null:
+		_slow_timer.stop()
+
+	if _stun_active:
+		_stun_active = false
+		can_move = _stun_saved_can_move
+		can_attack = _stun_saved_can_attack
+
+	if _stun_timer != null:
+		_stun_timer.stop()
+
+	_refresh_sprite_tint()
 
 func _update_health_ui() -> void:
 	if health_ui != null and health_ui.has_method("set_health"):
@@ -324,7 +368,14 @@ func add_gold(amount: int) -> void:
 	$Coin.play()
 	$EnemyDeath.play()
 
-func _show_coin_popup(amount: int) -> void:
+
+func award_fast_clear_bonus(amount: int = 15) -> void:
+	gold += amount
+	_update_coin_ui()
+	_show_coin_popup(amount, "+%d gold\n(fast\nclear\nbonus)" % amount)
+	$Coin.play()
+
+func _show_coin_popup(amount: int, custom_text: String = "") -> void:
 	if coin_popup_scene == null:
 		print("no coin popup scene assigned")
 		return
@@ -338,7 +389,9 @@ func _show_coin_popup(amount: int) -> void:
 
 	print("spawned popup at ", popup.position)
 
-	if popup.has_method("show_amount"):
+	if custom_text != "" and popup.has_method("show_text"):
+		popup.show_text(custom_text)
+	elif popup.has_method("show_amount"):
 		popup.show_amount(amount)
 	else:
 		print("popup missing show_amount")
@@ -346,40 +399,48 @@ func _show_coin_popup(amount: int) -> void:
 func _equip_starter_weapon() -> void:
 	if not inventory.has("pistol"):
 		inventory.append("pistol")
-	if not inventory.has("baseball"):
-		inventory.append("baseball")
-	if not inventory.has("6shooter"):
-		inventory.append("6shooter")
-	if not inventory.has("gungun"):
-		inventory.append("gungun")
-	if not inventory.has("papershuriken"):
-		inventory.append("papershuriken")
-	if not inventory.has("shuriken"):
-		inventory.append("shuriken")
-	if not inventory.has("slimelauncher"):
-		inventory.append("slimelauncher")
-	if not inventory.has("50cal"):
-		inventory.append("50cal")
-	if not inventory.has("grenade_launcher"):
-		inventory.append("grenade_launcher")
-	if not inventory.has("revolver"):
-		inventory.append("revolver")
-	if not inventory.has("shotgun"):
-		inventory.append("shotgun")
-	if not inventory.has("sawedoff"):
-		inventory.append("sawedoff")
-	if not inventory.has("ak47"):
-		inventory.append("ak47")
-	if not inventory.has("gold_ak"):
-		inventory.append("gold_ak")
-	if not inventory.has("watergun"):
-		inventory.append("watergun")
-	if not inventory.has("stratocaster"):
-		inventory.append("stratocaster")
-	if not inventory.has("jazzmaster"):
-		inventory.append("jazzmaster")
-	if not inventory.has("telecaster"):
-		inventory.append("telecaster")
+	# if not inventory.has("baseball"):
+	# 	inventory.append("baseball")
+	# if not inventory.has("6shooter"):
+	# 	inventory.append("6shooter")
+	# if not inventory.has("gungun"):
+	# 	inventory.append("gungun")
+	# if not inventory.has("papershuriken"):
+	# 	inventory.append("papershuriken")
+	# if not inventory.has("shuriken"):
+	# 	inventory.append("shuriken")
+	# if not inventory.has("slimelauncher"):
+	# 	inventory.append("slimelauncher")
+	# if not inventory.has("50cal"):
+	# 	inventory.append("50cal")
+	# if not inventory.has("grenade_launcher"):
+	# 	inventory.append("grenade_launcher")
+	# if not inventory.has("revolver"):
+	# 	inventory.append("revolver")
+	# if not inventory.has("shotgun"):
+	# 	inventory.append("shotgun")
+	# if not inventory.has("sawedoff"):
+	# 	inventory.append("sawedoff")
+	# if not inventory.has("ak47"):
+	# 	inventory.append("ak47")
+	# if not inventory.has("gold_ak"):
+	# 	inventory.append("gold_ak")
+	# if not inventory.has("watergun"):
+	# 	inventory.append("watergun")
+	# if not inventory.has("stratocaster"):
+	# 	inventory.append("stratocaster")
+	# if not inventory.has("jazzmaster"):
+	# 	inventory.append("jazzmaster")
+	# if not inventory.has("telecaster"):
+	# 	inventory.append("telecaster")
+	# if not inventory.has("2xbow"):
+	# 	inventory.append("2xbow")
+	if not inventory.has("sparkbolt"):
+		inventory.append("sparkbolt")
+	# if not inventory.has("zeusbolt"):
+	# 	inventory.append("zeusbolt")
+	# if not inventory.has("taserlaser"):
+	# 	inventory.append("taserlaser")
 	current_weapon_index = inventory.find(starter_weapon_key)
 	if current_weapon_index == -1:
 		current_weapon_index = 0
@@ -628,6 +689,51 @@ func get_slowed(_amount: float) -> void:
 		_slow_timer.start(1.5)
 
 
+func apply_chain_stun(incoming_damage: int, stun_time: float, _chain_amount: int = 0, _chain_damage: float = 0.0, _chain_dist: float = 0.0, _damager: Node = null) -> void:
+	if is_dead():
+		return
+	if not can_take_damage:
+		return
+	take_damage(incoming_damage, global_position)
+	_apply_stun(stun_time * 0.75)
+
+
+func _apply_stun(stun_time: float) -> void:
+	if stun_time <= 0.0 or is_dead():
+		return
+
+	if not _stun_active:
+		_stun_saved_can_move = can_move
+		_stun_saved_can_attack = can_attack
+
+	_stun_active = true
+	can_move = false
+	can_attack = false
+
+	if is_dashing:
+		is_dashing = false
+		_set_dash_collision_ignored(false)
+
+	_refresh_sprite_tint()
+	if _stun_timer != null:
+		_stun_timer.start(stun_time)
+
+
+func _on_stun_finished() -> void:
+	if not _stun_active:
+		return
+	_stun_active = false
+
+	if not is_dead():
+		can_move = _stun_saved_can_move
+		can_attack = _stun_saved_can_attack
+		_refresh_sprite_tint()
+
+
+func apply_magnet_pull(force: Vector2) -> void:
+	magnet_pull += force
+	
+
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("enemy_hitbox"):
 		var enemy = area.get_parent()
@@ -740,6 +846,9 @@ func reset_for_round() -> void:
 	is_dashing = false
 	dash_direction = Vector2.ZERO
 	_dash_anim_playing = false
+	_stun_active = false
+	if _stun_timer != null:
+		_stun_timer.stop()
 
 
 func respawn_at(pos: Vector2) -> void:
@@ -867,6 +976,8 @@ func _refresh_sprite_tint() -> void:
 	var alpha: float = sprite.modulate.a
 	if _damage_flash_active:
 		sprite.modulate = Color(1.0, 0.3, 0.3, alpha)
+	elif _stun_active:
+		sprite.modulate = Color(1.0, 1.0, 0.25, alpha)
 	elif _slow_active:
 		sprite.modulate = Color(0.6, 1.0, 0.6, alpha)
 	else:

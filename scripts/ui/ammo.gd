@@ -17,16 +17,16 @@ var _slots: Array[TextureRect] = []
 func _ready() -> void:
 	if is_left:
 		position = Vector2(1, 142)
-		reload_bar.position = Vector2(5, -6.0)
+		reload_bar.position = Vector2(1, -6.0)
 	else:
 		position = Vector2(423, 142)
-		reload_bar.position = Vector2(-2, -6.0)
+		reload_bar.position = Vector2(2, -6.0)
 
 	ammo_panel.custom_minimum_size = panel_size
 	ammo_panel.size = panel_size
 	ammo_stack.custom_minimum_size = panel_size
 	ammo_stack.size = panel_size
-	reload_bar.custom_minimum_size = Vector2(panel_size.x + 6.0, 4.0)
+	reload_bar.custom_minimum_size = Vector2(panel_size.x + 4.0, 4.0)
 	reload_bar.min_value = 0.0
 	reload_bar.max_value = 100.0
 	reload_bar.value = 0.0
@@ -131,10 +131,12 @@ func _apply_style() -> void:
 
 	var fill := StyleBoxFlat.new()
 	fill.bg_color = Color(0.18, 0.85, 0.46, 1.0)
+	fill.set_corner_radius_all(8)
 	reload_bar.add_theme_stylebox_override("fill", fill)
 
 	var bg := StyleBoxFlat.new()
 	bg.bg_color = Color(0.1, 0.1, 0.13, 0.85)
+	bg.set_corner_radius_all(8)
 	reload_bar.add_theme_stylebox_override("background", bg)
 
 

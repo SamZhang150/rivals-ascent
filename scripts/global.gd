@@ -79,7 +79,7 @@ func _add_joy_motion_event(action_name: String, device_id: int, axis: JoyAxis, a
 # different params by player
 var player_stats = {
 	1: {
-		"health": 100,
+		"health": 75,
 		"max_health": 100,
 		"speed": 100.0,
 		"is_dead": false,
@@ -93,7 +93,7 @@ var player_stats = {
 		"dashes_available": 1
 	},
 	2: {
-		"health": 100,
+		"health": 75,
 		"max_health": 100,
 		"speed": 100.0,
 		"is_dead": false,

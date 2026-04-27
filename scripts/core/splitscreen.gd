@@ -66,6 +66,8 @@ var p1_room_index: int = 0
 var p2_room_index: int = 0
 var p1_finished_dungeon: bool = false
 var p2_finished_dungeon: bool = false
+var fast_clear_bonus_awarded: bool = false
+var shop_offers_locked: bool = false
 var duel_resolved: bool = false
 var ready_countdown_timer: Timer
 var ready_countdown_remaining: int = 0
@@ -85,11 +87,11 @@ var p1_dungeon_rooms: Array[Node2D] = []
 var p2_dungeon_rooms: Array[Node2D] = []
 
 var difficulty_curves: Array = [
-	[1, 1, 2, 2],
-	[2, 2, 3, 3],
-	[2, 2, 3, 3],
-	[3, 3, 3, 3],
-	[3, 3, 3, 3],
+	[1, 1, 1, 2],
+	[1, 2, 2, 3],
+	[2, 3, 3, 4],
+	[3, 3, 4, 4],
+	[4, 4, 4, 4],
 ]
 
 func _get_difficulty_curve() -> Array:
@@ -238,6 +240,7 @@ func reset_match_state() -> void:
 	p2_room_index = 0
 	p1_finished_dungeon = false
 	p2_finished_dungeon = false
+	shop_offers_locked = false
 	_sync_player_ready_states()
 	_update_duel_score_ui()
 	
@@ -270,7 +273,8 @@ func _transition_to(new_phase: Phase):
 			_set_players_combat(false)
 			ready_up_ui.visible = true
 			_update_ready_ui()
-			
+			$DuelMusic.stop()
+			$LobbyMusic.play()
 
 		Phase.DUNGEON:
 			_clear_rooms()
@@ -283,10 +287,14 @@ func _transition_to(new_phase: Phase):
 			p2_room_index = 0
 			p1_finished_dungeon = false
 			p2_finished_dungeon = false
+			fast_clear_bonus_awarded = false
+			shop_offers_locked = false
 			_generate_dungeon_rooms()
 			_teleport_to_dungeon_room(1, 0)
 			_teleport_to_dungeon_room(2, 0)
 			_enable_players(true)
+			$LobbyMusic.stop()
+			$DungeonMusic.play()
 
 		Phase.SHOP_WAITING:
 			# One player is in shop, other still in dungeon
@@ -302,8 +310,7 @@ func _transition_to(new_phase: Phase):
 				p2.set_phase_state(false, false, false)
 			else:
 				p2.set_phase_state(false, true, true)
-			if shop_ui and shop_ui.has_method("refresh_weapon_offers"):
-				shop_ui.refresh_weapon_offers(current_round)
+			_ensure_shop_offers_for_round()
 			shop_ui.visible = true
 
 		Phase.SHOP:
@@ -311,8 +318,7 @@ func _transition_to(new_phase: Phase):
 			
 			p1.set_phase_state(false, false, false)
 			p2.set_phase_state(false, false, false)
-			if shop_ui and shop_ui.has_method("refresh_weapon_offers"):
-				shop_ui.refresh_weapon_offers(current_round)
+			_ensure_shop_offers_for_round()
 			
 			if not shop_instance:
 				shop_instance = _place_room(shop_room_scene, Vector2(ROOM_SPACING * 5, 0))
@@ -326,6 +332,8 @@ func _transition_to(new_phase: Phase):
 			shop_ui.visible = true
 			ready_up_ui.visible = true
 			_update_ready_ui()
+			$DungeonMusic.stop()
+			$ShopMusic.play()
 
 		Phase.PVP:
 			duel_resolved = false
@@ -342,6 +350,8 @@ func _transition_to(new_phase: Phase):
 			_enable_players(true)
 			_set_players_combat(true)
 			# Start a countdown timer here if desired
+			$ShopMusic.stop()
+			$DuelMusic.play()
 
 		Phase.ROUND_END:
 			_enable_players(false)
@@ -388,6 +398,20 @@ func _transition_to(new_phase: Phase):
 			var winner_id := 1 if p1_wins >= DUELS_TO_WIN else 2
 			_show_game_over_screen(winner_id)
 			#round_over_ui.visible = true
+			$DuelMusic.stop()
+
+		Phase.GAME_OVER:
+			_enable_players(false)
+			round_over_ui.visible = true
+			$DuelMusic.stop()
+
+
+func _ensure_shop_offers_for_round() -> void:
+	if shop_offers_locked:
+		return
+	if shop_ui != null and shop_ui.has_method("refresh_weapon_offers"):
+		shop_ui.refresh_weapon_offers(current_round)
+		shop_offers_locked = true
 
 
 # ─── DUNGEON GENERATION ─────────────────────────────────
@@ -493,6 +517,12 @@ func _player_finished_dungeon(player_id: int):
 	var player = p1 if player_id == 1 else p2
 	var spawn = shop_instance.get_node("SpawnPoint") as Marker2D
 	player.teleport_to_position(spawn.global_position)
+
+	# First player to reach shop gets a fast-clear bonus once per dungeon phase.
+	if not fast_clear_bonus_awarded:
+		fast_clear_bonus_awarded = true
+		if player != null and player.has_method("award_fast_clear_bonus"):
+			player.award_fast_clear_bonus(15)
 
 	if p1_finished_dungeon and p2_finished_dungeon:
 		$Teleport.play()

@@ -47,8 +47,8 @@ animations = [{
 [node name="6Shooter" type="Node2D" unique_id=1518235098]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_vopay")
-fire_rate = 1.8
-damage = 16
+fire_rate = 1.6
+damage = 15
 bullet_length = 4.0
 bullet_speed = 300.0
 pellet_count = 3
@@ -61,7 +61,7 @@ current_ammo = 12
 ammo_icon = ExtResource("2_3cd4x")
 projectile_scene = ExtResource("3_28crq")
 shop_icon = SubResource("AtlasTexture_vsca8")
-price = 60
+price = 75
 description = "Not sure how this gun was made. Double the cylinders... 6-times the ammo?"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]

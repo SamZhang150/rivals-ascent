@@ -6,14 +6,11 @@
 [ext_resource type="AudioStream" uid="uid://knwqy2kfoepx" path="res://assets/audio/weapons/telecastershoot.wav" id="5_da3cc"]
 [ext_resource type="Texture2D" uid="uid://cvbql6b6ppsen" path="res://assets/sprites/weapons/ammo/music.png" id="5_l1vhg"]
 [ext_resource type="AudioStream" uid="uid://cti4lqv56mgdf" path="res://assets/audio/weapons/telecasterreload.wav" id="6_6i2jh"]
+[ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/fonts/pixel_font.ttf" id="7_6i2jh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jggdc"]
 atlas = ExtResource("5_l1vhg")
 region = Rect2(108, 0, 18, 22)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l1vhg"]
-atlas = ExtResource("5_6i2jh")
-region = Rect2(0, 0, 24, 33)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vy6ml"]
 atlas = ExtResource("5_l1vhg")
@@ -103,6 +100,10 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_l1vhg"]
+atlas = ExtResource("5_6i2jh")
+region = Rect2(0, 0, 24, 33)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_lb2nh"]
 atlas = ExtResource("5_6i2jh")
 region = Rect2(24, 0, 24, 33)
@@ -186,21 +187,22 @@ animations = [{
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_da3cc")
 fire_rate = 2.0
-damage = 16
+damage = 20
 bullet_radius = 5.0
 bullet_length = 5.0
-bullet_speed = 225.0
+bullet_speed = 175.0
 pellet_count = 3
 spread = 16.0
-max_ammo = 4
+max_ammo = 5
 reload_time = 1.8
-current_ammo = 4
+current_ammo = 5
 ammo_icon = SubResource("AtlasTexture_jggdc")
 projectile_scene = ExtResource("3_da3cc")
-shop_icon = SubResource("AtlasTexture_l1vhg")
-price = 110
-description = "Previously owned by a rolling stone, frequently borrowed by Sisyphus. Shoots chords."
 projectile_frames = SubResource("SpriteFrames_i8g8s")
+projectile_rotation_speed = 100.0
+shop_icon = SubResource("AtlasTexture_l1vhg")
+price = 115
+description = "Previously owned by a rolling stone, frequently borrowed by Sisyphus. Shoots chords."
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
 sprite_frames = SubResource("SpriteFrames_kkxoa")
@@ -213,3 +215,14 @@ stream = ExtResource("5_da3cc")
 
 [node name="Reload" type="AudioStreamPlayer" parent="." unique_id=19300168]
 stream = ExtResource("6_6i2jh")
+
+[node name="Label" type="Label" parent="." unique_id=1200924051]
+modulate = Color(1, 1, 1, 0.5882353)
+offset_left = -14.0
+offset_top = -4.0
+offset_right = 26.0
+offset_bottom = 19.0
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("7_6i2jh")
+theme_override_font_sizes/font_size = 10
+text = "<"

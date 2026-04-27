@@ -6,11 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://c7cpfrihfo4vk" path="res://scenes/entities/weapons/50cal.tscn" id="2_6w11v"]
 [ext_resource type="PackedScene" uid="uid://ch23bekp7x3u0" path="res://scenes/entities/weapons/watergun.tscn" id="2_u0aoc"]
 [ext_resource type="PackedScene" uid="uid://dpfs6hokkq2rs" path="res://scenes/entities/weapons/sawedoff.tscn" id="3_02wf5"]
-[ext_resource type="PackedScene" uid="uid://ttmmonjpmf52" path="res://scenes/entities/weapons/pistol.tscn" id="3_oiff6"]
 [ext_resource type="PackedScene" uid="uid://b3tiu2vjdd56k" path="res://scenes/entities/weapons/ak47.tscn" id="3_u0aoc"]
 [ext_resource type="PackedScene" uid="uid://bd48fr7dajlel" path="res://scenes/entities/weapons/goldak47.tscn" id="4_glpsx"]
 [ext_resource type="PackedScene" uid="uid://dfu8yvbwbjoos" path="res://scenes/entities/weapons/papershuriken.tscn" id="4_jlorm"]
 [ext_resource type="PackedScene" uid="uid://drgrjya6fqayc" path="res://scenes/entities/weapons/grenadelauncher.tscn" id="6_u0aoc"]
+[ext_resource type="PackedScene" uid="uid://be0jmy4wdf5ws" path="res://scenes/entities/weapons/taserlaser.tscn" id="6_x7tnw"]
 [ext_resource type="PackedScene" uid="uid://462nq2egl6ly" path="res://scenes/entities/weapons/shotgun.tscn" id="7_glpsx"]
 [ext_resource type="PackedScene" uid="uid://bnghuays1cfpf" path="res://scenes/entities/weapons/slimelauncher.tscn" id="9_uwiqs"]
 [ext_resource type="PackedScene" uid="uid://h3h7bp45tfyq" path="res://scenes/entities/weapons/6shooter.tscn" id="10_28guu"]
@@ -19,10 +19,13 @@
 [ext_resource type="PackedScene" uid="uid://ba0dxmrp6o4k0" path="res://scenes/entities/weapons/jazzmaster.tscn" id="12_g57r5"]
 [ext_resource type="PackedScene" uid="uid://mvrsw87ygwn1" path="res://scenes/entities/weapons/gungun.tscn" id="12_iuebs"]
 [ext_resource type="PackedScene" uid="uid://dl7y4cyj2gmao" path="res://scenes/entities/weapons/telecaster.tscn" id="13_2swu6"]
+[ext_resource type="PackedScene" uid="uid://dnbqjfqfo62kj" path="res://scenes/entities/weapons/sparkbolt.tscn" id="14_jf3x2"]
+[ext_resource type="PackedScene" uid="uid://dur3r46rv4fji" path="res://scenes/entities/weapons/zeusbolt.tscn" id="20_wu7oo"]
+[ext_resource type="PackedScene" uid="uid://bum25g6ceeawq" path="res://scenes/entities/weapons/2xbow.tscn" id="21_512gv"]
 
 [resource]
 script = ExtResource("1_qenqu")
-power_1 = Array[PackedScene]([ExtResource("1_wssqx"), ExtResource("4_jlorm"), ExtResource("3_oiff6"), ExtResource("1_v8nrh"), ExtResource("3_02wf5"), ExtResource("2_u0aoc")])
-power_2 = Array[PackedScene]([ExtResource("10_28guu"), ExtResource("3_u0aoc"), ExtResource("6_u0aoc"), ExtResource("12_iuebs"), ExtResource("7_glpsx"), ExtResource("12_3hxrx"), ExtResource("9_uwiqs")])
-power_3 = Array[PackedScene]([ExtResource("2_6w11v"), ExtResource("4_glpsx"), ExtResource("12_g57r5"), ExtResource("11_4cmam"), ExtResource("13_2swu6")])
+power_1 = Array[PackedScene]([ExtResource("1_wssqx"), ExtResource("4_jlorm"), ExtResource("1_v8nrh"), ExtResource("3_02wf5"), ExtResource("2_u0aoc"), ExtResource("6_x7tnw")])
+power_2 = Array[PackedScene]([ExtResource("10_28guu"), ExtResource("3_u0aoc"), ExtResource("6_u0aoc"), ExtResource("12_iuebs"), ExtResource("7_glpsx"), ExtResource("12_3hxrx"), ExtResource("9_uwiqs"), ExtResource("14_jf3x2")])
+power_3 = Array[PackedScene]([ExtResource("2_6w11v"), ExtResource("4_glpsx"), ExtResource("12_g57r5"), ExtResource("11_4cmam"), ExtResource("13_2swu6"), ExtResource("20_wu7oo"), ExtResource("21_512gv")])
 metadata/_custom_type_script = "uid://0v6tj1ef1bb4"

@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://ntrd1hpmal0u"]
+
+[ext_resource type="Script" uid="uid://3i777kc35jdr" path="res://scripts/ui/arrow.gd" id="1_64f34"]
+[ext_resource type="Texture2D" uid="uid://cnx55rndfp4l4" path="res://assets/sprites/icons/arrow.png" id="1_kdkpw"]
+
+[node name="Arrow" type="Node2D" unique_id=272575789]
+scale = Vector2(2, 2)
+script = ExtResource("1_64f34")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=262920926]
+modulate = Color(1, 0.88235295, 0.49411765, 1)
+position = Vector2(36.5, 0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("1_kdkpw")

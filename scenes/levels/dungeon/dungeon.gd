@@ -51,6 +51,9 @@ func _ready():
 			enemies_alive += 1
 			if enemy.has_signal("died") and not enemy.died.is_connected(_on_enemy_died):
 				enemy.died.connect(_on_enemy_died)
+
+	# Use an authoritative recount in case any enemy state changed before signal wiring.
+	enemies_alive = _count_alive_room_enemies()
 	
 	print(name, " enemies_alive = ", enemies_alive)
 
@@ -85,11 +88,24 @@ func set_room_active(active: bool, player: CharacterBody2D = null) -> void:
 		
 			
 func _on_enemy_died():
-	enemies_alive -= 1
+	enemies_alive = _count_alive_room_enemies()
 	print(name, " enemy died, remaining = ", enemies_alive)
 
 	if enemies_alive <= 0:
 		_open_exit()
+
+
+func _count_alive_room_enemies() -> int:
+	var count := 0
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy == null or not is_instance_valid(enemy):
+			continue
+		if not is_ancestor_of(enemy):
+			continue
+		if "dead" in enemy and bool(enemy.get("dead")):
+			continue
+		count += 1
+	return count
 		
 func _open_exit():
 	if is_cleared:

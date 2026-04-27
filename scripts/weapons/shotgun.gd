@@ -20,18 +20,23 @@ signal reload_finished()
 @export var current_ammo: int = 8
 @export var ammo_icon: Texture2D
 @export var projectile_scene: PackedScene
-@export var shop_icon: Texture2D
-@export var price: int = 50
-@export_multiline var description: String = "This is a gun."
 @export var projectile_sprite: Texture2D
 @export var projectile_frames: SpriteFrames
 @export var projectile_animation: String = "default"
+@export var projectile_rotation_speed: float = 0.0
+@export var electro_stun_time: float = 0.0
+@export var electro_chain_damage: float = 0.0
+@export var electro_chain_amount: int = 0
+@export var electro_chain_dist: float = 0.0
+@export var shoot_max_polyphony: int = 8
+@export var shop_icon: Texture2D
+@export var price: int = 50
+@export_multiline var description: String = "This is a gun."
 
 var _fire_cooldown: float = 0.0
 var _reload_cooldown: float = 0.0
 var _is_reloading: bool = false
 var _is_equipped: bool = true
-@export var shoot_max_polyphony: int = 8
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var shoot_sfx: AudioStreamPlayer = $Shoot
@@ -126,6 +131,16 @@ func try_fire() -> void:
 			projectile.call("set_projectile_sprite", projectile_sprite)
 		if projectile_frames != null and projectile.has_method("set_projectile_frames"):
 			projectile.call("set_projectile_frames", projectile_frames, projectile_animation)
+		if projectile_rotation_speed != 0.0 and "spin_speed_degrees" in projectile:
+			projectile.set("spin_speed_degrees", projectile_rotation_speed)
+		if "stun_time" in projectile:
+			projectile.set("stun_time", electro_stun_time)
+		if "chain_damage" in projectile:
+			projectile.set("chain_damage", electro_chain_damage)
+		if "chain_amount" in projectile:
+			projectile.set("chain_amount", electro_chain_amount)
+		if "chain_dist" in projectile:
+			projectile.set("chain_dist", electro_chain_dist)
 		world.add_child(projectile)
 
 	_play_fire_animation_from_start()

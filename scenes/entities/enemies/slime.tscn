@@ -46,6 +46,7 @@ size = Vector2(10, 7)
 [node name="Slime" type="CharacterBody2D" unique_id=1718233248]
 collision_layer = 4
 script = ExtResource("1_ljkv1")
+max_health = 80
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1200022150]
 texture_filter = 1
@@ -75,9 +76,9 @@ shape = SubResource("RectangleShape2D_jw1jb")
 
 [node name="HealthBar" type="Node2D" parent="." unique_id=1821913402]
 
-[node name="BarBG" type="ColorRect" parent="HealthBar" unique_id=395978934]
+[node name="BarBG" type="ColorRect" parent="HealthBar" unique_id=1240685243]
 
-[node name="BarFill" type="ColorRect" parent="HealthBar" unique_id=469884138]
+[node name="BarFill" type="ColorRect" parent="HealthBar" unique_id=1338957929]
 
 [node name="Damage" type="AudioStreamPlayer" parent="." unique_id=1406974204]
 stream = ExtResource("3_glkij")
