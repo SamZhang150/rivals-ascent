@@ -192,6 +192,7 @@ offset_right = 46.0
 offset_bottom = 56.0
 
 [node name="ShopUI" parent="UI" unique_id=1017933386 instance=ExtResource("6_w74f3")]
+visible = false
 
 [node name="HealthUILeft" parent="UI" unique_id=1253297385 instance=ExtResource("6_uskqa")]
 is_left = true
@@ -235,6 +236,88 @@ player_id = 2
 position = Vector2(409, 76)
 sprite_frames = SubResource("SpriteFrames_05jgh")
 animation = &"controlskey"
+
+[node name="DuelScoreUI" type="Control" parent="UI" unique_id=1943417043]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="P1ScoreLabel" type="Label" parent="UI/DuelScoreUI" unique_id=1185445675]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 5.0
+offset_right = 33.0
+offset_bottom = 25.0
+theme_override_font_sizes/font_size = 10
+
+[node name="P2ScoreLabel" type="Label" parent="UI/DuelScoreUI" unique_id=1677347979]
+layout_mode = 0
+offset_left = 378.0
+offset_top = 5.0
+offset_right = 418.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 2
+
+[node name="DuelPointPopup" type="Label" parent="UI/DuelScoreUI" unique_id=87641317]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+horizontal_alignment = 1
+
+[node name="GameOverUI" type="Control" parent="UI" unique_id=1480265853]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Backdrop" type="ColorRect" parent="UI/GameOverUI" unique_id=562855358]
+layout_mode = 0
+offset_left = 175.0
+offset_top = 100.0
+offset_right = 325.0
+offset_bottom = 200.0
+color = Color(0, 0, 0, 1)
+
+[node name="Panel" type="Panel" parent="UI/GameOverUI" unique_id=397715008]
+custom_minimum_size = Vector2(500, 300)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TitleLabel" type="Label" parent="UI/GameOverUI/Panel" unique_id=800344525]
+layout_mode = 0
+offset_left = 211.0
+offset_top = 106.0
+offset_right = 294.0
+offset_bottom = 129.0
+theme_override_font_sizes/font_size = 10
+
+[node name="WinnerLabel" type="Label" parent="UI/GameOverUI/Panel" unique_id=354953528]
+layout_mode = 0
+offset_left = 199.0
+offset_top = 128.0
+offset_right = 305.0
+offset_bottom = 151.0
+theme_override_font_sizes/font_size = 8
+
+[node name="FinalScoreLabel" type="Label" parent="UI/GameOverUI/Panel" unique_id=1050017452]
+layout_mode = 0
+offset_left = 219.0
+offset_top = 161.0
+offset_right = 282.0
+offset_bottom = 184.0
+theme_override_font_sizes/font_size = 8
+
+[node name="RestartLabel" type="Label" parent="UI/GameOverUI/Panel" unique_id=1941419644]
+layout_mode = 0
+offset_left = 213.0
+offset_top = 174.0
+offset_right = 376.0
+offset_bottom = 197.0
+theme_override_font_sizes/font_size = 7
 
 [node name="Ready" type="AudioStreamPlayer" parent="." unique_id=2046117568]
 stream = ExtResource("18_8p1l0")
