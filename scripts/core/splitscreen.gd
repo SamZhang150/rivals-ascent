@@ -43,6 +43,16 @@ enum ScreenMode { SPLIT, SHARED }
 @onready var countdown_label: Label = $UI/ReadyUpUI/CountdownLabel
 @onready var shop_ui: Control = $UI/ShopUI
 @onready var round_over_ui: Control = $UI/RoundOverUI
+@onready var duel_score_ui: Control = $UI/DuelScoreUI
+@onready var p1_score_label: Label = $UI/DuelScoreUI/P1ScoreLabel
+@onready var p2_score_label: Label = $UI/DuelScoreUI/P2ScoreLabel
+@onready var duel_point_popup: Label = $UI/DuelScoreUI/DuelPointPopup
+@onready var game_over_ui: Control = $UI/GameOverUI
+@onready var game_over_title: Label = $UI/GameOverUI/Panel/TitleLabel
+@onready var game_over_winner: Label = $UI/GameOverUI/Panel/WinnerLabel
+@onready var game_over_score: Label = $UI/GameOverUI/Panel/FinalScoreLabel
+@onready var game_over_restart: Label = $UI/GameOverUI/Panel/RestartLabel
+
 
 var phase: Phase = Phase.LOBBY
 var p1: CharacterBody2D
@@ -221,6 +231,7 @@ func reset_match_state() -> void:
 	p1_wins = 0
 	p2_wins = 0
 	current_round = 0
+	duel_resolved = false
 	p1_ready = false
 	p2_ready = false
 	p1_room_index = 0
@@ -228,6 +239,10 @@ func reset_match_state() -> void:
 	p1_finished_dungeon = false
 	p2_finished_dungeon = false
 	_sync_player_ready_states()
+	_update_duel_score_ui()
+	
+	if game_over_ui:
+		game_over_ui.visible = false
 
 func _transition_to(new_phase: Phase):
 	phase = new_phase
@@ -330,26 +345,49 @@ func _transition_to(new_phase: Phase):
 
 		Phase.ROUND_END:
 			_enable_players(false)
-			round_over_ui.visible = true
-			var winner_label = round_over_ui.get_node("WinnerLabel") as Label
-			var score_label = round_over_ui.get_node("ScoreLabel") as Label
-			score_label.text = "Score: %d - %d" % [p1_wins, p2_wins]
+			_set_players_combat(false)
+			
 			if p1_wins >= DUELS_TO_WIN:
-				winner_label.text = "Player 1 Wins the Match!"
-				phase = Phase.GAME_OVER
+				_transition_to(Phase.GAME_OVER)
 			elif p2_wins >= DUELS_TO_WIN:
-				winner_label.text = "Player 2 Wins the Match!"
-				phase = Phase.GAME_OVER
+				_transition_to(Phase.GAME_OVER)
 			else:
-				winner_label.text = "Round %d Complete" % current_round
-				# Auto-advance after delay
+				round_over_ui.visible = true
+				var winner_label = round_over_ui.get_node("WinnerLabel") as Label
+				var score_label = round_over_ui.get_node("ScoreLabel") as Label
+
+				winner_label.text = "Duel %d Complete" % current_round
+				score_label.text = "Score: %d - %d" % [p1_wins, p2_wins]
+
 				get_tree().create_timer(3.0).timeout.connect(
 					func(): _transition_to(Phase.LOBBY)
 				)
+			#round_over_ui.visible = true
+			#var winner_label = round_over_ui.get_node("WinnerLabel") as Label
+			#var score_label = round_over_ui.get_node("ScoreLabel") as Label
+			#score_label.text = "Score: %d - %d" % [p1_wins, p2_wins]
+			#if p1_wins >= DUELS_TO_WIN:
+				#winner_label.text = "Player 1 Wins the Match!"
+				#phase = Phase.GAME_OVER
+			#elif p2_wins >= DUELS_TO_WIN:
+				#winner_label.text = "Player 2 Wins the Match!"
+				#phase = Phase.GAME_OVER
+			#else:
+				#winner_label.text = "Round %d Complete" % current_round
+				## Auto-advance after delay
+				#get_tree().create_timer(3.0).timeout.connect(
+					#func(): _transition_to(Phase.LOBBY)
+				#)
+			
 
 		Phase.GAME_OVER:
 			_enable_players(false)
-			round_over_ui.visible = true
+			_set_players_combat(false)
+			_set_screen_mode(ScreenMode.SHARED)
+			
+			var winner_id := 1 if p1_wins >= DUELS_TO_WIN else 2
+			_show_game_over_screen(winner_id)
+			#round_over_ui.visible = true
 
 
 # ─── DUNGEON GENERATION ─────────────────────────────────
@@ -466,12 +504,33 @@ func _player_finished_dungeon(player_id: int):
 
 # ─── PVP RESOLUTION / LOBBY RESPAWN ────────────────────
 func register_duel_result(loser_id: int) -> void:
-	if loser_id == 1:
-		p2_wins += 1
-	else:
+	var winner_id := 2 if loser_id == 1 else 1
+	
+	if winner_id == 1:
 		p1_wins += 1
+	else:
+		p2_wins += 1
 	current_round += 1
+	_update_duel_score_ui()
+	_show_duel_point_popup(winner_id)
+	
+	await get_tree().create_timer(1.5).timeout
 	_transition_to(Phase.ROUND_END)
+	
+func _show_duel_point_popup(winner_id: int) -> void:
+	duel_point_popup.visible = true
+	duel_point_popup.text = "PLAYER %d CLAIMS A DUEL POINT!" % winner_id
+
+	duel_point_popup.scale = Vector2(0.6, 0.6)
+	duel_point_popup.modulate.a = 0.0
+
+	var tween = create_tween()
+	tween.parallel().tween_property(duel_point_popup, "scale", Vector2(1.2, 1.2), 0.2)
+	tween.parallel().tween_property(duel_point_popup, "modulate:a", 1.0, 0.2)
+	tween.tween_interval(0.8)
+	tween.parallel().tween_property(duel_point_popup, "scale", Vector2(1.0, 1.0), 0.2)
+	tween.parallel().tween_property(duel_point_popup, "modulate:a", 0.0, 0.2)
+
 
 ## Call this from the player script when a player dies
 func on_player_died(player_id: int):
@@ -487,6 +546,36 @@ func on_player_died(player_id: int):
 		return
 	duel_resolved = true
 	register_duel_result(player_id)
+	
+func _update_duel_score_ui() -> void:
+	p1_score_label.text = "P1 " + _make_win_markers(p1_wins)
+	p2_score_label.text = "P2 " + _make_win_markers(p2_wins)
+	
+func _make_win_markers(wins: int) -> String:
+	var text := ""
+	
+	for i in range (DUELS_TO_WIN):
+		if i < wins:
+			text += "◆ "
+		else:
+			text += "◇ "
+	return text
+	
+func _show_game_over_screen(winner_id: int) -> void:
+	game_over_ui.visible = true
+
+	game_over_title.text = "RIVAL ASCENDED"
+	game_over_winner.text = "PLAYER %d WINS THE MATCH" % winner_id
+	game_over_score.text = "Final Score: %d - %d" % [p1_wins, p2_wins]
+	game_over_restart.text = "Both players press Ready to restart"
+
+	var panel = $UI/GameOverUI/Panel
+	panel.scale = Vector2(0.8, 0.8)
+	panel.modulate.a = 0.0
+
+	var tween = create_tween()
+	tween.parallel().tween_property(panel, "scale", Vector2(1.0, 1.0), 0.35)
+	tween.parallel().tween_property(panel, "modulate:a", 1.0, 0.35)
 
 
 # ─── READY-UP ───────────────────────────────────────────
@@ -556,6 +645,8 @@ func _sync_player_ready_states() -> void:
 		p1.set_ready_state(p1_ready)
 	if p2 and p2.has_method("set_ready_state"):
 		p2.set_ready_state(p2_ready)
+		
+
 
 
 # ─── HELPERS ─────────────────────────────────────────────
