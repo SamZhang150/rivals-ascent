@@ -209,6 +209,7 @@ is_left = true
 [node name="AmmoUIRight" parent="UI" unique_id=917244202 instance=ExtResource("10_ammo")]
 
 [node name="ControlsUILeft" type="Control" parent="UI" unique_id=1979661846]
+z_index = 10
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -222,6 +223,7 @@ sprite_frames = SubResource("SpriteFrames_2ejtj")
 animation = &"controlskey"
 
 [node name="ControlsUIRight" type="Control" parent="UI" unique_id=1536005814]
+z_index = 10
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -251,16 +253,12 @@ stream = ExtResource("22_4jyee")
 
 [node name="ShopMusic" type="AudioStreamPlayer" parent="." unique_id=880139319]
 stream = ExtResource("23_wks8d")
-volume_db = -4.0
 
 [node name="LobbyMusic" type="AudioStreamPlayer" parent="." unique_id=1543466449]
 stream = ExtResource("24_y76fd")
-volume_db = -4.0
 
 [node name="DungeonMusic" type="AudioStreamPlayer" parent="." unique_id=1829571214]
 stream = ExtResource("25_xlu7k")
-volume_db = -4.0
 
 [node name="DuelMusic" type="AudioStreamPlayer" parent="." unique_id=454975584]
 stream = ExtResource("26_402a5")
-volume_db = -4.0

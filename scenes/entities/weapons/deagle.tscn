@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://cmono4hc586xg"]
+
+[ext_resource type="Script" uid="uid://do6ylt0ahl1lb" path="res://scripts/weapons/gun.gd" id="1_fphqp"]
+[ext_resource type="Texture2D" uid="uid://2f865a7a0354" path="res://assets/sprites/weapons/ammo/45.png" id="2_70k84"]
+[ext_resource type="PackedScene" uid="uid://o5n41athbj2o" path="res://scenes/entities/weapons/projectiles/laser_projectile.tscn" id="3_tf6jj"]
+[ext_resource type="AudioStream" uid="uid://pfjrhdh8nokt" path="res://assets/audio/weapons/revolvershoot.wav" id="5_3ijv4"]
+[ext_resource type="Texture2D" uid="uid://dftasccex4kxw" path="res://assets/sprites/weapons/deagle.png" id="5_70k84"]
+[ext_resource type="AudioStream" uid="uid://b01wr2ond4rnx" path="res://assets/audio/weapons/revolverreload.wav" id="6_rb4gk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_70k84"]
+atlas = ExtResource("5_70k84")
+region = Rect2(0, 0, 22, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tf6jj"]
+atlas = ExtResource("5_70k84")
+region = Rect2(22, 0, 22, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sblls"]
+atlas = ExtResource("5_70k84")
+region = Rect2(44, 0, 22, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ijv4"]
+atlas = ExtResource("5_70k84")
+region = Rect2(66, 0, 22, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rb4gk"]
+atlas = ExtResource("5_70k84")
+region = Rect2(88, 0, 22, 11)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkxoa"]
+animations = [{
+"frames": [{
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_tf6jj")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_sblls")
+}, {
+"duration": 0.2,
+"texture": SubResource("AtlasTexture_3ijv4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rb4gk")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_70k84")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="Deagle" type="Node2D" unique_id=1518235098]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_fphqp")
+fire_rate = 2.4
+damage = 15
+bullet_radius = 3.0
+bullet_length = 3.0
+bullet_speed = 300.0
+projectile_base_color = Color(0.7433496, 0.30463278, 9.62615e-08, 1)
+max_ammo = 7
+reload_time = 0.8
+current_ammo = 10
+ammo_icon = ExtResource("2_70k84")
+projectile_scene = ExtResource("3_tf6jj")
+shop_icon = SubResource("AtlasTexture_70k84")
+price = 44
+description = "One more bullet that it's cousin, the revolver. Might be compensating for something."
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=110348040]
+sprite_frames = SubResource("SpriteFrames_kkxoa")
+animation = &"idle"
+
+[node name="Shoot" type="AudioStreamPlayer" parent="." unique_id=1902218631]
+stream = ExtResource("5_3ijv4")
+
+[node name="Reload" type="AudioStreamPlayer" parent="." unique_id=19300168]
+stream = ExtResource("6_rb4gk")

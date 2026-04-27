@@ -1,0 +1,19 @@
+/***************************************************************************************
+*  REFERENCES
+*  Title: Claude
+*  Usage: Used for learning Godot's infrastructure and GDScript syntax.
+*  Also used to brainstorm/debug various gameplay elements/implementation
+*  techniques.
+*  URL: https://claude.ai/
+*
+*  Title: BeepBox
+*  Author: John Nesky
+*  URL: https://sfxr.me/
+*  Usage: Used to make all background music.
+*
+*  Title: jsfxr (javascript port of sfxr by DrPetter)
+*  Author: Eric Fredricksen and Chris McCormick
+*  URL: https://sfxr.me/
+*  Notes: Used to make most sound effects.
+*
+***************************************************************************************/

@@ -399,6 +399,8 @@ func _show_coin_popup(amount: int, custom_text: String = "") -> void:
 func _equip_starter_weapon() -> void:
 	if not inventory.has("pistol"):
 		inventory.append("pistol")
+	# if not inventory.has("deagle"):
+	# 	inventory.append("deagle")
 	# if not inventory.has("baseball"):
 	# 	inventory.append("baseball")
 	# if not inventory.has("6shooter"):
@@ -435,10 +437,10 @@ func _equip_starter_weapon() -> void:
 	# 	inventory.append("telecaster")
 	# if not inventory.has("2xbow"):
 	# 	inventory.append("2xbow")
-	if not inventory.has("sparkbolt"):
-		inventory.append("sparkbolt")
-	# if not inventory.has("zeusbolt"):
-	# 	inventory.append("zeusbolt")
+	# if not inventory.has("sparkbolt"):
+	# 	inventory.append("sparkbolt")
+	if not inventory.has("zeusbolt"):
+		inventory.append("zeusbolt")
 	# if not inventory.has("taserlaser"):
 	# 	inventory.append("taserlaser")
 	current_weapon_index = inventory.find(starter_weapon_key)
