@@ -37,14 +37,19 @@ func _ready() -> void:
 	bar_bg.size = Vector2(BAR_WIDTH, BAR_HEIGHT)
 	bar_fill.size = Vector2(BAR_WIDTH, BAR_HEIGHT)
 	health_bar.visible = health < max_health
+	
+	bar_bg.color = Color("#2a2a2a")
+	bar_fill.color = Color("#d64b4b")
 
 	_stun_timer = Timer.new()
 	_stun_timer.one_shot = true
 	_stun_timer.timeout.connect(_on_stun_finished)
 	add_child(_stun_timer)
 	
-	bar_bg.color = Color("#2a2a2a")
-	bar_fill.color = Color("#d64b4b")
+	#bar_bg.color = Color("#2a2a2a")
+	#bar_bg.set_corner_radius_all(8)
+	#bar_fill.color = Color("#d64b4b")
+	#bar_fill.set_corner_radius_all(8)
 
 func set_player(target: CharacterBody2D) -> void:
 	player = target

@@ -60,7 +60,6 @@ size = Vector2(16, 24)
 [node name="Demon" type="CharacterBody2D" unique_id=2130443368]
 scale = Vector2(0.5, 0.5)
 collision_layer = 4
-collision_mask = 1
 script = ExtResource("1_wqaxn")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=964746519]

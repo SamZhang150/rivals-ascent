@@ -49,6 +49,8 @@ var current_weapon_index: int = 0
 
 var is_invulnerable: bool = false
 var damage_knockback: Vector2 = Vector2.ZERO
+var magnet_pull: Vector2 = Vector2.ZERO
+
 
 # Contact damage tracking
 var _enemies_in_contact: Array[Node] = []
@@ -221,6 +223,9 @@ func _physics_process(_delta: float) -> void:
 	velocity += damage_knockback
 	damage_knockback = damage_knockback.move_toward(Vector2.ZERO, get_knockback_decay() * _delta)
 
+	velocity += magnet_pull
+	magnet_pull = Vector2.ZERO
+	
 	move_and_slide()
 
 
@@ -701,6 +706,10 @@ func _on_stun_finished() -> void:
 		can_attack = _stun_saved_can_attack
 		_refresh_sprite_tint()
 
+
+func apply_magnet_pull(force: Vector2) -> void:
+	magnet_pull += force
+	
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("enemy_hitbox"):

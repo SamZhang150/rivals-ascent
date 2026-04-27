@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://ciwjrvuhwxynq"]
+[gd_scene format=4 uid="uid://dt2wbxo5a6x2g"]
 
 [ext_resource type="Script" uid="uid://blvjmqiox7fy" path="res://scenes/levels/dungeon/dungeon.gd" id="1_ayrub"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_tqlpj"]

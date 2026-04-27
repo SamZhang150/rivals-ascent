@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://c18p56xbs1b10"]
+
+[ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="1_a8kky"]
+[ext_resource type="Texture2D" uid="uid://bmj1unob3gccg" path="res://assets/sprites/enemies/magnet_sprite_sheet.png" id="2_c63wi"]
+[ext_resource type="Script" uid="uid://bbrp62gjrk4wi" path="res://scripts/enemies/soulsucker.gd" id="2_e4j88"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_53j4x"]
+atlas = ExtResource("2_c63wi")
+region = Rect2(0, 0, 20, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rukqk"]
+atlas = ExtResource("2_c63wi")
+region = Rect2(20, 0, 20, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_68s1y"]
+atlas = ExtResource("2_c63wi")
+region = Rect2(0, 16, 20, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5jkvb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_53j4x")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rukqk")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_68s1y")
+}],
+"loop": true,
+"name": &"pull",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.2,
+"texture": SubResource("AtlasTexture_rukqk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_53j4x")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c63wi"]
+size = Vector2(16, 16.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e4j88"]
+size = Vector2(15, 16)
+
+[node name="SoulSucker" unique_id=1718233248 instance=ExtResource("1_a8kky")]
+script = ExtResource("2_e4j88")
+max_health = 120
+touch_damage = 12
+coin_reward = 12
+pull_radius = 300.0
+pull_strength = 1000.0
+max_pull_force = 5000.0
+min_pull_dist = 40.0
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1200022150]
+sprite_frames = SubResource("SpriteFrames_5jkvb")
+animation = &"run"
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=1238288431]
+position = Vector2(-2, 0.25)
+shape = SubResource("RectangleShape2D_c63wi")
+
+[node name="CollisionShape2D" parent="HurtboxArea" parent_id_path=PackedInt32Array(1151634370) index="0" unique_id=1103982250]
+position = Vector2(-2.5, 0)
+shape = SubResource("RectangleShape2D_e4j88")

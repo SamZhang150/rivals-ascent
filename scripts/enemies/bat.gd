@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 signal died
 
-@export var speed := randf_range(55, 65)
+@export var speed := randf_range(120, 140)
 @export var max_health := 120
 @export var touch_damage := 4
 @export var knockback_strength := 110.0
@@ -53,6 +53,9 @@ func _ready() -> void:
 	
 	bar_bg.color = Color("#2a2a2a")
 	bar_fill.color = Color("#d64b4b")
+	
+
+
 
 func set_player(target: CharacterBody2D) -> void:
 	player = target
