@@ -4,7 +4,7 @@ signal died
 
 @export var move_speed: float = 40.0
 @export var chase_speed: float = 60.0
-@export var max_health := 320
+@export var max_health := 280
 @export var touch_damage := 6
 @export var knockback_strength := 110.0
 @export var arrive_distance: float = 6.0
@@ -517,17 +517,37 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 		return
 
 	var attacker := area.get_parent()
+	var damager: Node = _resolve_damager_from_area(area, attacker)
 
 	# Demon is immune to player melee/contact areas and should only take projectile/explosion damage.
 	if attacker != null and attacker.is_in_group("player"):
 		return
 
 	if "damage" in area:
-		take_damage(int(area.damage), area.global_position, attacker)
+		take_damage(int(area.damage), area.global_position, damager)
 		return
 
 	if attacker != null and "damage" in attacker:
-		take_damage(int(attacker.damage), attacker.global_position, attacker)
+		take_damage(int(attacker.damage), attacker.global_position, damager)
+
+
+func _resolve_damager_from_area(area: Area2D, fallback: Node) -> Node:
+	if area == null:
+		return fallback
+
+	# Most projectiles store the owning player on this property.
+	if "projectile_owner" in area:
+		var owner = area.get("projectile_owner")
+		if owner != null and owner is Node and is_instance_valid(owner):
+			return owner
+
+	# Some hit areas are children of a projectile node that owns this property.
+	if fallback != null and "projectile_owner" in fallback:
+		var parent_owner = fallback.get("projectile_owner")
+		if parent_owner != null and parent_owner is Node and is_instance_valid(parent_owner):
+			return parent_owner
+
+	return fallback
 
 
 func _on_state_timer_timeout() -> void:

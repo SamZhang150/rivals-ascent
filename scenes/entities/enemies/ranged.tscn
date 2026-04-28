@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://d2t617cwu2nsu" path="res://scenes/entities/enemies/bat.tscn" id="1_k7wdp"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_5f0o3"]
-[ext_resource type="Script" path="res://scripts/enemies/ranged.gd" id="2_u1wl2"]
+[ext_resource type="Script" uid="uid://eqcu8ttax71m" path="res://scripts/enemies/ranged.gd" id="2_u1wl2"]
 [ext_resource type="PackedScene" uid="uid://cdm8ydvwjpg10" path="res://scenes/entities/enemies/projectiles/enemy_projectile.tscn" id="3_mfbbp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u1wl2"]
@@ -53,7 +53,6 @@ size = Vector2(10, 16)
 
 [node name="Ranged" unique_id=1718233248 instance=ExtResource("1_k7wdp")]
 script = ExtResource("2_u1wl2")
-max_health = 240
 touch_damage = 12
 coin_reward = 16
 preferred_radius = 180.0

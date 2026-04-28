@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://blvjmqiox7fy" path="res://scenes/levels/dungeon/dungeon.gd" id="1_wiiog"]
 [ext_resource type="Texture2D" uid="uid://dir2ul2myjcyk" path="res://assets/sprites/pico8.png" id="2_o5jcp"]
 [ext_resource type="AudioStream" uid="uid://b3nbov0npelkq" path="res://assets/audio/ingame/done.wav" id="5_25lik"]
-[ext_resource type="PackedScene" path="res://scenes/entities/enemies/soulsucker.tscn" id="5_wiiog"]
+[ext_resource type="PackedScene" uid="uid://c18p56xbs1b10" path="res://scenes/entities/enemies/soulsucker.tscn" id="5_wiiog"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7d7vv"]
 texture = ExtResource("2_o5jcp")

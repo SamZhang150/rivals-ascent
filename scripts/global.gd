@@ -1,6 +1,7 @@
 extends Node
 
 func _ready() -> void:
+	reset_player_stats()
 	_configure_controller_input_map()
 
 
@@ -77,7 +78,7 @@ func _add_joy_motion_event(action_name: String, device_id: int, axis: JoyAxis, a
 	InputMap.action_add_event(action_name, new_event)
 
 # different params by player
-var player_stats = {
+const DEFAULT_PLAYER_STATS := {
 	1: {
 		"health": 75,
 		"max_health": 100,
@@ -107,3 +108,16 @@ var player_stats = {
 		"dashes_available": 1
 	}
 }
+
+var player_stats = {}
+
+
+func _clone_player_stats_defaults() -> Dictionary:
+	return {
+		1: DEFAULT_PLAYER_STATS[1].duplicate(true),
+		2: DEFAULT_PLAYER_STATS[2].duplicate(true)
+	}
+
+
+func reset_player_stats() -> void:
+	player_stats = _clone_player_stats_defaults()

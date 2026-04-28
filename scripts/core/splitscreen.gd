@@ -32,6 +32,7 @@ enum ScreenMode { SPLIT, SHARED }
 @export var shop_room_scene: PackedScene     # assign shop_room.tscn
 @export var pvp_room_scene: PackedScene      # assign pvp_room.tscn
 @export var player_scene: PackedScene        # assign player.tscn
+@export var game_over_text_x_offset: float = 128.0
 
 # ─── NODE REFERENCES ────────────────────────────────────
 @onready var world: Node2D = $World
@@ -88,8 +89,8 @@ var p2_dungeon_rooms: Array[Node2D] = []
 
 var difficulty_curves: Array = [
 	[1, 1, 1, 2],
-	[1, 2, 2, 3],
-	[2, 3, 3, 4],
+	[1, 2, 2, 2],
+	[2, 2, 3, 4],
 	[3, 3, 4, 4],
 	[4, 4, 4, 4],
 ]
@@ -173,7 +174,7 @@ func _center_viewport_on(vp: SubViewport, target_pos: Vector2, room: Node2D) -> 
 
 func _unhandled_input(event: InputEvent):
 	# Ready-up handling
-	if phase == Phase.LOBBY or phase == Phase.SHOP:
+	if phase == Phase.LOBBY or phase == Phase.SHOP or phase == Phase.GAME_OVER:
 		if event.is_action_pressed("p1_ready"):
 			p1_ready = !p1_ready
 			if p1_ready:
@@ -362,12 +363,7 @@ func _transition_to(new_phase: Phase):
 			elif p2_wins >= DUELS_TO_WIN:
 				_transition_to(Phase.GAME_OVER)
 			else:
-				round_over_ui.visible = true
-				var winner_label = round_over_ui.get_node("WinnerLabel") as Label
-				var score_label = round_over_ui.get_node("ScoreLabel") as Label
-
-				winner_label.text = "Duel %d Complete" % current_round
-				score_label.text = "Score: %d - %d" % [p1_wins, p2_wins]
+				_show_round_end_ui()
 
 				get_tree().create_timer(3.0).timeout.connect(
 					func(): _transition_to(Phase.LOBBY)
@@ -397,12 +393,16 @@ func _transition_to(new_phase: Phase):
 			
 			var winner_id := 1 if p1_wins >= DUELS_TO_WIN else 2
 			_show_game_over_screen(winner_id)
+			ready_up_ui.visible = true
+			_update_ready_ui()
 			#round_over_ui.visible = true
 			$DuelMusic.stop()
 
 		Phase.GAME_OVER:
 			_enable_players(false)
 			round_over_ui.visible = true
+			ready_up_ui.visible = true
+			_update_ready_ui()
 			$DuelMusic.stop()
 
 
@@ -535,6 +535,7 @@ func _player_finished_dungeon(player_id: int):
 # ─── PVP RESOLUTION / LOBBY RESPAWN ────────────────────
 func register_duel_result(loser_id: int) -> void:
 	var winner_id := 2 if loser_id == 1 else 1
+	$DuelMusic.stop()
 	
 	if winner_id == 1:
 		p1_wins += 1
@@ -544,22 +545,25 @@ func register_duel_result(loser_id: int) -> void:
 	_update_duel_score_ui()
 	_show_duel_point_popup(winner_id)
 	
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(2.5).timeout
 	_transition_to(Phase.ROUND_END)
 	
 func _show_duel_point_popup(winner_id: int) -> void:
 	duel_point_popup.visible = true
 	duel_point_popup.text = "PLAYER %d CLAIMS A DUEL POINT!" % winner_id
+	duel_point_popup.reset_size()
+	duel_point_popup.position = (get_viewport_rect().size - duel_point_popup.size) / 2.0
+	duel_point_popup.pivot_offset = duel_point_popup.size / 2.0
 
 	duel_point_popup.scale = Vector2(0.6, 0.6)
 	duel_point_popup.modulate.a = 0.0
 
 	var tween = create_tween()
-	tween.parallel().tween_property(duel_point_popup, "scale", Vector2(1.2, 1.2), 0.2)
-	tween.parallel().tween_property(duel_point_popup, "modulate:a", 1.0, 0.2)
-	tween.tween_interval(0.8)
-	tween.parallel().tween_property(duel_point_popup, "scale", Vector2(1.0, 1.0), 0.2)
-	tween.parallel().tween_property(duel_point_popup, "modulate:a", 0.0, 0.2)
+	tween.parallel().tween_property(duel_point_popup, "scale", Vector2(1.2, 1.2), 0.7)
+	tween.parallel().tween_property(duel_point_popup, "modulate:a", 1.0, 1.3)
+	tween.tween_interval(1.2)
+	tween.parallel().tween_property(duel_point_popup, "scale", Vector2(1.0, 1.0), 0.7)
+	tween.parallel().tween_property(duel_point_popup, "modulate:a", 0.0, 1.3)
 
 
 ## Call this from the player script when a player dies
@@ -578,8 +582,8 @@ func on_player_died(player_id: int):
 	register_duel_result(player_id)
 	
 func _update_duel_score_ui() -> void:
-	p1_score_label.text = "P1 " + _make_win_markers(p1_wins)
-	p2_score_label.text = "P2 " + _make_win_markers(p2_wins)
+	p1_score_label.text = "P1 Wins " + _make_win_markers(p1_wins)
+	p2_score_label.text = _make_win_markers(p2_wins) + " P2 Wins"
 	
 func _make_win_markers(wins: int) -> String:
 	var text := ""
@@ -590,6 +594,36 @@ func _make_win_markers(wins: int) -> String:
 		else:
 			text += "◇ "
 	return text
+
+func _show_round_end_ui() -> void:
+	round_over_ui.visible = true
+	var winner_label = round_over_ui.get_node("WinnerLabel") as Label
+	var score_label = round_over_ui.get_node("ScoreLabel") as Label
+
+	winner_label.text = "Duel %d Complete" % current_round
+	score_label.text = "Score: %d - %d" % [p1_wins, p2_wins]
+
+	winner_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	winner_label.reset_size()
+	score_label.reset_size()
+
+	var viewport_size := get_viewport_rect().size
+	winner_label.position = Vector2((viewport_size.x - winner_label.size.x) / 2.0, viewport_size.y * 0.40)
+	score_label.position = Vector2((viewport_size.x - score_label.size.x) / 2.0, winner_label.position.y + winner_label.size.y + 10.0)
+
+	winner_label.pivot_offset = winner_label.size / 2.0
+	score_label.pivot_offset = score_label.size / 2.0
+	winner_label.scale = Vector2(0.8, 0.8)
+	score_label.scale = Vector2(0.8, 0.8)
+	winner_label.modulate.a = 0.0
+	score_label.modulate.a = 0.0
+
+	var tween = create_tween()
+	tween.parallel().tween_property(winner_label, "scale", Vector2(1.0, 1.0), 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(winner_label, "modulate:a", 1.0, 0.25)
+	tween.parallel().tween_property(score_label, "scale", Vector2(1.0, 1.0), 0.25).set_delay(0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(score_label, "modulate:a", 1.0, 0.25).set_delay(0.08)
 	
 func _show_game_over_screen(winner_id: int) -> void:
 	game_over_ui.visible = true
@@ -598,13 +632,61 @@ func _show_game_over_screen(winner_id: int) -> void:
 	game_over_winner.text = "PLAYER %d WINS THE MATCH" % winner_id
 	game_over_score.text = "Final Score: %d - %d" % [p1_wins, p2_wins]
 	game_over_restart.text = "Both players press Ready to restart"
+	
+	# Keep the container full-screen, then center the panel and labels dynamically.
+	game_over_ui.set_anchors_preset(Control.PRESET_FULL_RECT)
+	game_over_ui.offset_left = 0.0
+	game_over_ui.offset_top = 0.0
+	game_over_ui.offset_right = 0.0
+	game_over_ui.offset_bottom = 0.0
 
-	var panel = $UI/GameOverUI/Panel
+	var backdrop = $UI/GameOverUI/Backdrop as ColorRect
+	if backdrop:
+		backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
+		backdrop.offset_left = 0.0
+		backdrop.offset_top = 0.0
+		backdrop.offset_right = 0.0
+		backdrop.offset_bottom = 0.0
+		backdrop.color = Color(0, 0, 0, 0.45)
+
+	var panel: Panel = $UI/GameOverUI/Panel
+	panel.reset_size()
+
+	game_over_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	game_over_winner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	game_over_score.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	game_over_restart.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+	game_over_title.reset_size()
+	game_over_winner.reset_size()
+	game_over_score.reset_size()
+	game_over_restart.reset_size()
+
+	var panel_size: Vector2 = panel.size
+	if panel_size == Vector2.ZERO:
+		panel_size = panel.custom_minimum_size
+	var root_size: Vector2 = get_tree().root.get_visible_rect().size
+	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	panel.offset_left = 0.0
+	panel.offset_top = 0.0
+	panel.offset_right = panel_size.x
+	panel.offset_bottom = panel_size.y
+	panel.global_position = (root_size - panel_size) / 2.0
+	panel.self_modulate = Color(1, 1, 1, 0.88)
+
+	var panel_center_x: float = panel_size.x / 2.0
+	var y: float = 106.0
+	var game_over_labels: Array[Label] = [game_over_title, game_over_winner, game_over_score, game_over_restart]
+	for label: Label in game_over_labels:
+		label.position = Vector2((panel_center_x - label.size.x) / 2.0 + game_over_text_x_offset, y)
+		y += label.size.y + 10.0
+
+	panel.pivot_offset = panel_size / 2.0
 	panel.scale = Vector2(0.8, 0.8)
 	panel.modulate.a = 0.0
 
 	var tween = create_tween()
-	tween.parallel().tween_property(panel, "scale", Vector2(1.0, 1.0), 0.35)
+	tween.parallel().tween_property(panel, "scale", Vector2(1.0, 1.0), 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(panel, "modulate:a", 1.0, 0.35)
 
 
@@ -619,6 +701,11 @@ func _check_both_ready():
 		Phase.SHOP:
 			if p1_ready and p2_ready:
 				_start_ready_countdown(Phase.PVP)
+			else:
+				_cancel_ready_countdown()
+		Phase.GAME_OVER:
+			if p1_ready and p2_ready:
+				_restart_match_from_game_over()
 			else:
 				_cancel_ready_countdown()
 
@@ -675,6 +762,18 @@ func _sync_player_ready_states() -> void:
 		p1.set_ready_state(p1_ready)
 	if p2 and p2.has_method("set_ready_state"):
 		p2.set_ready_state(p2_ready)
+
+
+func _restart_match_from_game_over() -> void:
+	_cancel_ready_countdown()
+	if Global.has_method("reset_player_stats"):
+		Global.reset_player_stats()
+	if p1 and p1.has_method("reset_for_new_match"):
+		p1.reset_for_new_match()
+	if p2 and p2.has_method("reset_for_new_match"):
+		p2.reset_for_new_match()
+	reset_match_state()
+	_transition_to(Phase.LOBBY)
 		
 
 

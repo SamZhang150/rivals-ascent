@@ -58,7 +58,8 @@ var _contact_damage_timer: Timer = null
 @export var contact_damage_interval: float = 0.5  # How often to take damage while in contact
 
 # Shop / progression state
-var gold: int = 30
+const STARTING_GOLD := 30
+var gold: int = STARTING_GOLD
 var inventory: Array[String] = []
 var nearby_station: Area2D = null
 var shop_ui_open: bool = false
@@ -439,8 +440,8 @@ func _equip_starter_weapon() -> void:
 	# 	inventory.append("2xbow")
 	# if not inventory.has("sparkbolt"):
 	# 	inventory.append("sparkbolt")
-	if not inventory.has("zeusbolt"):
-		inventory.append("zeusbolt")
+	# if not inventory.has("zeusbolt"):
+	# 	inventory.append("zeusbolt")
 	# if not inventory.has("taserlaser"):
 	# 	inventory.append("taserlaser")
 	current_weapon_index = inventory.find(starter_weapon_key)
@@ -851,6 +852,25 @@ func reset_for_round() -> void:
 	_stun_active = false
 	if _stun_timer != null:
 		_stun_timer.stop()
+
+
+func reset_for_new_match() -> void:
+	gold = STARTING_GOLD
+	inventory.clear()
+	current_weapon_index = 0
+	nearby_station = null
+	shop_ui_open = false
+
+	for weapon in _weapon_instances.values():
+		var weapon_node := weapon as Node2D
+		if weapon_node != null and is_instance_valid(weapon_node):
+			weapon_node.queue_free()
+	_weapon_instances.clear()
+	equipped_weapon = null
+
+	_equip_starter_weapon()
+	reset_for_round()
+	_update_coin_ui()
 
 
 func respawn_at(pos: Vector2) -> void:

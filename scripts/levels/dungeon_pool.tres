@@ -1,18 +1,10 @@
 [gd_resource type="Resource" script_class="DungeonPool" format=3 uid="uid://m0kpf2rdypio"]
 
-[ext_resource type="PackedScene" uid="uid://cgtdodxwfi8mk" path="res://scenes/levels/dungeon/difficulty_1/room1a.tscn" id="1_8p2u8"]
 [ext_resource type="Script" uid="uid://ciqvnns4ihm2w" path="res://scripts/levels/dungeon_pool.gd" id="1_qwihy"]
-[ext_resource type="PackedScene" uid="uid://daa4mu05oexbt" path="res://scenes/levels/dungeon/difficulty_1/room1b.tscn" id="2_gxi8c"]
-[ext_resource type="PackedScene" uid="uid://do2wkek5wgexk" path="res://scenes/levels/dungeon/difficulty_1/room1ax.tscn" id="2_r3yk4"]
-[ext_resource type="PackedScene" uid="uid://dlo3yft8oagoa" path="res://scenes/levels/dungeon/difficulty_1/room1c.tscn" id="3_5bxwk"]
-[ext_resource type="PackedScene" uid="uid://dt2wbxo5a6x2g" path="res://scenes/levels/dungeon/difficulty_1/room1bx.tscn" id="4_1u5cj"]
-[ext_resource type="PackedScene" uid="uid://1udxsu3r4sur" path="res://scenes/levels/dungeon/difficulty_1/room1d.tscn" id="4_mo6qi"]
 [ext_resource type="PackedScene" uid="uid://bjywfrdk1mx3b" path="res://scenes/levels/dungeon/difficulty_2/room2a.tscn" id="5_gtr35"]
 [ext_resource type="PackedScene" uid="uid://b088m46gk70od" path="res://scenes/levels/dungeon/difficulty_2/room2b.tscn" id="6_hbnye"]
-[ext_resource type="PackedScene" uid="uid://cahgha6x20u6c" path="res://scenes/levels/dungeon/difficulty_1/room1cx.tscn" id="6_u5a34"]
 [ext_resource type="PackedScene" uid="uid://b5vakeob3l0t0" path="res://scenes/levels/dungeon/difficulty_2/room2c.tscn" id="7_hbnye"]
 [ext_resource type="PackedScene" uid="uid://u1if2dkuw5c1" path="res://scenes/levels/dungeon/difficulty_3/room3a.tscn" id="7_xdmr7"]
-[ext_resource type="PackedScene" uid="uid://beapm88jwk6m2" path="res://scenes/levels/dungeon/difficulty_1/room1dx.tscn" id="8_bfh5h"]
 [ext_resource type="PackedScene" uid="uid://3vv471jl5tka" path="res://scenes/levels/dungeon/difficulty_3/room3b.tscn" id="8_giwlm"]
 [ext_resource type="PackedScene" uid="uid://c2w7xisb5jgl" path="res://scenes/levels/dungeon/difficulty_2/room2d.tscn" id="8_xdmr7"]
 [ext_resource type="PackedScene" uid="uid://cdsfngiscymyk" path="res://scenes/levels/dungeon/difficulty_2/room2e.tscn" id="9_giwlm"]
@@ -42,7 +34,7 @@
 
 [resource]
 script = ExtResource("1_qwihy")
-difficulty_1 = Array[PackedScene]([ExtResource("1_8p2u8"), ExtResource("2_r3yk4"), ExtResource("2_gxi8c"), ExtResource("4_1u5cj"), ExtResource("3_5bxwk"), ExtResource("6_u5a34"), ExtResource("4_mo6qi"), ExtResource("8_bfh5h")])
+difficulty_1 = Array[PackedScene]([ExtResource("14_86ukm")])
 difficulty_2 = Array[PackedScene]([ExtResource("5_gtr35"), ExtResource("10_qb5fr"), ExtResource("6_hbnye"), ExtResource("12_dn05y"), ExtResource("7_hbnye"), ExtResource("14_86ukm"), ExtResource("8_xdmr7"), ExtResource("16_1klj2"), ExtResource("9_giwlm"), ExtResource("18_tq00k")])
 difficulty_3 = Array[PackedScene]([ExtResource("7_xdmr7"), ExtResource("20_5u7bw"), ExtResource("8_giwlm"), ExtResource("22_26lrm"), ExtResource("23_81atm"), ExtResource("24_wu2ac"), ExtResource("25_qels8"), ExtResource("26_ku31o")])
 difficulty_4 = Array[PackedScene]([ExtResource("27_tq00k"), ExtResource("28_5u7bw"), ExtResource("29_wu2ac"), ExtResource("29_26lrm"), ExtResource("30_81atm"), ExtResource("32_ku31o"), ExtResource("31_wu2ac"), ExtResource("32_qels8"), ExtResource("35_hfyoi"), ExtResource("33_ku31o"), ExtResource("34_hfyoi"), ExtResource("38_04nxd")])

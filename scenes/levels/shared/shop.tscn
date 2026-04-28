@@ -4,7 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://u3emwq1rc6h6" path="res://assets/sprites/shop/upgradeshop.png" id="3_ql8nn"]
 [ext_resource type="Texture2D" uid="uid://dt5h1pf3u8lkh" path="res://assets/sprites/shop/weaponshop.png" id="3_rn1qy"]
 [ext_resource type="Script" uid="uid://dgqt24s3qjnx3" path="res://scripts/station.gd" id="3_t0dvs"]
+[ext_resource type="Texture2D" uid="uid://4ech0mavtswr" path="res://assets/sprites/shop/upgradeshop1.png" id="4_qnkii"]
 [ext_resource type="FontFile" uid="uid://cqhlyweokgngl" path="res://assets/fonts/pixel_font.ttf" id="5_ql8nn"]
+[ext_resource type="Texture2D" uid="uid://d2ljiqqrstsmu" path="res://assets/sprites/shop/weaponshop1.png" id="6_cvgtf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_k0yl7"]
 texture = ExtResource("1_k0yl7")
@@ -537,8 +539,62 @@ sources/0 = SubResource("TileSetAtlasSource_dldte")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rn1qy"]
 size = Vector2(12, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ql8nn"]
+atlas = ExtResource("3_ql8nn")
+region = Rect2(0, 0, 12, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0o025"]
+atlas = ExtResource("4_qnkii")
+region = Rect2(0, 0, 14, 18)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qnkii"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ql8nn")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0o025")
+}],
+"loop": true,
+"name": &"interact",
+"speed": 5.0
+}]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t0dvs"]
 size = Vector2(12, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvgtf"]
+atlas = ExtResource("3_rn1qy")
+region = Rect2(0, 0, 12, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i66pa"]
+atlas = ExtResource("6_cvgtf")
+region = Rect2(0, 0, 14, 18)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0o025"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cvgtf")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i66pa")
+}],
+"loop": true,
+"name": &"interact",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ql8nn"]
 size = Vector2(223, 2)
@@ -571,7 +627,7 @@ position = Vector2(112, 64)
 [node name="ShopStations" type="Node2D" parent="." unique_id=1807933744]
 
 [node name="UpgradeStation" type="Area2D" parent="ShopStations" unique_id=728984281]
-position = Vector2(80, -29)
+position = Vector2(37, -19)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("3_t0dvs")
@@ -579,14 +635,16 @@ station_type = "upgrade"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ShopStations/UpgradeStation" unique_id=962765458]
 position = Vector2(125, 65)
+scale = Vector2(1.5, 1.5)
 shape = SubResource("RectangleShape2D_rn1qy")
 
-[node name="Sprite2D" type="Sprite2D" parent="ShopStations/UpgradeStation" unique_id=208279504]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ShopStations/UpgradeStation" unique_id=611740578]
 position = Vector2(125, 65)
-texture = ExtResource("3_ql8nn")
+sprite_frames = SubResource("SpriteFrames_qnkii")
+autoplay = "default"
 
 [node name="BuyStation" type="Area2D" parent="ShopStations" unique_id=1855519570]
-position = Vector2(-28, -16)
+position = Vector2(15, -6)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("3_t0dvs")
@@ -594,11 +652,13 @@ station_type = "buy"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ShopStations/BuyStation" unique_id=1339414554]
 position = Vector2(47, 52)
+scale = Vector2(1.5, 1.5)
 shape = SubResource("RectangleShape2D_t0dvs")
 
-[node name="Sprite2D" type="Sprite2D" parent="ShopStations/BuyStation" unique_id=278552451]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ShopStations/BuyStation" unique_id=78063112]
 position = Vector2(47, 52)
-texture = ExtResource("3_rn1qy")
+sprite_frames = SubResource("SpriteFrames_0o025")
+autoplay = "default"
 
 [node name="CamTopLeft" type="Marker2D" parent="." unique_id=897993050]
 
@@ -633,7 +693,7 @@ offset_right = 193.5
 offset_bottom = 44.0
 theme_override_fonts/font = ExtResource("5_ql8nn")
 theme_override_font_sizes/font_size = 12
-text = "<Weapons<         >Upgrades>"
+text = "  Weapons           Upgrades"
 
 [connection signal="body_entered" from="ShopStations/UpgradeStation" to="ShopStations/UpgradeStation" method="_on_body_entered"]
 [connection signal="body_exited" from="ShopStations/UpgradeStation" to="ShopStations/UpgradeStation" method="_on_body_exited"]

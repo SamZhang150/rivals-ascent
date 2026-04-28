@@ -693,13 +693,11 @@ position = Vector2(115, 140)
 
 [node name="SoulSucker" parent="." unique_id=1175288089 instance=ExtResource("6_daxoq")]
 position = Vector2(-18, 29)
+max_health = 200
 
 [node name="SoulSucker2" parent="." unique_id=1718233248 instance=ExtResource("6_daxoq")]
 position = Vector2(231, 30.5)
-
-[node name="SoulSucker3" parent="." unique_id=932804143 instance=ExtResource("6_daxoq")]
-position = Vector2(366, 100.5)
-scale = Vector2(0.5, 0.5)
+max_health = 200
 
 [node name="Slime" parent="." unique_id=1405925967 instance=ExtResource("6_i2hgt")]
 position = Vector2(93.5, 121)

@@ -3,15 +3,15 @@ extends CharacterBody2D
 signal died
 
 @export var speed := randf_range(55, 65)
-@export var max_health := 320
+@export var max_health := 200
 @export var touch_damage := 12
 @export var knockback_strength := 110.0
 @export var coin_reward: int = 12
 
 # Magnet features
-@export var pull_radius: float = 300.0
-@export var pull_strength: float = 1000.0
-@export var max_pull_force: float = 5000.0
+@export var pull_radius: float = 400.0
+@export var pull_strength: float = 6000.0
+@export var max_pull_force: float = 10000.0
 @export var min_pull_dist: float = 40.0
 
 @onready var sprite = $AnimatedSprite2D
@@ -52,7 +52,7 @@ func _ready() -> void:
 	add_child(_stun_timer)
 
 	health = max_health
-	health_bar.position = Vector2(-20, -14)
+	health_bar.position = Vector2(-13, -14)
 	bar_bg.size = Vector2(BAR_WIDTH, BAR_HEIGHT)
 	bar_fill.size = Vector2(BAR_WIDTH, BAR_HEIGHT)
 	health_bar.visible = health < max_health

@@ -79,9 +79,8 @@ size = Vector2(16, 16.5)
 size = Vector2(15, 16)
 
 [node name="SoulSucker" unique_id=1718233248 instance=ExtResource("1_a8kky")]
-position = Vector2(-5, 0)
 script = ExtResource("2_e4j88")
-max_health = 320
+max_health = 200
 touch_damage = 12
 coin_reward = 12
 pull_radius = 300.0
@@ -91,7 +90,7 @@ min_pull_dist = 40.0
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=1200022150]
 sprite_frames = SubResource("SpriteFrames_5jkvb")
-animation = &"run"
+animation = &"pull"
 
 [node name="CollisionShape2D" parent="." index="1" unique_id=1238288431]
 position = Vector2(6, -2)
