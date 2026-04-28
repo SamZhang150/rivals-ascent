@@ -855,6 +855,9 @@ func reset_for_round() -> void:
 
 
 func reset_for_new_match() -> void:
+	if Global.has_method("reset_player_stats"):
+		Global.reset_player_stats()
+
 	gold = STARTING_GOLD
 	inventory.clear()
 	current_weapon_index = 0

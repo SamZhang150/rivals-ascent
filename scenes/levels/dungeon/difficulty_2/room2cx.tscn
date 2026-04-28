@@ -676,6 +676,12 @@ stream = ExtResource("5_25lik")
 
 [node name="SoulSucker" parent="." unique_id=1718233248 instance=ExtResource("5_wiiog")]
 position = Vector2(70.5, 37.5)
+pull_radius = 400.0
+pull_strength = 6000.0
+max_pull_force = 10000.0
 
 [node name="SoulSucker2" parent="." unique_id=437641179 instance=ExtResource("5_wiiog")]
 position = Vector2(169, 90)
+pull_radius = 400.0
+pull_strength = 6000.0
+max_pull_force = 10000.0
