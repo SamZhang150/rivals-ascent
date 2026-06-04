@@ -7,8 +7,8 @@ func _ready() -> void:
 
 func _configure_controller_input_map() -> void:
 	# Device 0 controls player 1, device 1 controls player 2.
-	_add_controller_mapping(1, 0)
-	_add_controller_mapping(2, 1)
+	_add_controller_mapping(1, 1)
+	_add_controller_mapping(2, 2)
 	_ensure_action_exists("p1_toggle_controls", 0.85)
 	_ensure_action_exists("p2_toggle_controls", 0.85)
 	InputMap.action_set_deadzone("p1_toggle_controls", 0.85)

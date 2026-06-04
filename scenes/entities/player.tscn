@@ -236,4 +236,4 @@ volume_db = -2.737
 [node name="EnemyDeath" type="AudioStreamPlayer" parent="." unique_id=2050204898]
 stream = ExtResource("8_dnykm")
 
-[node name="Arrow" parent="." instance=ExtResource("9_mwj8e")]
+[node name="Arrow" parent="." unique_id=157459691 instance=ExtResource("9_mwj8e")]

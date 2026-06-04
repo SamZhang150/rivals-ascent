@@ -53,6 +53,7 @@ size = Vector2(10, 16)
 
 [node name="Ranged" unique_id=1718233248 instance=ExtResource("1_k7wdp")]
 script = ExtResource("2_u1wl2")
+max_health = 240
 touch_damage = 12
 coin_reward = 16
 preferred_radius = 180.0
